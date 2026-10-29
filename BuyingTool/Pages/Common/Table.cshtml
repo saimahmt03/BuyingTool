@@ -1,0 +1,134 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@{
+    // How to call (Standard Table):
+    //       @RenderPage("~/Pages/Component/Table.cshtml", headers, rows)
+    //
+    // How to call (With Row Headers on Column 0):
+    //       @RenderPage("~/Pages/Component/Table.cshtml", headers, rows, true)
+
+    var headers = PageData[0] as IEnumerable<object>;
+    var rows = PageData[1] as IEnumerable<object>;
+    var hasRowHeader = PageData.Count > 2 && PageData[2] is bool flag && flag;
+
+    // Safe fallbacks and normalization
+    var headerList = headers != null ? headers.Cast<object>().ToList() : new List<object>();
+
+    var rowList = new List<List<object>>();
+    if (rows != null)
+    {
+        foreach (var row in rows)
+        {
+            if (row == null) { continue; }
+
+            if (row is object[] objArr)
+            {
+                rowList.Add(objArr.ToList());
+            }
+            else if (row is IEnumerable<object> objEnum)
+            {
+                rowList.Add(objEnum.ToList());
+            }
+            else
+            {
+                var list = new List<object>();
+                foreach (var item in (System.Collections.IEnumerable)row)
+                {
+                    list.Add(item);
+                }
+                rowList.Add(list);
+            }
+        }
+    }
+}
+
+<table class="data-table">
+    @if (headerList.Count > 0)
+    {
+        <thead>
+            <tr class="data-table__header-row">
+                @foreach (var header in headerList)
+                {
+                    <th class="data-table__header-cell">@header</th>
+                }
+            </tr>
+        </thead>
+    }
+    <tbody>
+        @foreach (var r in rowList)
+        {
+            if (r.Count == 0) { continue; }
+
+            <tr class="data-table__row">
+                @if (hasRowHeader)
+                {
+                    // Render first column as a row header
+                    var label = r[0];
+                    <th scope="row" class="data-table__label">@label</th>
+
+                    // Render remaining columns as standard data cells
+                    for (var i = 1; i < r.Count; i++)
+                    {
+                        <td class="data-table__cell">@r[i]</td>
+                    }
+                }
+                else
+                {
+                    // Render all columns as standard data cells
+                    foreach (var cell in r)
+                    {
+                        <td class="data-table__cell">@cell</td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tables = document.querySelectorAll(".data-table");
+
+        tables.forEach(table => {
+            const headers = table.querySelectorAll("th");
+
+            headers.forEach((header, index) => {
+                // Skip resizing the very first column if it's a row header
+                if (index === 0 && header.classList.contains("data-table__label")) {
+                    return;
+                }
+
+                // Create the draggable resizer handle element
+                const resizer = document.createElement("div");
+                resizer.classList.add("data-table__resizer");
+                header.appendChild(resizer);
+
+                let startX = 0;
+                let startWidth = 0;
+
+                const onMouseMove = function (e) {
+                    const dx = e.clientX - startX;
+                    header.style.width = `${startWidth + dx}px`;
+                };
+
+                const onMouseUp = function () {
+                    resizer.classList.remove("is-resizing");
+                    document.removeEventListener("mousemove", onMouseMove);
+                    document.removeEventListener("mouseup", onMouseUp);
+                };
+
+                resizer.addEventListener("mousedown", function (e) {
+                    startX = e.clientX;
+                    startWidth = header.offsetWidth;
+
+                    resizer.classList.add("is-resizing");
+
+                    document.addEventListener("mousemove", onMouseMove);
+                    document.addEventListener("mouseup", onMouseUp);
+
+                    e.preventDefault();
+                });
+            });
+        });
+    });
+</script>

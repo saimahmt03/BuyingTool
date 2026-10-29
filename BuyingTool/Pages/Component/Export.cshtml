@@ -1,0 +1,313 @@
+﻿@using System.Data;
+@using BuyingTool.Services
+@{
+    Service service = new Service();
+    ServiceValidator serviceValidator = new ServiceValidator();
+
+    // Column name should be hiden
+    string hideColumn = "Type, Store Grade";
+
+    if (IsPost)
+    {
+        string[] storeGrades =
+            Request.Form.GetValues("store-grades")
+            ?? new string[0];
+
+        string selectedStoreGrade = string.Empty;
+
+        if (storeGrades.Length > 1)
+        {
+            selectedStoreGrade = string.Join(",", storeGrades);
+        }
+        else if (storeGrades.Length == 1)
+        {
+            selectedStoreGrade = storeGrades[0];
+        }
+
+        string[] sizes = Request.Form.GetValues("sizes")
+            ?? new string[0];
+
+        string selectedSize = string.Empty;
+
+        if (sizes.Length > 1)
+        {
+            selectedSize = string.Join(",", sizes);
+        }
+        else if (sizes.Length == 1)
+        {
+            selectedSize = sizes[0];
+        }
+
+        string metric = Request.Form["summaryMetric"];
+
+        Session["StoreGrade"] = selectedStoreGrade;
+        Session["Size"] = selectedSize;
+
+        if (!string.IsNullOrEmpty(metric))
+        {
+            Session["ActiveMetric"] = metric;
+        }
+    }
+
+    // All variables
+    var metricOptions = new string[] { "MAX", "AVE", "MIN" };
+    var tableHeaders = new List<string>();
+    var tableRows = new List<string[]>();
+    var tHeader = new List<string>();
+    var tRows = new List<string[]>();
+    var dbResponse = string.Empty;
+
+    // Retrieve active metric from session, default to "MAX" if empty
+    string activeMetric = Session["ActiveMetric"] as string;
+
+    if (string.IsNullOrEmpty(activeMetric))
+    {
+        activeMetric = "MAX";
+    }
+
+    string selectedStoreGrades = Session["StoreGrade"] as string;
+    string selectedSizes = Session["Size"] as string;
+
+    DataTable dataSet = service.GetFinalDataSetFilterCache().GetAwaiter().GetResult();
+
+    var storeGradeList = dataSet != null
+                ? dataSet.AsEnumerable()
+                           .Select(row => row.Field<string>("StoreGrade"))
+                           .Where(val => !string.IsNullOrWhiteSpace(val))
+                           .Distinct()
+                           .ToList()
+                : new List<string>();
+
+    var sizeList = dataSet != null
+                ? dataSet.AsEnumerable()
+                           .Select(row => row.Field<string>("Size"))
+                           .Where(val => !string.IsNullOrWhiteSpace(val))
+                           .Distinct()
+                           .ToList()
+                : new List<string>();
+
+    if (activeMetric == "MAX" && string.IsNullOrEmpty(selectedStoreGrades) && string.IsNullOrEmpty(selectedSizes))
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        // We do this to keep the original dataset
+        (tHeader, tRows, dbResponse) = service.GetExportTable(selectedStoreGrades, selectedSizes, activeMetric)
+                                    .GetAwaiter()
+                                    .GetResult();
+
+        // We do this to remove the columns that we don't want to show in ui table since we are working with dynamic table
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+
+    }
+    else if (activeMetric == "AVE")
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetExportTable(selectedStoreGrades, selectedSizes, activeMetric)
+                            .GetAwaiter()
+                            .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+    else if (activeMetric == "MIN")
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetExportTable(selectedStoreGrades, selectedSizes, activeMetric)
+                            .GetAwaiter()
+                            .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+    else // MAX with Parameters
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetExportTable(selectedStoreGrades, selectedSizes, activeMetric)
+                            .GetAwaiter()
+                            .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+
+    var fieldName = "summaryMetric";
+    string errorMessage = string.Empty;
+
+    if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
+    {
+        var th = new List<string>();
+        var td = new List<string[]>();
+
+        string action = Request["actionButton"];
+
+        if(action == "Apply")
+        {
+            activeMetric = Session["ActiveMetric"] as string;
+
+            (tHeader, tRows, dbResponse) = service.GetExportTable(selectedStoreGrades, selectedSizes, activeMetric)
+                            .GetAwaiter()
+                            .GetResult();
+
+            (th, td) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+
+            tableHeaders = th;
+            tableRows = td;
+        }
+        else if(action == "Export")
+        {
+            string userInputFileName = Request.Form["customFileName"];
+            string fileName = string.IsNullOrWhiteSpace(userInputFileName) ? "000000_colorname" : userInputFileName.Trim();
+
+            errorMessage = serviceValidator.ValidateFilename(fileName);
+
+            service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+                       .GetAwaiter()
+                       .GetResult();
+
+            //if (errorMessage == "Proceed")
+            //{
+
+            //    service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+            //           .GetAwaiter()
+            //           .GetResult();
+
+            //    errorMessage = string.Empty;
+            //}
+        }
+        else if (action == "SaveToDb")
+        {
+            int fiscalMonth = 0;
+            int fiscalYear = 0;
+
+            string status = string.Empty;
+
+            string userInputFileName = Request.Form["customFileName"];
+            string fileName = string.IsNullOrWhiteSpace(userInputFileName) ? "000000_colorname" : userInputFileName.Trim();
+
+            string brand = Session["Brand"] as string;
+            string collection = Session["PeriodPlan"] as string;
+
+            DataTable periodPlans = service.GetPeriodPlan().GetAwaiter().GetResult();
+
+            // Query using .Field<int?>() directly since they are numbers
+            fiscalMonth = periodPlans.AsEnumerable()
+                        .Where(p => p.Field<string>("PlanPeriod") == collection)
+                        .Select(p => p.Field<int?>("MonthNumber"))
+                        .Distinct()
+                        .FirstOrDefault() ?? 0;
+
+            fiscalYear = periodPlans.AsEnumerable()
+                        .Where(p => p.Field<string>("PlanPeriod") == collection)
+                        .Select(p => p.Field<int?>("Year"))
+                        .Distinct()
+                        .FirstOrDefault() ?? 0;
+
+            errorMessage = serviceValidator.ValidateFilename(fileName);
+
+            (string matno, string color) = service.SplitFilename(fileName).GetAwaiter().GetResult();
+
+            if (errorMessage == "Proceed")
+            {
+                (status, errorMessage) = service.ExportToAlloc(tableHeaders, tableRows, brand, collection, fiscalMonth, fiscalYear, matno, color).GetAwaiter().GetResult();
+            }
+
+            if (status == "Success" && string.IsNullOrEmpty(errorMessage))
+            {
+                errorMessage = "Successfully added.";
+            }
+            else
+            {
+                errorMessage = errorMessage;
+            }
+        }
+    }
+
+
+    var headerCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header.css")).Ticks.ToString();
+    var toolbarCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/toolbar.css")).Ticks.ToString();
+    var buttonCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/button.css")).Ticks.ToString();
+    var exportCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/export.css")).Ticks.ToString();
+    var segmetedcontrolCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/segmented-control.css")).Ticks.ToString();
+    var table1Css = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/table-with-pagination.css")).Ticks.ToString();
+}
+
+<head>
+    <link href="~/Pages/Style/header.css?v=@headerCss" rel="stylesheet" />
+    <link href="~/Pages/Style/button.css?v=@buttonCss" rel="stylesheet" />
+    <link href="~/Pages/Style/export.css?v=@exportCss" rel="stylesheet" />
+    <link href="~/Pages/Style/segmented-control.css?v=@segmetedcontrolCss" rel="stylesheet" />
+
+    <link href="~/Pages/Style/table-with-pagination.css?v=@table1Css" rel="stylesheet" />
+</head>
+<body>
+    <header role="banner">
+        @RenderPage("~/Pages/Common/Header.cshtml", "Step 4: Export to Excel")
+    </header>
+
+    <main class="main-content-wrapper" role="main">
+        <section class="export-container">
+
+            <form method="post" id="filterForm" class="filter-group-left">
+                <!-- Horizontal Toolbar: Filters Left | Action Buttons Right -->
+                <div class="toolbar-row">
+
+                    <!-- Left-aligned Filters & Controls -->
+                    <div class="control-item">
+                        @RenderPage("~/Pages/Common/SegmentedControl.cshtml", metricOptions, activeMetric, fieldName)
+                    </div>
+                    <div class="control-item">
+                        @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "store-grades", "Store Grade", storeGradeList, selectedStoreGrades, "", "100px")
+                    </div>
+                    <div class="control-item">
+                        @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizes", "Size", sizeList, selectedSizes, "", "100px")
+                    </div>
+                    <div class="control-item">
+                        @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
+                    </div>
+                    @if (!string.IsNullOrEmpty(dbResponse))
+                    {
+                        <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@dbResponse</div>
+                    }
+
+
+                    <!-- Right-aligned Actions -->
+                    <div class="action-group-right">
+
+                        <!-- Text input for the custom filename -->
+                        <input type="text"
+                               name="customFileName"
+                               id="customFileName"
+                               class="form-control"
+                               placeholder="Enter filename..."
+                               value="000000_colorname"
+                               style="width: 200px; display: inline-block;" />
+
+                        <!-- Export to Excel Button -->
+                        @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+
+                        <!-- Export to Alloc Button -->
+                        @RenderPage("~/Pages/Common/Button.cshtml", "Export to Alloc Tool", "submit", "actionButton", "SaveToDb")
+
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
+                        }
+                    </div>
+
+                </div>
+            </form>
+
+            <article class="export-panel" aria-label="Export Data Panel">
+                <div class="row">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "IA For Export to Allocation Tool (" + activeMetric + ")")
+                    <div class="table-responsive-wrapper">
+                        <!-- Renders the table with row headers on column 0, and 5 rows per page -->
+                        @RenderPage("~/Pages/Common/TableWithPagination.cshtml", tableHeaders, tableRows, true, 15)
+                    </div>
+
+                </div>
+            </article>
+
+        </section>
+        </main>
+    </body>

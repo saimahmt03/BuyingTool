@@ -1,0 +1,47 @@
+﻿/* Component: PageHeader.cshtml */
+
+/* 1. Colors and sizes: change them here */
+:root {
+    --header-bg: #004f6c; /* CHANGED: darker blue-teal, matched to the prototype image */
+    --header-text: #ffffff;
+    --header-height: 67px;
+}
+
+/* 2. Band */
+.page-header {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: var(--header-height);
+    padding: 0 14px; /* CHANGED: 16px -> 14px, matches the image */
+    background: var(--header-bg);
+}
+
+/* 3. Title */
+.page-header__title {
+    margin: 0;
+    min-width: 0; /* CHANGED: lets a long title shrink instead of overflowing */
+    overflow: hidden; /* CHANGED: long titles are cut with "..." instead of wrapping */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--header-text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px; /* CHANGED: 26px -> 24px, matches the image */
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+/* 4. CHANGED: phones: shorter band, smaller title */
+@media (max-width: 575.98px) {
+    :root {
+        --header-height: 52px;
+    }
+
+    .page-header {
+        padding: 0 10px;
+    }
+
+    .page-header__title {
+        font-size: 20px;
+    }
+}

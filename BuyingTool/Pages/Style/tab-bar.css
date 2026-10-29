@@ -1,0 +1,210 @@
+﻿/* Component: TabNav.cshtml */
+
+/* 1. Colors: change the active (olive green) shade here */
+:root {
+    --tab-active-top: #9aa01c; /* lighter olive green */
+    --tab-active-bottom: #6b7210; /* darker olive green */
+    --tab-active-border: #565c0c;
+}
+
+/* 2. Strip: dark teal, tabs sit on its bottom edge */
+.tab-nav {
+    background: #0a5873;
+    padding: 0 6px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+}
+
+.tab-nav__list {
+    list-style: none;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    width: max-content; /* Ensures tabs maintain their natural width and don't squish */
+}
+
+/* 3. Default (inactive) tab: light, rounded top */
+.tab-nav__tab {
+    display: flex;
+    align-items: center;
+    padding: 4px 14px 4px;
+    border: 1px solid #b9c7ce;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(#ffffff 0%, #e9eef0 100%);
+    color: #000;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+    .tab-nav__tab:hover {
+        background: #ffffff;
+    }
+
+    .tab-nav__tab:focus-visible {
+        outline: 2px solid #ffffff;
+        outline-offset: 1px;
+    }
+
+/* 4. Main: blue-teal, white text (when not active) */
+.tab-nav__tab--main {
+    background: linear-gradient(#2b7fa3 0%, #14587a 100%);
+    border-color: #0d4a68;
+    color: #ffffff;
+}
+
+    .tab-nav__tab--main:hover {
+        background: linear-gradient(#3590b6 0%, #1a6589 100%);
+    }
+
+/* 5. ACTIVE tab (any tab, including Main): olive green, white bold text, larger. */
+.tab-nav__tab.tab-nav__tab--active,
+.tab-nav__tab.tab-nav__tab--active:hover {
+    background: linear-gradient(var(--tab-active-top) 0%, var(--tab-active-bottom) 100%);
+    border-color: var(--tab-active-border);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 7px 20px 6px;
+}
+
+/*ADDED FOR SET FILTERS WINDOW*/
+
+/* Header Layout wrapping the flexible two-column layout */
+.dashboard-header {
+    width: 100%;
+    background-color: #0a5873;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* Two-column flexible container for navigation and logout link */
+.two-col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+/* Left side wrapping tab navigation with horizontal sliding */
+.col-left-side {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    order: 1;
+    display: flex;
+    align-items: flex-end;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+    .col-left-side::-webkit-scrollbar {
+        height: 4px; /* Slimmer scrollbar to prevent crowding */
+    }
+
+    .col-left-side::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-radius: 2px;
+    }
+
+/* Right side wrapping logout action pinned to the right */
+.col-right-side {
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    background-color: inherit;
+    order: 2;
+    white-space: nowrap;
+}
+
+/* Styled Logout text link with locked font size and styling */
+.logout-link {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+    line-height: normal;
+}
+
+    .logout-link:hover {
+        color: #e0e0e0;
+    }
+
+
+
+/* 3. Default (inactive) tab: light, rounded top */
+.tab-nav__tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px 4px;
+    border: 1px solid #b9c7ce;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    background: linear-gradient(#ffffff 0%, #e9eef0 100%);
+    color: #000;
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevents tabs from auto-resizing unpredictably */
+}
+
+    /* 5. ACTIVE tab: fixed sizing behavior to prevent layout shift */
+    .tab-nav__tab.tab-nav__tab--active,
+    .tab-nav__tab.tab-nav__tab--active:hover {
+        background: linear-gradient(var(--tab-active-top) 0%, var(--tab-active-bottom) 100%);
+        border-color: var(--tab-active-border);
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: bold;
+        padding: 7px 16px 6px; /* Slightly tightened padding to match visual balance */
+        flex-shrink: 0;
+    }
+
+
+.col-left-side {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    order: 1;
+    display: flex;
+    align-items: flex-end;
+}
+
+.tab-nav__tab {
+    flex-shrink: 0; /* Prevents tabs from squishing or changing box metrics */
+}
+
+    .tab-nav__tab.tab-nav__tab--active {
+        flex-shrink: 0;
+    }
+
+    .col-left-side {
+    flex: 1 1 0; /* Forces it to share space predictably without forcing a blowout */
+    min-width: 0;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    order: 1;
+    display: flex;
+    align-items: flex-end;
+}

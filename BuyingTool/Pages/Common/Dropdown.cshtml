@@ -1,0 +1,49 @@
+﻿@using System.Collections.Generic
+@{
+    // How to call:
+    //   @RenderPage("~/Pages/Component/Dropdown.cshtml", name, label, options, selected, style, labelWidth)
+    //
+    //   name       : form field name
+    //   label      : text on the left
+    //   options    : list of choices (string[])
+    //   selected   : currently selected value ("" = nothing selected)
+    //   style      : "" (green when selected / grey bead when empty) | "plain" (plain text, no colored cell)
+    //   labelWidth : width of the label column, e.g. "80px"
+
+    var name = PageData[0] as string;
+    var label = PageData[1] as string;
+    var options = PageData[2] as IEnumerable<string>;
+    var selected = PageData[3] as string;
+    var style = PageData[4] as string;
+    var labelWidth = PageData[5] as string;
+
+    // Optional 7th parameter for onchange or custom attributes
+
+    var onChangeAction = PageData.Count > 6 ? PageData[6] as string : "";
+
+    if (options == null) { options = new string[0]; }
+    if (string.IsNullOrEmpty(labelWidth)) { labelWidth = "80px"; }
+
+    var hasValue = !string.IsNullOrEmpty(selected);
+
+    var css = "dropdown";
+    if (style == "plain") { css += " dropdown--plain"; }
+    else if (hasValue) { css += " dropdown--selected"; }
+    else { css += " dropdown--empty"; }
+
+    if (style == "bar") { css += " dropdown--bar"; }
+
+    var id = "dd_" + name;
+}
+
+<div class="@css" style="--dd-label-width:@labelWidth">
+    <label class="dropdown__label" for="@id">@label</label>
+    <span class="dropdown__arrow" aria-hidden="true"></span>
+    <select class="dropdown__select" id="@id" name="@name">
+        <option value="">-- Select --</option>
+        @foreach (var o in options)
+        {
+            <option value="@o" selected="@(o == selected)">@o</option>
+        }
+    </select>
+</div>

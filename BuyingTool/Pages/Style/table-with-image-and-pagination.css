@@ -1,0 +1,102 @@
+﻿/* =================================================================
+   Table With Image And Pagination (.NET Framework 4.7.2 / Razor v3)
+   ================================================================= */
+/* Component: TableWithPagination.cshtml */
+
+.data-table {
+    width: 100%;
+    min-width: max-content; /* Allows the table to expand horizontally to fit all columns */
+    border-collapse: collapse;
+    table-layout: auto; /* Lets columns size themselves based on their content */
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+    color: #000;
+}
+
+    .data-table th,
+    .data-table td {
+        padding: 4px 6px;
+        border: 1px solid #d2d2d2;
+        text-align: center;
+    }
+
+    /* Allow header cells to wrap text */
+    .data-table th {
+        height: auto;
+        white-space: normal;
+        word-break: break-word;
+        font-weight: bold;
+        background: #eaeaea;
+    }
+
+    /* Standard data cells stay compact */
+    .data-table td {
+        height: 14px;
+        white-space: nowrap;
+    }
+
+/* Header Cells */
+.data-table__header-row {
+    background: #f4f4f4;
+}
+
+/* First column: bold row labels */
+.data-table__label {
+    min-width: 104px;
+    background: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Image row styling & fixed thumbnail dimensions */
+.data-table__row--image .data-table__cell {
+    height: 54px; /* Expanded row height to comfortably fit the thumbnail */
+    padding: 2px 4px;
+}
+
+.data-table__img {
+    display: block;
+    width: 44px; /* Locked fixed width for clean thumbnails */
+    height: 44px; /* Locked fixed height */
+    object-fit: cover; /* Crops the image proportionally without distortion */
+    border-radius: 3px;
+    margin: 0 auto;
+}
+
+.data-table__img--empty {
+    background: repeating-linear-gradient(45deg, #ececec, #ececec 6px, #e2e2e2 6px, #e2e2e2 12px);
+}
+
+/* Green rows (Positive / Highlighted states) */
+.data-table__row--positive .data-table__cell {
+    color: #2e7d32;
+}
+
+/* Pagination */
+
+.data-table__pagination {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+}
+
+.data-table__page-btn {
+    padding: 6px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .data-table__page-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.data-table__page-info {
+    font-size: 0.9rem;
+    color: #495057;
+}

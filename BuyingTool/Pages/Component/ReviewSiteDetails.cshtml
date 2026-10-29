@@ -1,0 +1,257 @@
+﻿@using BuyingTool.Services
+@using System.Collections.Generic
+@using System.Data;
+@{ 
+    Service service = new Service();
+    ServiceValidator serviceValidator = new ServiceValidator();
+
+    // Column name should be hiden
+    string hideColumn = "Type";
+
+    // Handle form postback and store selected values in Session
+    if (IsPost)
+    {
+        string[] storeGrades =
+            Request.Form.GetValues("store-grades")
+            ?? new string[0];
+
+        string selectedStoreGrade = string.Empty;
+
+        if (storeGrades.Length > 1)
+        {
+            selectedStoreGrade = string.Join(",", storeGrades);
+        }
+        else if (storeGrades.Length == 1)
+        {
+            selectedStoreGrade = storeGrades[0];
+        }
+
+        string[] sizes = Request.Form.GetValues("sizes")
+            ?? new string[0];
+
+        string selectedSize = string.Empty;
+
+        if (sizes.Length > 1)
+        {
+            selectedSize = string.Join(",", sizes);
+        }
+        else if (sizes.Length == 1)
+        {
+            selectedSize = sizes[0];
+        }
+
+        string metric = Request.Form["summaryMetric"];
+
+        Session["StoreGrade"] = selectedStoreGrade;
+        Session["Size"] = selectedSize;
+
+        if (!string.IsNullOrEmpty(metric))
+        {
+            Session["ActiveMetric"] = metric;
+        }
+    }
+
+    // All variables
+    var metricOptions = new string[] { "MAX", "AVE", "MIN" };
+    var tableHeaders = new List<string>();
+    var tableRows = new List<string[]>();
+    var tHeader = new List<string>();
+    var tRows = new List<string[]>();
+    var dbResponse = string.Empty;
+
+    string activeMetric = Session["ActiveMetric"] as string;
+
+    if (string.IsNullOrEmpty(activeMetric))
+    {
+        activeMetric = "MAX";
+    }
+
+    string selectedStoreGrades = Session["StoreGrade"] as string;
+    string selectedSizes = Session["Size"] as string;
+
+    DataTable dataSet = service.GetFinalDataSetFilterCache().GetAwaiter().GetResult();
+
+    var storeGradeList = dataSet != null
+                ? dataSet.AsEnumerable()
+                           .Select(row => row.Field<string>("StoreGrade"))
+                           .Where(val => !string.IsNullOrWhiteSpace(val))
+                           .Distinct()
+                           .ToList()
+                : new List<string>();
+
+    var sizeList = dataSet != null
+                ? dataSet.AsEnumerable()
+                           .Select(row => row.Field<string>("Size"))
+                           .Where(val => !string.IsNullOrWhiteSpace(val))
+                           .Distinct()
+                           .ToList()
+                : new List<string>();
+
+    if (activeMetric == "MAX" && string.IsNullOrEmpty(selectedStoreGrades) && string.IsNullOrEmpty(selectedSizes))
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetPerSiteTable(selectedStoreGrades, selectedSizes, activeMetric)
+                                    .GetAwaiter()
+                                    .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+    else if (activeMetric == "AVE")
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetPerSiteTable(selectedStoreGrades, selectedSizes, activeMetric)
+                                    .GetAwaiter()
+                                    .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+    else if (activeMetric == "MIN")
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetPerSiteTable(selectedStoreGrades, selectedSizes, activeMetric)
+                                    .GetAwaiter()
+                                    .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+    else // MAX with Parameters
+    {
+        Session["ActiveMetric"] = activeMetric as string;
+
+        (tHeader, tRows, dbResponse) = service.GetPerSiteTable(selectedStoreGrades, selectedSizes, activeMetric)
+                                    .GetAwaiter()
+                                    .GetResult();
+
+        (tableHeaders, tableRows) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+    }
+
+    var fieldName = "summaryMetric";
+    string errorMessage = string.Empty;
+
+    if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
+    {
+        var th = new List<string>();
+        var td = new List<string[]>();
+
+        string action = Request["actionButton"];
+
+        if(action == "Apply")
+        {
+            activeMetric = Session["ActiveMetric"] as string;
+
+            (tHeader, tRows, dbResponse) = service.GetPerSiteTable(selectedStoreGrades, selectedSizes, activeMetric)
+                            .GetAwaiter()
+                            .GetResult();
+
+            (th, td) = service.HideTableColumnAndRow(tHeader, tRows, hideColumn).GetAwaiter().GetResult();
+
+            tableHeaders = th;
+            tableRows = td;
+        }
+        else if(action == "Export")
+        {
+            string userInputFileName = Request.Form["customFileName"];
+            string fileName = string.IsNullOrWhiteSpace(userInputFileName) ? "000000_colorname" : userInputFileName.Trim();
+
+            errorMessage = serviceValidator.ValidateFilename(fileName);
+
+            service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+                       .GetAwaiter()
+                       .GetResult();
+        }
+    }
+
+
+    // Loading CSS Files with version ticks
+    var headerCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header.css")).Ticks.ToString();
+    var buttonCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/button.css")).Ticks.ToString();
+    var reviewsiteCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/review-site-details.css")).Ticks.ToString();
+    var segmetedcontrolCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/segmented-control.css")).Ticks.ToString();
+
+    var table1Css = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/table-with-pagination.css")).Ticks.ToString();
+}
+<head>
+    <link href="~/Pages/Style/header.css?v=@headerCss" rel="stylesheet" />
+    <link href="~/Pages/Style/button.css?v=@buttonCss" rel="stylesheet" />
+    <link href="~/Pages/Style/review-site-details.css?v=@reviewsiteCss" rel="stylesheet" />
+    <link href="~/Pages/Style/segmented-control.css?v=@segmetedcontrolCss" rel="stylesheet" />
+
+    <link href="~/Pages/Style/table-with-pagination.css?v=@table1Css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        @RenderPage("~/Pages/Common/Header.cshtml", "Step 3: Review Site Details")
+    </div>
+
+    <main class="main-content-wrapper">
+        <section class="export-container">
+
+            <form method="post" id="filterForm">
+                <div class="toolbar-row">
+                    <div class="four-col-filter">
+                        <div class="col segmented-col">
+                            @RenderPage("~/Pages/Common/SegmentedControl.cshtml", metricOptions, activeMetric, fieldName)
+                        </div>
+                        <div class="col">
+                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "store-grades", "Store Grade", storeGradeList, selectedStoreGrades, "", "100px")
+                        </div>
+                        <div class="col">
+                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizes", "Size", sizeList, selectedSizes, "", "100px")
+                        </div>
+                        <div class="col">
+                            @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
+                        </div>
+                        @if (!string.IsNullOrEmpty(dbResponse))
+                        {
+                            <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@dbResponse</div>
+                        }
+                    </div>
+                    <div class="export-col" style="display: flex; align-items: center; gap: 8px;">
+
+                        <!-- Text input for the custom filename -->
+                        <input type="text"
+                               name="customFileName"
+                               id="customFileName"
+                               class="form-control"
+                               placeholder="Enter filename..."
+                               value="000000_colorname"
+                               style="width: 200px; display: inline-block;" />
+
+                        @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+                    </div>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
+                    }
+                </div>
+            </form>
+
+            <article class="export-panel" aria-label="Review Site Details Panel">
+                <div class="row">
+                    <div class="three-col">
+                        <div class="col">
+
+                        </div>
+                        <!--<div class="col">
+                            RenderPage("~/Pages/Common/SectionHeader.cshtml", "Order QTY")
+                        </div>
+                        <div class="col">
+                            RenderPage("~/Pages/Common/SectionHeader.cshtml", "IA QTY")
+                        </div>-->
+                    </div>
+                </div>
+                <div class="row">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "IA per Store per Size (" + activeMetric + ")")
+                    <div class="table-responsive-wrapper">
+                        <!-- Renders the table with row headers on column 0, and 5 rows per page -->
+                        @RenderPage("~/Pages/Common/TableWithPagination.cshtml", tableHeaders, tableRows, true, 15)
+                    </div>
+                </div>
+            </article>
+
+        </section>
+    </main>
+</body>

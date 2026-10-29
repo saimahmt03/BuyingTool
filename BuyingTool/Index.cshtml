@@ -1,0 +1,284 @@
+﻿@using BuyingTool.Services
+@using BuyingTool.DTO.Request
+@{
+    UserAccountService userAccountService = new UserAccountService();
+    Service service = new Service();
+
+    Layout = null;
+
+    // Handle Logout action if posted back
+    if (IsPost && Request["actionButton"] == "Logout")
+    {
+        string userId = Session["idnumber"] as string;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            service.ClearFiltersWindowCache(userId);
+            service.ClearFinalDataSetFilterCache(userId);
+            service.ClearGetFiltersAttributeCache(userId);
+            service.ClearGetFiltersOrganizationCache(userId);
+            service.ClearGetFiltersRequiredCache(userId);
+            service.ClearGetFiltersStylesCache(userId);
+        }
+
+        Session.Clear();
+        Session.Abandon();
+
+        Response.Redirect("~/Index.cshtml");
+        return;
+    }
+
+    // Check if the user is already logged in via Session
+    bool isLoggedIn = Session["idnumber"] != null && !string.IsNullOrWhiteSpace(Session["idnumber"].ToString());
+
+    string errorMessage = string.Empty;
+
+    // Handle Login postback if not logged in
+    if (!isLoggedIn && IsPost)
+    {
+        string action = Request["actionButton"];
+        string idnumber = Request.Form["idnumber"];
+        string pass = Request.Form["password"];
+
+        //System.Diagnostics.Debug.WriteLine("DEBUG ID NUMBER RECEIVED: " + idnumber);
+
+        UserRequired useraccount = new UserRequired
+        {
+            Id_Number = idnumber,
+            Password = pass
+        };
+
+        if (action == "Login")
+        {
+            string user = userAccountService.ValidateUser(useraccount);
+
+            if (!string.IsNullOrEmpty(user))
+            {
+
+                if(user == "User does not exist, please try again.")
+                {
+                    errorMessage = user;
+                }
+                else
+                {
+                    // Save session and reload Index to transition to Main.cshtml
+                    Session["idnumber"] = idnumber;
+                    Session["password"] = pass;
+                    Response.Redirect("~/Index.cshtml");
+                    return;
+                }
+            }
+            else
+            {
+                errorMessage = "Invalid ID Number or Password.";
+            }
+        }
+    }
+
+    bool isCalculated = Session["IsCalculated"] != null && (bool)Session["IsCalculated"];
+
+    isLoggedIn = Session["idnumber"] != null && !string.IsNullOrWhiteSpace(Session["idnumber"].ToString());
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@(isLoggedIn ? "Dashboard" : "Login - Buying Tool Report")</title>
+</head> 
+<body>
+    @if (!isLoggedIn)
+    {
+        // --- VIEW 1: LOGIN SCREEN ---
+        var loginCss = System.IO.File
+            .GetLastWriteTime(Server.MapPath("~/Pages/Style/login.css"))
+            .Ticks.ToString();
+
+        <link href="~/Pages/Style/login.css?v=@loginCss" rel="stylesheet" />
+
+        <main class="content-wrapper" role="main">
+            <section class="tab-pane login-pane" aria-label="Main Login">
+                <div class="login-header-group">
+                    <h1 class="page-title">Buy and Allocation Report</h1>
+                    <h2 class="login-sub-title">LOGIN</h2>
+                </div>
+
+                <div class="login-form-container">
+                    <form method="post" class="login-form">
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
+                        }
+                        <div class="form-row-aligned">
+                            @RenderPage("~/Pages/Common/TextField.cshtml", "idnumber", "ID Number", "", "numeric")
+                        </div>
+                        <div class="form-row-aligned">
+                            @RenderPage("~/Pages/Common/PasswordField.cshtml", "password", "Password", "", "password")
+                        </div>
+                        <div class="form-actions">
+                            @RenderPage("~/Pages/Common/Button.cshtml", "Login", "submit", "actionButton", "Login")
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    }
+    else
+    {
+        // --- VIEW 2: DASHBOARD TABS (Loads Main.cshtml when Session[idnumber] is active) ---
+        var activeTab = Request.QueryString["tab"];
+        if (string.IsNullOrWhiteSpace(activeTab))
+        {
+            activeTab = "Main";
+        }
+
+        var tabbarCss = System.IO.File
+            .GetLastWriteTime(Server.MapPath("~/Pages/Style/tab-bar.css"))
+            .Ticks.ToString();
+
+        var indexCss = System.IO.File
+            .GetLastWriteTime(Server.MapPath("~/Pages/Style/index.css"))
+            .Ticks.ToString();
+
+        <link href="~/Pages/Style/tab-bar.css?v=@tabbarCss" rel="stylesheet" />
+        <link href="~/Pages/Style/index.css?v=@indexCss" rel="stylesheet" />
+
+        <header role="banner" class="dashboard-header">
+            <div class="two-col">
+                <div class="col-left-side">
+                    <div class="nav-container">
+                        @RenderPage("~/Pages/Component/TabNav.cshtml", activeTab)
+                    </div>
+                </div>
+                <div class="col-right-side">
+                    <div class="logout-container">
+                        <form method="post" style="margin: 0;">
+                            <button type="submit" name="actionButton" value="Logout" class="logout-link">LOGOUT</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        // OLD 
+<main class="content-wrapper" role="main">
+    @if (activeTab == "Main")
+    {
+        <section id="tab-main" class="tab-pane" aria-label="Main Content">
+            @RenderPage("~/Pages/Component/Main.cshtml", activeTab)
+        </section>
+    }
+    else if (activeTab == "1. Set Filters")
+    {
+        <section id="tab-1.-set-filters" class="tab-pane" aria-label="Set Filters">
+            @RenderPage("~/Pages/Component/SetFiltersWindow.cshtml", activeTab)
+        </section>
+    }
+    else if (activeTab == "2. Review Summary")
+    {
+        <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
+            @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
+        </section>
+
+        @*if (isCalculated)
+        {
+            <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
+                @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
+            </section>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                Please click the *Calculate* button first to unlock the Review Summary.
+            </div>
+        }*@
+    }
+    else if (activeTab == "3. Review Site Details")
+    {
+        <section id="tab-3.-review-site-details" class="tab-pane" aria-label="Review Site Details">
+            @RenderPage("~/Pages/Component/ReviewSiteDetails.cshtml", activeTab)
+        </section>
+    }
+    else if (activeTab == "4. Export")
+    {
+        <section id="tab-4.-export" class="tab-pane" aria-label="Export">
+            @RenderPage("~/Pages/Component/Export.cshtml", activeTab)
+        </section>
+    }
+    else if (activeTab == "Size Curve")
+    {
+        <section id="tab-size-curve" class="tab-pane" aria-label="Size Curve">
+            @RenderPage("~/Pages/Component/SizeCurve.cshtml", activeTab)
+        </section>
+    }
+    else if (activeTab == "Monitoring")
+    {
+        <section id="tab-size-curve" class="tab-pane" aria-label="Size Curve">
+            @RenderPage("~/Pages/Component/Monitoring.cshtml", activeTab)
+        </section>
+    }
+</main>
+
+        // NEW
+        //<main class="content-wrapper" role="main">
+        //
+        //    <div id="tab-main" class="tab-pane" style="@(activeTab == "Main" ? "" : "display:none;")">
+        //        @RenderPage("~/Pages/Component/Main.cshtml", activeTab)
+        //    </div>
+        //
+        //    <div id="tab-1-set-filters" class="tab-pane" style="@(activeTab == "1. Set Filters" ? "" : "display:none;")">
+        //        @RenderPage("~/Pages/Component/SetFiltersWindow.cshtml", activeTab)
+        //    </div>
+        //
+        //    <div id="tab-2-review-summary" class="tab-pane" style="@(activeTab == "2. Review Summary" ? "" : "display:none;")">
+        //        @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
+        //    </div>
+        //
+        //    <div id="tab-3-review-site-details" class="tab-pane" style="@(activeTab == "3. Review Site Details" ? "" : "display:none;")">
+        //        @RenderPage("~/Pages/Component/ReviewSiteDetails.cshtml", activeTab)
+        //    </div>
+        //
+        //    <div id="tab-4-export" class="tab-pane" style="@(activeTab == "4. Export" ? "" : "display:none;")">
+        //        @RenderPage("~/Pages/Component/Export.cshtml", activeTab)
+        //    </div>
+        //
+        //    <div id="tab-size-curve" class="tab-pane" style="@(activeTab == "Size Curve" ? "" : "display:none;")">
+        //        @RenderPage("~/Pages/Component/SizeCurve.cshtml", activeTab)
+        //    </div>
+        //
+        //</main>
+
+        <!-- NEW: Script to manage layout panel visibility instantly without a reload -->
+        //<script>
+        //    document.addEventListener("DOMContentLoaded", function () {
+        //        const tabs = document.querySelectorAll('.tab-nav__tab');
+        //    
+        //        tabs.forEach(tab => {
+        //            tab.addEventListener('click', function (e) {
+        //                e.preventDefault();
+        //            
+        //                // 1. Manage Active States on the Nav links
+        //                document.querySelector('.tab-nav__tab--active')?.classList.remove('tab-nav__tab--active');
+        //                document.querySelector('[aria-current="page"]')?.removeAttribute('aria-current');
+        //            
+        //                this.classList.add('tab-nav__tab--active');
+        //                this.setAttribute('aria-current', 'page');
+                    
+                        // 2. Hide all layout content blocks
+        //                document.querySelectorAll('.tab-pane').forEach(pane => {
+        //                    pane.style.display = 'none';
+        //                });
+                    
+                        // 3. Show the selected content block matching the target ID
+         //               const targetAttr = this.getAttribute('data-tab-target');
+         //               const targetPane = document.getElementById('tab-' + targetAttr);
+         //               if (targetPane) {
+         //                   targetPane.style.display = 'block';
+         //               }
+         //           });
+         //       });
+         //   });
+        //</script>
+    
+        }
+</body>
+</html>

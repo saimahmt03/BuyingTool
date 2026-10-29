@@ -1,0 +1,48 @@
+cat > .gitignore <<'EOF'
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+[Aa]ny[Cc]pu/
+
+# NuGet packages
+packages/
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+
+# Publish output
+publish/
+Publish/
+
+# Temporary files and logs
+*.tmp
+*.temp
+*.log
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.*.local.json
+
+# User-specific project files
+*.csproj.user
+*.vbproj.user
+*.dbmdl
+EOF

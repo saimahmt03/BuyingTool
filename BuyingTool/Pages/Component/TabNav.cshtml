@@ -1,0 +1,52 @@
+﻿@{
+    // Text of the active tab, passed in from the calling page
+    var activeTab = PageData[0] as string;
+
+    // CHANGED: the "Done" field was removed from every tab (it only controlled the green dot).
+    // Variant: "main" (blue-teal when not active) | "" (light tab)
+    var tabs = new[]
+    {
+        new { Text = "Main",                   Variant = ""     },
+        new { Text = "1. Set Filters",         Variant = ""     },
+        new { Text = "2. Review Summary",      Variant = ""     },
+        new { Text = "3. Review Site Details", Variant = ""     },
+        new { Text = "4. Export",              Variant = ""     },
+        new { Text = "Size Curve",             Variant = ""     },
+        new { Text = "Monitoring",             Variant = ""     }
+    };
+}
+
+<nav class="tab-nav">
+    <ul class="tab-nav__list">
+        @foreach (var tab in tabs)
+        {
+            var isActive = (tab.Text == activeTab);
+
+            var css = "tab-nav__tab";
+            if (tab.Variant != "") { css += " tab-nav__tab--" + tab.Variant; }
+            if (isActive) { css += " tab-nav__tab--active"; }
+
+            // OLD
+            // Clicking a tab reloads the page with ?tab=<its name>
+            var url = Href("~/") + "?tab=" + Uri.EscapeDataString(tab.Text);
+
+            <li class="tab-nav__item">
+                <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)">@tab.Text</a>
+            </li>
+
+
+            // NEW
+            // Create a safe HTML ID string (e.g., "1.-set-filters" becomes "1-set-filters")
+            //var cleanId = tab.Text.Replace(" ", "-").Replace(".", "").ToLowerInvariant();
+
+            //<li class="tab-nav__item">
+            //    <a class="@css"
+            //       href="#tab-@cleanId"
+            //       data-tab-target="@cleanId"
+            //       aria-current="@(isActive ? "page" : null)">
+            //        @tab.Text
+            //    </a>
+            //</li>
+        }
+    </ul>
+</nav>

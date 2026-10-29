@@ -1,0 +1,63 @@
+﻿/* Component: Viewer.cshtml */
+
+.viewer {
+    display: flex;
+    align-items: stretch;
+    height: 20px;
+    background: #e6e6e6;
+    border: 1px solid #d0d0d0;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+}
+
+/* Left label block, darker grey */
+.viewer__label {
+    display: flex;
+    align-items: center;
+    min-width: 60px;
+    padding: 0 8px 0 4px;
+    background: #c4c4c4;
+    color: #000000;
+}
+
+.viewer__option {
+    position: relative;
+    display: block;
+    cursor: pointer;
+}
+
+/* The real radio button is hidden but stays usable with the keyboard */
+.viewer__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.viewer__text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 100%;
+    padding: 0 8px;
+    background: #e6e6e6;
+    color: #8a8a8a;
+    font-size: 10px;
+}
+
+.viewer__option:hover .viewer__text {
+    background: #f1f1f1;
+}
+
+/* Selected option: orange with white text */
+.viewer__input:checked + .viewer__text,
+.viewer__option:hover .viewer__input:checked + .viewer__text {
+    background: #f7a03a;
+    color: #ffffff;
+}
+
+.viewer__input:focus-visible + .viewer__text {
+    outline: 2px solid #0a5873;
+    outline-offset: -2px;
+}

@@ -1,0 +1,11 @@
+﻿@{ // How to call:
+                //   @RenderPage("~/Pages/Component/PageHeader.cshtml", "Filters Window")
+                //
+                //   title : text shown in the band
+
+    var title = PageData[0] as string; 
+}
+
+<header class="page-header" role="banner">
+    <h1 class="page-header__title">@title</h1>
+</header>

@@ -1,0 +1,246 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using System.Web
+@{
+    // How to call (Standard Table):
+    //        @RenderPage("~/Pages/Component/TableWithPagination.cshtml", headers, rows)
+    //
+    // How to call (With Row Headers on Column 0):
+    //        @RenderPage("~/Pages/Component/TableWithPagination.cshtml", headers, rows, true)
+    //
+    // Optional Page Size can be passed as 4th parameter (default is 10):
+    //        @RenderPage("~/Pages/Component/TableWithPagination.cshtml", headers, rows, true, 5)
+
+    var headers = PageData[0] as IEnumerable<object>;
+    var rows = PageData[1] as IEnumerable<object>;
+    var hasRowHeader = PageData.Count > 2 && PageData[2] is bool flag && flag;
+
+    // Optional page size configuration (default to 10 rows per page)
+    var pageSize = (PageData.Count > 3 && PageData[3] is int size) ? size : 10;
+
+    // Safe fallbacks and normalization
+    var headerList = headers != null ? headers.Cast<object>().ToList() : new List<object>();
+
+    var rowList = new List<List<object>>();
+    if (rows != null)
+    {
+        foreach (var row in rows)
+        {
+            if (row == null) { continue; }
+
+            if (row is object[] objArr)
+            {
+                rowList.Add(objArr.ToList());
+            }
+            else if (row is IEnumerable<object> objEnum)
+            {
+                rowList.Add(objEnum.ToList());
+            }
+            else
+            {
+                var list = new List<object>();
+                foreach (var item in (System.Collections.IEnumerable)row)
+                {
+                    list.Add(item);
+                }
+                rowList.Add(list);
+            }
+        }
+    }
+}
+
+@helper RenderCellContent(object cellValue)
+{
+    if (cellValue == null)
+    {
+        @:
+        return;
+    }
+
+    string valStr = cellValue.ToString();
+
+    // Automatically detect if the cell value is an image path/URL across any directory structure
+    if (IsImagePath(valStr))
+    {
+        // If it's already a web URL or relative web path, use it directly.
+        // If it's a UNC network path, pass it through your GetImage.ashx handler.
+        string finalSrc = valStr;
+        if (valStr.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase))
+        {
+            finalSrc = VirtualPathUtility.ToAbsolute("~/GetImage.ashx?path=" + HttpUtility.UrlEncode(valStr));
+        }
+
+        <img src="@finalSrc" class="data-table__img" alt="Thumbnail" loading="lazy" />
+    }
+    else
+    {
+        @valStr
+    }
+}
+
+@functions {
+    // Flexible utility method supporting UNC, absolute, relative, and URL paths with standard image extensions
+    private bool IsImagePath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) return false;
+
+        string lower = path.ToLowerInvariant().Trim();
+
+        // Check for common image extensions
+        bool hasImageExtension = lower.EndsWith(".jpg") ||
+                                lower.EndsWith(".jpeg") ||
+                                lower.EndsWith(".png") ||
+                                lower.EndsWith(".gif") ||
+                                lower.EndsWith(".webp") ||
+                                lower.EndsWith(".bmp");
+
+        if (!hasImageExtension) return false;
+
+        // Flexible path format check to avoid false positives on random text containing ".jpg"
+        bool isUncPath = lower.StartsWith(@"\\");
+        bool isWebUrl = lower.StartsWith("http://") || lower.StartsWith("https://");
+        bool isRelativePath = lower.StartsWith("/") || lower.StartsWith("~/") || lower.StartsWith("./");
+        bool isAbsolutePath = (lower.Length > 2 && lower[1] == ':' && lower[2] == '\\'); // e.g., C:\...
+
+        return isUncPath || isWebUrl || isRelativePath || isAbsolutePath;
+    }
+}
+
+<div class="data-table-container" data-page-size="@pageSize">
+    <table class="data-table">
+        @if (headerList.Count > 0)
+        {
+            <thead>
+                <tr class="data-table__header-row">
+                    @foreach (var header in headerList)
+                    {
+                        <th class="data-table__header-cell">@header</th>
+                    }
+                </tr>
+            </thead>
+        }
+        <tbody>
+            @foreach (var r in rowList)
+            {
+                if (r.Count == 0) { continue; }
+
+                // Automatically add row--image modifier class if any cell contains an image path
+                bool isImageRow = r.Any(cell => cell != null && IsImagePath(cell.ToString()));
+                string rowClass = isImageRow ? "data-table__row data-table__row--image" : "data-table__row";
+
+                <tr class="@rowClass">
+                    @if (hasRowHeader)
+                    {
+                        var label = r[0];
+                        <th scope="row" class="data-table__label">
+                            @RenderCellContent(label)
+                        </th>
+
+                        for (var i = 1; i < r.Count; i++)
+                        {
+                            <td class="data-table__cell">
+                                @RenderCellContent(r[i])
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var cell in r)
+                        {
+                            <td class="data-table__cell">
+                                @RenderCellContent(cell)
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls Container -->
+    <div class="data-table__pagination">
+        <button type="button" class="data-table__page-btn data-table__page-btn--prev" disabled>&laquo; Prev</button>
+        <span class="data-table__page-info">Page 1 of 1</span>
+        <button type="button" class="data-table__page-btn data-table__page-btn--next" disabled>Next &raquo;</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const wrappers = document.querySelectorAll(".data-table-container");
+
+        wrappers.forEach(wrapper => {
+            const table = wrapper.querySelector(".data-table");
+            const tbody = table.querySelector("tbody");
+            const rows = Array.from(tbody.querySelectorAll("tr.data-table__row"));
+            const pageSize = parseInt(wrapper.getAttribute("data-page-size")) || 10;
+
+            const prevBtn = wrapper.querySelector(".data-table__page-btn--prev");
+            const nextBtn = wrapper.querySelector(".data-table__page-btn--next");
+            const pageInfo = wrapper.querySelector(".data-table__page-info");
+
+            let currentPage = 1;
+            const totalPages = Math.ceil(rows.length / pageSize) || 1;
+
+            function showPage(page) {
+                currentPage = page;
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+
+                rows.forEach((row, index) => {
+                    row.style.display = (index >= start && index < end) ? "" : "none";
+                });
+
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                prevBtn.disabled = currentPage === 1;
+                nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+            }
+
+            prevBtn.addEventListener("click", () => {
+                if (currentPage > 1) showPage(currentPage - 1);
+            });
+
+            nextBtn.addEventListener("click", () => {
+                if (currentPage < totalPages) showPage(currentPage + 1);
+            });
+
+            // Initialize pagination display
+            showPage(1);
+
+            // --- Column Resizer Logic ---
+            const headers = table.querySelectorAll("th");
+            headers.forEach((header, index) => {
+                if (index === 0 && header.classList.contains("data-table__label")) {
+                    return;
+                }
+
+                const resizer = document.createElement("div");
+                resizer.classList.add("data-table__resizer");
+                header.appendChild(resizer);
+
+                let startX = 0;
+                let startWidth = 0;
+
+                const onMouseMove = function (e) {
+                    const dx = e.clientX - startX;
+                    header.style.width = `${startWidth + dx}px`;
+                };
+
+                const onMouseUp = function () {
+                    resizer.classList.remove("is-resizing");
+                    document.removeEventListener("mousemove", onMouseMove);
+                    document.removeEventListener("mouseup", onMouseUp);
+                };
+
+                resizer.addEventListener("mousedown", function (e) {
+                    startX = e.clientX;
+                    startWidth = header.offsetWidth;
+                    resizer.classList.add("is-resizing");
+                    document.addEventListener("mousemove", onMouseMove);
+                    document.addEventListener("mouseup", onMouseUp);
+                    e.preventDefault();
+                });
+            });
+        });
+    });
+</script>

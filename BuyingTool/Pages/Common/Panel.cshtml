@@ -1,0 +1,25 @@
+﻿@{
+    // How to call:
+    //   @RenderPage("~/Pages/Common/Panel.cshtml", title, variant, body)
+    //
+    //   title   : text in the header bar
+    //   variant : "teal" | "olive" | "gray"
+    //   body    : Razor template with the content (e.g. a table)
+
+    var title = PageData[0] as string;
+    var variant = PageData[1] as string;
+    var body = PageData[2] as Func<dynamic, object>;
+
+    if (string.IsNullOrEmpty(variant)) { variant = "teal"; }
+}
+
+<section class="panel panel--@variant">
+    <header class="panel__header">@title</header>
+
+    @if (body != null)
+    {
+        <div class="panel__body">
+            @body(null)
+        </div>
+    }
+</section>

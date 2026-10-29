@@ -1,0 +1,55 @@
+﻿/* Component: Panel.cshtml (plain: frame + title bar + body) */
+
+/* 1. Colors: one variable per variant. Change the shades here. */
+.panel--teal {
+    --panel-color: #3e7e85;
+}
+
+.panel--olive {
+    --panel-color: #8b8636;
+}
+
+.panel--gray {
+    --panel-color: #808080;
+}
+
+/* 2. Frame */
+.panel {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 2px solid var(--panel-color);
+    background: #ffffff;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, .3);
+    color: #000000;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+}
+
+    .panel *,
+    .panel *::before,
+    .panel *::after {
+        box-sizing: border-box;
+    }
+
+/* 3. Title bar */
+.panel__header {
+    padding: 2px 8px;
+    background: var(--panel-color);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.25;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* 4. Body: whatever is inside (a table) scrolls here, not the whole page */
+.panel__body {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    overflow: auto;
+}

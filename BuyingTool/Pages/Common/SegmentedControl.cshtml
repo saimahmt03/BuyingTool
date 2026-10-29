@@ -1,0 +1,41 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+
+@{
+    // How to call:
+    // @RenderPage("~/Pages/Common/SegmentedControl.cshtml",
+    //     metricOptions, activeMetric, fieldName)
+
+    var items = PageData[0] as IEnumerable<string>;
+    var activeItem = PageData[1] as string;
+    var name = PageData[2] as string;
+
+    if (items == null)
+    {
+        items = new List<string>();
+    }
+
+    var hasName = !string.IsNullOrEmpty(name);
+    var controlId = "segmented-" + Guid.NewGuid().ToString("N").Substring(0, 8);
+}
+
+<div id="@controlId"
+     class="segmented-control"
+     role="group"
+     aria-label="Segmented Options">
+
+    @foreach (var item in items)
+    {
+        var isActive = (item == activeItem);
+
+        <button type="submit"
+                class="segmented-btn @(isActive ? "active" : "")"
+                name="@(hasName ? name : "metric")"
+                value="@item">
+
+            @item
+
+        </button>
+    }
+</div>

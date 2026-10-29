@@ -1,0 +1,124 @@
+﻿/* Base Layout & Color Scheme */
+:root {
+    --primary-deep: #004862;
+    --primary-accent: #065275;
+    --text-color: #003344;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--primary-deep);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* Full Screen Content Wrapper */
+.content-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    box-sizing: border-box;
+}
+
+/* Banner Container: Clean wrapper */
+.banner-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Central Content Section with Light Gradient and Top/Bottom Inner Shadow Effect */
+.banner-content {
+    /* Bright white to soft light-blue/cyan gradient matching your reference image */
+    background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.9) 0%, rgba(190, 220, 232, 0.4) 60%), linear-gradient(135deg, #ffffff 0%, #d8edf5 100%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem 0;
+    box-sizing: border-box;
+    /* Clean inner shadow cast by the top and bottom bars */
+    box-shadow: inset 0 8px 12px -4px rgba(0, 0, 0, 0.25), inset 0 -8px 12px -4px rgba(0, 0, 0, 0.25);
+}
+
+/* Controlled Fixed Width Wrapper for the Text */
+.centered-text-box {
+    width: 100%;
+    max-width: 1250px;
+    padding: 0 4rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Row Styles */
+.report-header-row {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-deep);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+/* Metadata Info Row Styles */
+.report-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.user-greeting-text {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #333333;
+    margin: 0;
+}
+
+.current-date-text {
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: #333333;
+    margin: 0;
+}
+
+.reload-time-text {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #333333;
+    margin: 0;
+    margin-top: 0.5rem;
+}
+
+/* Responsive Behavior for smaller screens */
+@media (max-width: 768px) {
+    .banner-content {
+        padding: 3rem 0;
+    }
+
+    .centered-text-box {
+        padding: 0 1.5rem;
+    }
+
+    .page-title {
+        font-size: 2.2rem;
+    }
+}

@@ -1,0 +1,131 @@
+﻿/* =================================================================
+   Review Site Details Page Styles (.NET Framework 4.7.2 / Razor v3)
+   ================================================================= */
+:root {
+    --bg-main: #e0e0e0;
+    --panel-bg: #ececec;
+    --panel-border: #888;
+    --text-dark: #222;
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* Edge-to-edge header banner layout matching reference */
+.header-banner-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2f5d5c;
+    padding: 0 15px;
+    margin: 0;
+}
+
+.header-title-area {
+    flex: 1;
+}
+
+.header-action-area {
+    flex: 0 0 auto;
+}
+
+/* Main content wrapper providing balanced page padding */
+.main-content-wrapper {
+    padding: 15px;
+    width: 100%;
+}
+
+/* Flexible container for the export view stack */
+.export-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Toolbar row alignment - pushes filters to the right side */
+.toolbar-row {
+    display: flex;
+    justify-content: space-between; /* Pushes filters to the left and export button to the right */
+    align-items: center;
+    width: 100%;
+    padding-right: 2px;
+}
+
+.four-col-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.export-col {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Horizontal alignment for Segment Control -> Store Grade -> Size -> Apply Button */
+.four-col-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.col {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Data grid / table panel card styling */
+.export-panel {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Structural utility classes */
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 5px;
+}
+
+/* Responsive fallback */
+@media (max-width: 1024px) {
+    .header-banner-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .toolbar-row {
+        justify-content: flex-start;
+    }
+}

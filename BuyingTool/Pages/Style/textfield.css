@@ -1,0 +1,40 @@
+﻿/* Component: Textfield.cshtml */
+
+.textfield {
+    display: flex;
+    align-items: center;
+    height: 16px;
+    border: 1px solid #7d8d90;
+    background: #ffffff;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+    color: #000;
+}
+
+.textfield__label {
+    flex: 0 0 var(--tf-label-width, 140px);
+    padding: 0 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.textfield__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    padding: 0 3px;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+}
+
+    .textfield__input:focus {
+        outline: none;
+    }
+
+.textfield:focus-within {
+    outline: 2px solid #3e7e85;
+    outline-offset: -1px;
+}

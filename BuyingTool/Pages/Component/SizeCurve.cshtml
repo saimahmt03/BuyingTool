@@ -1,0 +1,52 @@
+﻿@using BuyingTool.Services;
+@{
+    Service service = new Service();
+
+    var tableHeaders = new List<string>();
+    var tableRows = new List<string[]>();
+    var dbResponse = string.Empty;
+
+    string brand = Session["Brand"] as string;
+    string division = Session["Division"] as string; 
+    string category = Session["Category"] as string; 
+    string department = Session["Department"] as string; 
+    string periodplan = Session["PeriodPlan"] as string; 
+
+    (tableHeaders, tableRows, dbResponse) = service.GetSizeCurveTable(brand, division, department, category, periodplan)
+                                .GetAwaiter()
+                                .GetResult();
+
+    string label2 = "Size Curve per Store " + periodplan;
+
+    var headerCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header2.css")).Ticks.ToString();
+    var tableCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/table2.css")).Ticks.ToString();
+    var sizeCurveCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/size-curve.css")).Ticks.ToString();
+}
+<head>
+    <link href="~/Pages/Style/header2.css?v=@headerCss" rel="stylesheet" />
+    <link href="~/Pages/Style/table2.css?v=@tableCss" rel="stylesheet" />
+    <link href="~/Pages/Style/size-curve.css?v=@sizeCurveCss" rel="stylesheet" />
+</head>
+<body>
+    <main class="main-content-wrapper" role="main">
+        <section class="size-curve-container">
+            <!--<div class="size-curve-row">
+                <article class="panel-card" aria-label="Reference Size Curve Panel">
+                    RenderPage("~/Pages/Common/Header.cshtml", label1)
+                    <div class="table-responsive-wrapper">
+                        RenderPage("~/Pages/Common/Table.cshtml", tableHeaders, tableRows)
+                    </div>
+                </article>
+            </div>-->
+
+            <div class="size-curve-row">
+                <article class="panel-card" aria-label="Size Curve per Store Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", label2)
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/TableWithPagination.cshtml", tableHeaders, tableRows, true, 25)
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>

@@ -1,0 +1,19 @@
+﻿@{
+    // How to call:
+    //   @RenderPage("~/Pages/Component/Button.cshtml", text, type, name, value)
+    //
+    //   text  : text on the button
+    //   type  : "submit" | "button" | "reset"
+    //   name  : form field name sent with the button ("" to skip)
+    //   value : value sent with the button
+
+    var text = PageData[0] as string;
+    var type = PageData[1] as string;
+    var name = PageData[2] as string;
+    var value = PageData[3] as string;
+
+    if (string.IsNullOrEmpty(type)) { type = "button"; }
+    var hasName = !string.IsNullOrEmpty(name);
+}
+
+<button class="button" type="@type" name="@(hasName ? name : null)" value="@(hasName ? value : null)">@text</button>

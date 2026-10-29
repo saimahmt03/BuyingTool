@@ -1,0 +1,134 @@
+﻿/* =================================================================
+   IndexLayout & Shell Styles (.NET Framework 4.7.2 / Razor v3)
+   ================================================================= */
+:root {
+    --bg-main: #efefef;
+    --text-dark: #222;
+}
+
+/* Base Styles & Box-Sizing Reset */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-main);
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    color: var(--text-dark);
+    box-sizing: border-box;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* Header Layout wrapping the flexible two-column layout */
+.dashboard-header {
+    width: 100%;
+    background-color: #0a5873; /* Matches the exact TabNav strip background color */
+    height: 38px; /* Locks a strict, consistent header height */
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* Two-column flexible container for navigation and logout link */
+.two-col {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; /* Forces both columns to match the header height perfectly */
+    width: 100%;
+    height: 100%;
+    flex-wrap: nowrap;
+}
+
+/* Left side wrapping tab navigation */
+.col-left-side {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    order: 1;
+    display: flex;
+    align-items: flex-end; /* Pins tabs to the bottom edge of the header */
+}
+
+/* Right side wrapping logout action - inherits header background to blend seamlessly */
+.col-right-side {
+    flex: 0 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center; /* Keeps the LOGOUT text perfectly centered vertically */
+    background-color: inherit;
+    order: 2;
+    white-space: nowrap;
+}
+
+/* Styled Logout text link with white text */
+.logout-link {
+    background: none;
+    border: none;
+    color: #ffffff; /* Pure white text color */
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+    .logout-link:hover {
+        color: #e0e0e0; /* Subtle hover effect */
+    }
+
+/* Main content wrapper containing active tabs/steps */
+.content-wrapper {
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Individual tab pane container styling */
+.tab-pane {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Responsive adjustments for smaller screens or tablets */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 5px;
+    }
+}
+
+/* =================================================================
+   Password Component Styles (Extends Textfield)
+   ================================================================= */
+.textfield--password {
+    position: relative;
+}
+
+    .textfield--password .textfield__input {
+        font-family: Tahoma, Arial, sans-serif;
+        font-size: 11px;
+    }
+
+        .textfield--password .textfield__input::-ms-reveal,
+        .textfield--password .textfield__input::-ms-clear {
+            display: none; /* Hides default browser reveal button to keep custom UI consistent */
+        }
+
+
+
+

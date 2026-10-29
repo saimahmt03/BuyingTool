@@ -1,0 +1,74 @@
+﻿/* Component: Table.cshtml */
+
+.data-table {
+    width: 100%;
+    min-width: max-content; /* Allows the table to expand horizontally to fit all 25+ columns */
+    border-collapse: collapse;
+    table-layout: auto; /* Lets columns size themselves based on their content */
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+    color: #000;
+}
+
+    .data-table th,
+    .data-table td {
+        padding: 4px 6px; /* Added a bit more breathing room */
+        border: 1px solid #d2d2d2;
+        text-align: center;
+    }
+
+    /* Allow header cells to wrap text so long names like "IA QTY Final" are fully readable */
+    .data-table th {
+        height: auto;
+        white-space: normal;
+        word-break: break-word;
+        font-weight: bold;
+        background: #eaeaea;
+    }
+
+    /* Data cells stay compact and scroll horizontally if needed */
+    .data-table td {
+        height: 14px;
+        white-space: nowrap;
+    }
+
+/* Header Cells */
+.data-table__header-row {
+    background: #f4f4f4;
+}
+
+/* First column (Site Code): bold row labels */
+.data-table__label {
+    min-width: 104px;
+    background: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Image row styling (if used elsewhere) */
+.data-table__row--image .data-table__label {
+    background: #efefef;
+}
+
+.data-table__row--image .data-table__cell {
+    height: 92px;
+    padding: 2px 0;
+}
+
+.data-table__img {
+    display: block;
+    width: 58px;
+    height: 86px;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+.data-table__img--empty {
+    background: repeating-linear-gradient(45deg, #ececec, #ececec 6px, #e2e2e2 6px, #e2e2e2 12px);
+}
+
+/* Green rows (Positive / Highlighted states) */
+.data-table__row--positive .data-table__cell {
+    color: #2e7d32;
+}

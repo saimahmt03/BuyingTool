@@ -1,0 +1,65 @@
+﻿/* =================================================================
+   Size Curve Layout Styles (.NET Framework 4.7.2 / Razor v3)
+   ================================================================= */
+:root {
+    --bg-main: #e0e0e0;
+    --panel-bg: #ececec;
+    --panel-border: #888;
+    --text-dark: #222;
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* Main content container with balanced side padding */
+.main-content-wrapper {
+    padding: 15px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Outer layout container */
+.size-curve-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Full-width row block */
+.size-curve-row {
+    width: 100%;
+}
+
+/* Card styling for each panel matching enterprise theme */
+.panel-card {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Fully responsive table scroll wrapper */
+.table-responsive-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+}

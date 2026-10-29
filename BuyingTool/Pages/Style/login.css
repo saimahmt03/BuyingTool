@@ -1,0 +1,181 @@
+﻿/* Base Layout & Color Scheme */
+:root {
+    --primary-deep: #004862;
+    --primary-accent: #065275;
+    --text-color: #003344;
+    --bg-gradient-start: rgba(0, 72, 98, 0.12);
+    --bg-gradient-mid: rgba(74, 133, 156, 0.22);
+    --bg-gradient-end: rgba(0, 72, 98, 0.35);
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #edf2f6;
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 600px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+
+/* Compact Login Pane Card */
+.tab-pane.login-pane {
+    width: 100%;
+    background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%), linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
+    border-top: 5px solid var(--primary-deep);
+    border-bottom: 5px solid var(--primary-deep);
+    border-radius: 4px;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 72, 98, 0.15);
+    box-sizing: border-box;
+}
+
+/* Title & Header Section */
+.login-header-group {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 2.5rem;
+}
+
+.page-title {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--primary-deep);
+    margin: 0 0 0.4rem 0;
+    letter-spacing: -0.5px;
+}
+
+.login-sub-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* Direct Form Container (no inner white card background) */
+.login-form-container {
+    width: 100%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* Alignment wrapper for custom text field components */
+.form-row-aligned {
+    display: flex;
+    width: 100%;
+}
+
+    .form-row-aligned .text-field-container,
+    .form-row-aligned > div {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    /* Dark Navy Labels matching reference image */
+    .form-row-aligned label {
+        flex: 0 0 110px;
+        text-align: left;
+        font-weight: 600;
+        color: #003344; /* Dark navy text */
+        font-size: 1rem;
+    }
+
+    /* Sharp, clean rectangular box input style matching image */
+    .form-row-aligned input,
+    .form-row-aligned .text-field-input {
+        flex: 1;
+        padding: 0.6rem 0.75rem;
+        border: 1px solid #707070; /* Thin dark gray outline */
+        border-radius: 0px; /* Sharp corners */
+        font-size: 1rem;
+        outline: none;
+        background-color: #ffffff;
+        box-shadow: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-row-aligned input:focus,
+        .form-row-aligned .text-field-input:focus {
+            border-color: #004862;
+            box-shadow: 0 0 3px rgba(0, 72, 98, 0.4);
+        }
+
+/* Button Container */
+.form-actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .form-actions button,
+    .form-actions input[type="submit"],
+    .form-actions .btn {
+        background: linear-gradient(to bottom, #448fa6 0%, #065275 100%);
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0.5rem 2rem;
+        border: 1px solid #033a52;
+        border-radius: 18px;
+        cursor: pointer;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+        transition: filter 0.2s ease, transform 0.1s ease;
+    }
+
+        .form-actions button:hover,
+        .form-actions input[type="submit"]:hover,
+        .form-actions .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .form-actions button:active,
+        .form-actions input[type="submit"]:active,
+        .form-actions .btn:active {
+            transform: translateY(1px);
+        }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .tab-pane.login-pane {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-row-aligned .text-field-container,
+    .form-row-aligned > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .form-row-aligned label {
+        flex: none;
+        width: 100%;
+    }
+
+    .form-row-aligned input,
+    .form-row-aligned .text-field-input {
+        width: 100%;
+    }
+}

@@ -1,0 +1,86 @@
+﻿body {
+}
+/* General Layout & Table Reset */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    background-color: #f4f6f7;
+    margin: 0;
+    padding: 10px;
+}
+
+.size-curve-container {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.two-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    text-align: right;
+}
+
+th, td {
+    border: 1px solid #d9d9d9;
+    padding: 4px 6px;
+    white-space: nowrap;
+}
+
+/* Column headers inside tables */
+th {
+    background-color: #e6ebec;
+    color: #222222;
+    font-weight: bold;
+    text-align: center;
+}
+
+    /* Left-align text columns (like Site Code, Site Name, Size) */
+    td:nth-child(1), th:nth-child(1),
+    td:nth-child(2), th:nth-child(2),
+    td:nth-child(3), th:nth-child(3) {
+        text-align: left;
+    }
+
+/* Alternating rows for readability */
+tbody tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+/* Highlighted Column (e.g., New QTY / V1 vertical block) */
+td.highlight-col, th.highlight-col {
+    background-color: #e0f3ff !important;
+    border-left: 1px solid #bce2ff;
+    border-right: 1px solid #bce2ff;
+}
+
+/* Total / Summary row styling */
+tr.total-row {
+    font-weight: bold;
+    background-color: #f1f3f4;
+    border-top: 2px solid #b0b0b0;
+}
+
+/* Soft green highlight for calculated curve distribution cells */
+td.curve-highlight {
+    background-color: #eafaf1;
+}
+
+/* Negative variance coloring (Soft Red) */
+td.negative-var {
+    color: #d9534f;
+}
+
+/* Positive variance coloring */
+td.positive-var {
+    color: #2e7d32;
+}

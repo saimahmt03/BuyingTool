@@ -1,0 +1,226 @@
+﻿/* =================================================================
+    Set Filters & Layout Styles (.NET Framework 4.7.2 / Razor v3)
+   ================================================================= */
+:root {
+    --bg-main: #e0e0e0;
+    --panel-bg: #ececec;
+    --panel-border: #888;
+    --header-bg-dark: #555555;
+    --header-bg-teal: #2f5d5c;
+    --text-dark: #222;
+    --text-light: #fff;
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 11px;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* Ensure header container stretches edge-to-edge and allows tabs to be fully visible */
+.header-container,
+header {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+}
+
+/* Main content wrapper with flexible spacing */
+.main-content-wrapper {
+    padding: 15px;
+}
+
+/* Side-by-side Dashboard Container */
+.dashboard-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* Left Sidebar Filter Panel - Expanded width to match your purple box outline (fitting 2 columns side-by-side) */
+.filter-panel {
+    flex: 0 0 700px;
+    width: 700px;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+}
+
+/* Right Main Options Gallery Panel - Expands to fill the remaining dashboard space */
+.gallery-panel {
+    flex: 1;
+    min-width: 0;
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    overflow-x: auto;
+}
+
+/* Responsive Table Scroll Container */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+/* Reusable Filter Group Spacing */
+.filter-group {
+    margin: 15px 0 0 10px;
+}
+
+    /* Apply dark teal to inner filter group headers EXCEPT the first one ("Required Filters*") */
+    .filter-group:not(:first-child) .section-header,
+    .filter-group:not(:first-child) .sectionheader,
+    .filter-group:not(:first-child) [class*="section-header"],
+    .filter-group:not(:first-child) [class*="sectionheader"],
+    .gallery-panel .section-header,
+    .gallery-panel .sectionheader,
+    .gallery-panel [class*="section-header"],
+    .gallery-panel [class*="sectionheader"] {
+        background-color: var(--header-bg-teal) !important;
+        color: var(--text-light) !important;
+    }
+
+    /* Explicitly ensure "Input Factor Rate" gets the dark teal background to match PLC and WOS */
+    .filter-group:has(input[name="factorRate"]) .section-header,
+    .filter-group:has(input[name="factorRate"]) .sectionheader,
+    .filter-group:has(input[name="factorRate"]) [class*="section-header"],
+    .filter-group:has(input[name="factorRate"]) [class*="sectionheader"] {
+        background-color: var(--header-bg-teal) !important;
+        color: var(--text-light) !important;
+    }
+
+/* Dropdown & Input Layout Stability / Performance Containment */
+.filter-panel select,
+.filter-panel .dropdown-field,
+.filter-panel input[type="text"] {
+    contain: layout style;
+    width: 100%;
+    min-width: 0;
+}
+
+.filter-group .form-group,
+.filter-group .dropdown-container,
+.filter-group > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+    contain: layout;
+}
+
+.filter-group label,
+.filter-group .control-label {
+    flex: 0 0 100px;
+    text-align: left;
+    padding-right: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filter-group select,
+.filter-group input[type="text"],
+.filter-group .dropdown-field {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Utility structural classes */
+.two-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Allow the two inner columns inside the filter panel to sit side-by-side */
+.filter-panel .two-col {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Centers the button group and tightens spacing between them */
+.three-col {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+    /* Prevents the individual button columns from stretching wide, keeping them snug */
+    .three-col .col {
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 0;
+    }
+
+.col {
+    flex: 1;
+    min-width: 0;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* =================================================================
+   Responsive Adjustments
+   ================================================================= */
+@media (max-width: 1200px) {
+    /* If screen size narrows down, stack the two filter sub-columns vertically */
+    .filter-panel .two-col {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 1024px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .filter-panel {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .gallery-panel {
+        width: 100%;
+    }
+}
+
+
+
+/* Locked tabs (enabled after Calculate) */
+.tab-locked {
+    pointer-events: none; /* not clickable */
+    opacity: 0.45;
+}

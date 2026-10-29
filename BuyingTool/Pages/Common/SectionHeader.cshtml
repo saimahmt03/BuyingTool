@@ -1,0 +1,20 @@
+﻿@{
+    // How to call:
+    //   @RenderPage("~/Pages/Component/SectionHeader.cshtml", text, required)
+    //
+    //   text     : title shown in the header bar
+    //   required : "true" to append the * marker after the title ("" or "false" to skip)
+    //
+    // Include the stylesheet once in your layout or page:
+    //   <link rel="stylesheet" href="~/css/SectionHeader.css" />
+
+    var text = PageData[0] as string;
+    var required = PageData[1] as string;
+
+    var isRequired = string.Equals(required, "true", StringComparison.OrdinalIgnoreCase);
+}
+
+<div class="section-header">
+    <span class="section-header__title">@text@if (isRequired)
+    {<span class="section-header__required">*</span>}</span>
+</div>

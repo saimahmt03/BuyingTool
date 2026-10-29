@@ -1,0 +1,31 @@
+﻿/* Component: Button.cshtml */
+
+.button {
+    width: 116px;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid #2c5f64;
+    border-radius: 16px;
+    background: linear-gradient(#86b6bb 0%, #4b8b92 48%, #356f76 52%, #5a9aa0 100%);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .5);
+    color: #ffffff;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .45);
+    cursor: pointer;
+}
+
+    .button:hover {
+        filter: brightness(1.08);
+    }
+
+    .button:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .35);
+    }
+
+    .button:focus-visible {
+        outline: 2px solid #0a5873;
+        outline-offset: 2px;
+    }

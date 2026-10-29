@@ -1,0 +1,490 @@
+﻿@using BuyingTool.Services
+@using System.Linq
+@using System.Data;
+@{
+    Service service = new Service();
+
+    string selectedStoreGrades = string.Empty;
+    string selectedSizes = string.Empty;
+    string errorMessage = string.Empty;
+
+    if (Session["StoreGrade"] != null && Session["Size"] != null)
+    {
+        selectedStoreGrades = Session["StoreGrade"] as string;
+        selectedSizes = Session["Size"] as string;
+    }
+
+    DataTable dataSet = service.GetFinalDataSetFilterCache().GetAwaiter().GetResult();
+
+    var tableNameList = new string[] { "Store Grade (Cummulative)", "Distribution Plan per Store Grade", "Territory (Cummulative)",
+                                        "Distribution Plan per Territory", "Distribution Plan per Drops"};
+
+    var selectedTable = string.Empty;
+
+    var storeGradeList = dataSet != null
+                ? dataSet.AsEnumerable()
+                           .Select(row => row.Field<string>("StoreGrade"))
+                           .Where(val => !string.IsNullOrWhiteSpace(val))
+                           .Distinct()
+                           .ToList()
+                : new List<string>();
+
+    var sizeList = dataSet != null
+                ? dataSet.AsEnumerable()
+                           .Select(row => row.Field<string>("Size"))
+                           .Where(val => !string.IsNullOrWhiteSpace(val))
+                           .Distinct()
+                           .ToList()
+                : new List<string>();
+
+    var (tables, dbResponse) = service.GetDistributionSummary(selectedSizes, selectedStoreGrades).GetAwaiter().GetResult();
+
+    // Safely extract all 5 tables from the array
+    DataTable table1 = tables != null && tables.Length > 0 ? tables[0] : null; // Store Grade Cumulative
+    DataTable table2 = tables != null && tables.Length > 1 ? tables[1] : null; // Territory Cumulative
+    DataTable table3 = tables != null && tables.Length > 2 ? tables[2] : null; // Distribution Plan per Store Grade
+    DataTable table4 = tables != null && tables.Length > 3 ? tables[3] : null; // Distribution Plan per Territory
+    DataTable table5 = tables != null && tables.Length > 4 ? tables[4] : null; // Distribution Plan per Drop
+
+    var tableHeaders1 = new List<string>(); var tableRows1 = new List<string[]>();
+    if (table1 != null)
+    {
+        (tableHeaders1, tableRows1) = service.DatatableConvertToHT(table1).GetAwaiter().GetResult();
+    }
+
+    var tableHeaders2 = new List<string>(); var tableRows2 = new List<string[]>();
+    if (table2 != null)
+    {
+        (tableHeaders2, tableRows2) = service.DatatableConvertToHT(table2).GetAwaiter().GetResult();
+    }
+
+    var tableHeaders3 = new List<string>(); var tableRows3 = new List<string[]>();
+    if (table3 != null)
+    {
+        (tableHeaders3, tableRows3) = service.DatatableConvertToHT(table3).GetAwaiter().GetResult();
+    }
+
+    var tableHeaders4 = new List<string>(); var tableRows4 = new List<string[]>();
+    if (table4 != null)
+    {
+        (tableHeaders4, tableRows4) = service.DatatableConvertToHT(table4).GetAwaiter().GetResult();
+    }
+
+    var tableHeaders5 = new List<string>(); var tableRows5 = new List<string[]>();
+    if (table5 != null)
+    {
+        (tableHeaders5, tableRows5) = service.DatatableConvertToHT(table5).GetAwaiter().GetResult();
+    }
+
+    <!--if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
+    {
+
+            string action = Request["actionButton"];
+
+            if (action == "Apply")
+            {
+                var tHeader1 = new List<string>();
+                var tRows1 = new List<string[]>();
+                var tHeader2 = new List<string>();
+                var tRows2 = new List<string[]>();
+                var tHeader3 = new List<string>();
+                var tRows3 = new List<string[]>();
+                var tHeader4 = new List<string>();
+                var tRows4 = new List<string[]>();
+                var tHeader5 = new List<string>();
+                var tRows5 = new List<string[]>();
+
+                Func<string, string> getSelectedValues = (fieldName) =>
+                {
+                    string[] values = Request.Form.GetValues(fieldName) ?? new string[0];
+                    if (values.Length > 1) return string.Join(",", values);
+                    return values.Length == 1 ? values[0] : string.Empty;
+                };
+
+                string selectedStoreGrade = getSelectedValues("store-grades");
+                string selectedSize = getSelectedValues("sizes");
+
+                var (tbls, DBresponse) = service.GetDistributionSummary(selectedSize, selectedStoreGrade).GetAwaiter().GetResult();
+
+                // Safely extract all 5 tables from the array
+                DataTable table6 = tbls != null && tbls.Length > 0 ? tbls[0] : null; // Store Grade Cumulative
+                DataTable table7 = tbls != null && tbls.Length > 1 ? tbls[1] : null; // Territory Cumulative
+                DataTable table8 = tbls != null && tbls.Length > 2 ? tbls[2] : null; // Distribution Plan per Store Grade
+                DataTable table9 = tbls != null && tbls.Length > 3 ? tbls[3] : null; // Distribution Plan per Territory
+                DataTable table10 = tbls != null && tbls.Length > 4 ? tbls[4] : null; // Distribution Plan per Drop
+
+                if (table6 != null)
+                {
+                    (tHeader1, tRows1) = service.DatatableConvertToHT(table6).GetAwaiter().GetResult();
+
+                    tableHeaders1 = tHeader1;
+                    tableRows1 = tRows1;
+                }
+
+                if (table7 != null)
+                {
+                    (tHeader2, tRows2) = service.DatatableConvertToHT(table7).GetAwaiter().GetResult();
+
+                    tableHeaders2 = tHeader2;
+                    tableRows2 = tRows2;
+                }
+
+                if (table8 != null)
+                {
+                    (tHeader3, tRows3) = service.DatatableConvertToHT(table8).GetAwaiter().GetResult();
+
+                    tableHeaders3 = tHeader3;
+                    tableRows3 = tRows3;
+                }
+
+                if (table9 != null)
+                {
+                    (tHeader4, tRows4) = service.DatatableConvertToHT(table9).GetAwaiter().GetResult();
+
+                    tableHeaders4 = tHeader4;
+                    tableRows4 = tRows4;
+                }
+
+                if (table10 != null)
+                {
+                    (tHeader5, tRows5) = service.DatatableConvertToHT(table10).GetAwaiter().GetResult();
+
+                    tableHeaders5 = tHeader5;
+                    tableRows5 = tRows5;
+                }
+            }
+            else if(action == "Export")
+            {
+
+                var tableHeaders = new List<string>();
+                var tableRows = new List<string[]>();
+
+                // Tables
+                // Store Grade (Cummulative):           tableHeaders1, tableRows1
+                // Distribution Plan per Store Grade:   tableHeaders3, tableRows3
+                // Territory (Cummulative):             tableHeaders2, tableRows2
+                // Distribution Plan per Territory:     tableHeaders4, tableRows4
+                // Distribution Plan per Drops:         tableHeaders5, tableRows5
+
+                selectedTable = Request.Form["Table"];
+
+                string userInputFileName = Request.Form["customFileName"];
+                string fileName = string.IsNullOrWhiteSpace(userInputFileName) ? "report_summary" : userInputFileName.Trim();
+
+                if(selectedTable == "Store Grade (Cummulative)")
+                {
+                    tableHeaders = tableHeaders1;
+                    tableRows = tableRows1;
+                }
+                else if(selectedTable == "Distribution Plan per Store Grade")
+                {
+                    tableHeaders = tableHeaders3;
+                    tableRows = tableRows3;
+                }
+                else if(selectedTable == "Territory (Cummulative)")
+                {
+                    tableHeaders = tableHeaders2;
+                    tableRows = tableRows2;
+                }
+                else if(selectedTable == "Distribution Plan per Territory")
+                {
+                    tableHeaders = tableHeaders4;
+                    tableRows = tableRows4;
+                }
+                else if(selectedTable == "Distribution Plan per Drops")
+                {
+                    tableHeaders = tableHeaders5;
+                    tableRows = tableRows5;
+                }
+
+                service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+                           .GetAwaiter()
+                           .GetResult();
+
+            }
+            else if(action == "Go")
+            {
+                string val = Request.Form["override"];
+            }
+
+
+
+        }
+        -->
+
+
+    //string selectedStoreGrades = string.Empty;
+    //string selectedSizes = string.Empty;
+
+    if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
+    {
+        string action = Request["actionButton"];
+
+        // 1. Extract filters FIRST so they are available for both Apply and Export
+        Func<string, string> getSelectedValues = (fieldName) =>
+        {
+            string[] values = Request.Form.GetValues(fieldName) ?? new string[0];
+            if (values.Length > 1) return string.Join(",", values);
+            return values.Length == 1 ? values[0] : string.Empty;
+        };
+
+        selectedStoreGrades = getSelectedValues("store-grades");
+        selectedSizes = getSelectedValues("sizes");
+
+        Session["StoreGrade"] = selectedStoreGrades;
+        Session["Size"] = selectedSizes;
+
+        // 2. Fetch the filtered tables if the user clicked Apply OR Export
+        if (action == "Apply")
+        {
+            var tHeader1 = new List<string>();
+            var tRows1 = new List<string[]>();
+            var tHeader2 = new List<string>();
+            var tRows2 = new List<string[]>();
+            var tHeader3 = new List<string>();
+            var tRows3 = new List<string[]>();
+            var tHeader4 = new List<string>();
+            var tRows4 = new List<string[]>();
+            var tHeader5 = new List<string>();
+            var tRows5 = new List<string[]>();
+
+            var (tbls, DBresponse) = service.GetDistributionSummary(selectedSizes, selectedStoreGrades).GetAwaiter().GetResult();
+
+            // Safely extract all 5 tables from the array
+            DataTable table6 = tbls != null && tbls.Length > 0 ? tbls[0] : null; // Store Grade Cumulative
+            DataTable table7 = tbls != null && tbls.Length > 1 ? tbls[1] : null; // Territory Cumulative
+            DataTable table8 = tbls != null && tbls.Length > 2 ? tbls[2] : null; // Distribution Plan per Store Grade
+            DataTable table9 = tbls != null && tbls.Length > 3 ? tbls[3] : null; // Distribution Plan per Territory
+            DataTable table10 = tbls != null && tbls.Length > 4 ? tbls[4] : null; // Distribution Plan per Drop
+
+            if (table6 != null)
+            {
+                (tHeader1, tRows1) = service.DatatableConvertToHT(table6).GetAwaiter().GetResult();
+                tableHeaders1 = tHeader1;
+                tableRows1 = tRows1;
+            }
+
+            if (table7 != null)
+            {
+                (tHeader2, tRows2) = service.DatatableConvertToHT(table7).GetAwaiter().GetResult();
+                tableHeaders2 = tHeader2;
+                tableRows2 = tRows2;
+            }
+
+            if (table8 != null)
+            {
+                (tHeader3, tRows3) = service.DatatableConvertToHT(table8).GetAwaiter().GetResult();
+                tableHeaders3 = tHeader3;
+                tableRows3 = tRows3;
+            }
+
+            if (table9 != null)
+            {
+                (tHeader4, tRows4) = service.DatatableConvertToHT(table9).GetAwaiter().GetResult();
+                tableHeaders4 = tHeader4;
+                tableRows4 = tRows4;
+            }
+
+            if (table10 != null)
+            {
+                (tHeader5, tRows5) = service.DatatableConvertToHT(table10).GetAwaiter().GetResult();
+                tableHeaders5 = tHeader5;
+                tableRows5 = tRows5;
+            }
+        }
+        else if (action == "Export")
+        {
+            var tableHeaders = new List<string>();
+            var tableRows = new List<string[]>();
+
+            selectedTable = Request.Form["Table"];
+
+            if(string.IsNullOrEmpty(selectedTable))
+            {
+                errorMessage = "Please select table you want to download.";
+            }
+
+            string userInputFileName = Request.Form["customFileName"];
+            string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + userInputFileName;
+
+            if (selectedTable == "Store Grade (Cummulative)")
+            {
+                tableHeaders = tableHeaders1;
+                tableRows = tableRows1;
+            }
+            else if (selectedTable == "Distribution Plan per Store Grade")
+            {
+                tableHeaders = tableHeaders3;
+                tableRows = tableRows3;
+            }
+            else if (selectedTable == "Territory (Cummulative)")
+            {
+                tableHeaders = tableHeaders2;
+                tableRows = tableRows2;
+            }
+            else if (selectedTable == "Distribution Plan per Territory")
+            {
+                tableHeaders = tableHeaders4;
+                tableRows = tableRows4;
+            }
+            else if (selectedTable == "Distribution Plan per Drops")
+            {
+                tableHeaders = tableHeaders5;
+                tableRows = tableRows5;
+            }
+
+            service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+                   .GetAwaiter()
+                   .GetResult();
+        }
+        else if (action == "Go")
+        {
+            string val = Request.Form["override"];
+        }
+    }
+
+    //var errorMsg = !string.IsNullOrEmpty(dbResponse) ? dbResponse : DBresponse;
+
+    // Loading CSS File for each component
+    var headerCss = System.IO.File
+        .GetLastWriteTime(Server.MapPath("~/Pages/Style/header.css"))
+        .Ticks.ToString();
+
+    var buttonCss = System.IO.File
+        .GetLastWriteTime(Server.MapPath("~/Pages/Style/button.css"))
+        .Ticks.ToString();
+
+    var tableCss = System.IO.File
+        .GetLastWriteTime(Server.MapPath("~/Pages/Style/table.css"))
+        .Ticks.ToString();
+
+    var reviewsummaryCss = System.IO.File
+        .GetLastWriteTime(Server.MapPath("~/Pages/Style/review-summary.css"))
+        .Ticks.ToString();
+
+    var textfieldCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/textfield.css")).Ticks.ToString();
+}
+
+<head>
+    <link href="~/Pages/Style/header.css?v=@headerCss" rel="stylesheet" />
+    <link href="~/Pages/Style/button.css?v=@buttonCss" rel="stylesheet" />
+    <link href="~/Pages/Style/table.css?v=@tableCss" rel="stylesheet" />
+    <link href="~/Pages/Style/review-summary.css?v=@reviewsummaryCss" rel="stylesheet" />
+    <link href="~/Pages/Style/textfield.css?v=@textfieldCss" rel="stylesheet" />
+</head>
+<body>
+
+    <header role="banner">
+        @RenderPage("~/Pages/Common/Header.cshtml", "Step 2: Summary Distribution")
+    </header>
+
+    <main class="main-content-wrapper" role="main">
+        <section class="summary-container">
+
+            <form method="post">
+                <div class="action-toolbar-row">
+                    <div class="three-col-filter-left-side">
+                        <div class="col">
+                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "store-grades", "Store Grade", storeGradeList, selectedStoreGrades, "", "100px")
+                        </div>
+                        <div class="col">
+                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizes", "Size", sizeList, selectedSizes, "", "100px")
+                        </div>
+                        <div class="col apply-btn-col">
+                            @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
+                        </div>
+                        <!--if (!string.IsNullOrEmpty(errorMsg))
+                        {
+                            <div class="error-message" style="color: #ff4d4d; margin-top: 10px; margin-bottom: 15px; font-weight: 500;">errorMsg</div>
+                        }-->
+                    </div>
+                    <div class="three-col-filter-right-side">
+                        <div class="col dropdown-selection-col">
+                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "Table", "Table Name", tableNameList, selectedTable, "", "100%")
+                        </div>
+                        <div class="col filename-field-col" style="display: flex; align-items: center; gap: 8px;">
+
+                            <!-- Text input for the custom filename -->
+                            <input type="text"
+                                   name="customFileName"
+                                   id="customFileName"
+                                   class="form-control"
+                                   placeholder="Enter filename..."
+                                   value="ReportSummary"
+                                   style="width: 200px; display: inline-block;" />
+                           
+                           
+                        </div>
+                        <div class="col export-btn-col">
+                            @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+                        </div>
+                        <div>
+                            @if (!string.IsNullOrEmpty(errorMessage))
+                            {
+                                <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- ROW 1: Store Grade Pair -->
+            <div class="dashboard-row">
+                <article class="panel-card cumulative-panel" aria-label="Store Grade Cumulative Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "Store Grade (Cummulative)")
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders1, tableRows1)
+                    </div>
+                </article>
+                <article class="panel-card distribution-panel" aria-label="Distribution Plan per Store Grade Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Store Grade")
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders3, tableRows3)
+                    </div>
+                </article>
+            </div>
+
+            <!-- ROW 2: Territory Pair -->
+            <div class="dashboard-row">
+                <article class="panel-card cumulative-panel" aria-label="Territory Cumulative Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "Territory (Cummulative)")
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders2, tableRows2)
+                    </div>
+                </article>
+                <article class="panel-card distribution-panel" aria-label="Distribution Plan per Territory Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Territory")
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders4, tableRows4)
+                    </div>
+                </article>
+            </div>
+
+            <!-- ROW 3: Override Drops Pair -->
+            <div class="dashboard-row">
+
+                <article class="panel-card cumulative-panel" aria-label="Override Drops Quantity Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "Override Drops Quantity?")
+                    <div class="row">
+                        <div class="two-col">
+                            <div class="col-1">
+                                @RenderPage("~/Pages/Common/TextField.cshtml", "override", "", "", "numeric")
+                            </div>
+                            <div class="col-2">
+                                @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel-card distribution-panel" aria-label="Distribution Plan per Drops Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Drops")
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders5, tableRows5)
+                    </div>
+                </article>
+            </div>
+
+        </section>
+    </main>
+</body>

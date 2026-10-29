@@ -1,0 +1,131 @@
+﻿/* Component: Dropdown.cshtml */
+
+.dropdown {
+    display: flex;
+    align-items: center;
+    height: 14px;
+    margin-bottom: 1px;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+    line-height: 14px;
+    color: #000;
+    position: relative; /* Context positioning for popup expansion */
+}
+
+/* Label (left) */
+.dropdown__label {
+    flex: 0 0 var(--dd-label-width, 80px);
+    padding: 0 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+/* Small down-arrow between label and value */
+.dropdown__arrow {
+    flex: 0 0 12px;
+    display: flex;
+    justify-content: center;
+}
+
+    .dropdown__arrow::before {
+        content: "";
+        border-left: 3px solid transparent;
+        border-right: 3px solid transparent;
+        border-top: 4px solid #222;
+    }
+
+/* Value cell (the real <select>, restyled) */
+.dropdown__select {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 13px;
+    margin: 0 0 0 2px;
+    padding: 0 4px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    background-color: transparent;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+    /* Options keep normal colors when the list is open */
+    .dropdown__select option {
+        background: #ffffff;
+        color: #000000;
+        padding: 2px 4px;
+    }
+
+/* Selected: green cell */
+.dropdown--selected .dropdown__select {
+    background-color: #14d814;
+    border-color: #0fa80f;
+}
+
+/* Empty: grey cell with a bead in the middle, text hidden */
+.dropdown--empty .dropdown__select {
+    background-color: #f0f0f0;
+    border-color: #e2e2e2;
+    background-image: radial-gradient(circle at 38% 32%, #ffffff 0%, #bdbdbd 45%, #8a8a8a 100%);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 8px 8px;
+    color: transparent;
+}
+
+/* Plain: just text, no cell (e.g. Region, Country) */
+.dropdown--plain .dropdown__select {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+/* Focus: label gets a grey highlight, empty bead turns dark */
+.dropdown:focus-within .dropdown__label {
+    background: #e4e4e4;
+}
+
+.dropdown--empty:focus-within .dropdown__select {
+    background-image: radial-gradient(circle at 38% 32%, #aaaaaa 0%, #444444 55%, #111111 100%);
+}
+
+.dropdown__select:focus-visible {
+    outline: 1px solid #3e7e85;
+    outline-offset: 0;
+}
+
+/* --- Multi-Select Popup Overrides --- */
+
+.dropdown--multi {
+    z-index: 1;
+}
+
+    .dropdown--multi:focus-within {
+        z-index: 999; /* Ensure expanding list floats above lower rows */
+    }
+
+    /* Allow height expansion and absolute overlay position when focused/open */
+    .dropdown--multi .dropdown__select:focus {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: calc(100% - var(--dd-label-width, 80px) - 14px);
+        height: auto;
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #3e7e85;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        -webkit-appearance: listbox;
+        -moz-appearance: listbox;
+        appearance: listbox;
+    }
+
+    /* Restore bead indicator when multi-select expands from an empty state */
+    .dropdown--multi.dropdown--empty .dropdown__select:focus {
+        background-image: none;
+        color: #000;
+    }

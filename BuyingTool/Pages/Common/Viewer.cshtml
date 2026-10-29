@@ -1,0 +1,29 @@
+﻿@using System.Collections.Generic
+@{
+    // How to call:
+    //   @RenderPage("~/Pages/Common/Viewer.cshtml", name, label, options, selected)
+    //
+    //   name     : form field name
+    //   label    : text on the left, e.g. "Viewer"
+    //   options  : the choices, e.g. new[] { "MAX", "AVE", "MIN" }
+    //   selected : the current choice
+
+    var name = PageData[0] as string;
+    var label = PageData[1] as string;
+    var options = PageData[2] as IEnumerable<string>;
+    var selected = PageData[3] as string;
+
+    if (options == null) { options = new string[0]; }
+}
+
+<div class="viewer" role="radiogroup" aria-label="@label">
+    <span class="viewer__label">@label</span>
+
+    @foreach (var o in options)
+    {
+        <label class="viewer__option">
+            <input class="viewer__input" type="radio" name="@name" value="@o" checked="@(o == selected)" />
+            <span class="viewer__text">@o</span>
+        </label>
+    }
+</div>

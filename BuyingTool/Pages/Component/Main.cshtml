@@ -1,0 +1,37 @@
+﻿@{
+    Layout = null;
+
+    string userId = Session["idnumber"] != null ? Session["idnumber"].ToString() : "12132424";
+
+    var reportCss = System.IO.File
+        .GetLastWriteTime(Server.MapPath("~/Pages/Style/main.css"))
+        .Ticks.ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Buy and Allocation Report</title>
+    <link href="~/Pages/Style/main.css?v=@reportCss" rel="stylesheet" />
+</head>
+<body>
+    <main class="content-wrapper" role="main">
+        <div class="banner-container">
+            <section class="banner-content" aria-label="Buy Report Banner">
+                <div class="centered-text-box">
+                    <header class="report-header-row">
+                        <h1 class="page-title">Buy and Allocation Report</h1>
+                    </header>
+
+                    <div class="report-info-row">
+                        <p class="user-greeting-text">Welcome User @userId.</p>
+                        <p class="current-date-text">Today is @DateTime.UtcNow.ToString("MMMM d, yyyy")</p>
+                        <p class="reload-time-text">Last reloaded at @DateTime.UtcNow.ToString("M/d/yyyy h:mm:ss tt")</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

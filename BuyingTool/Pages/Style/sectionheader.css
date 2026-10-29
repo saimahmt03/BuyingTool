@@ -1,0 +1,23 @@
+﻿.section-header {
+    --section-header-bg: #857f4a;
+    --section-header-color: #ffffff;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    background-color: var(--section-header-bg);
+    color: var(--section-header-color);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.section-header__title {
+    display: inline-block;
+}
+
+.section-header__required {
+    margin-left: 1px;
+}

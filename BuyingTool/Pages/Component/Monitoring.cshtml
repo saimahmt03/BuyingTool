@@ -1,0 +1,41 @@
+﻿@using BuyingTool.Services
+@{
+    Service service = new Service();
+
+    var tableHeaders = new List<string>();
+    var tableRows = new List<string[]>();
+    var dbResponse = string.Empty;
+
+    (tableHeaders, tableRows, dbResponse) = service.GetExortedToAllocToolHistory().GetAwaiter().GetResult();
+
+    var headerCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header2.css")).Ticks.ToString();
+    var tableCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/table2.css")).Ticks.ToString();
+    var sizeCurveCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/size-curve.css")).Ticks.ToString();
+
+    string label = "Monitoring to Exported to Alloc Tool";
+
+    if (dbResponse != "Success")
+    {
+        label = "The System Couldn't Fetch Data from Database";
+    }
+}
+<head>
+    <link href="~/Pages/Style/header2.css?v=@headerCss" rel="stylesheet" />
+    <link href="~/Pages/Style/table2.css?v=@tableCss" rel="stylesheet" />
+    <link href="~/Pages/Style/size-curve.css?v=@sizeCurveCss" rel="stylesheet" />
+</head>
+<body>
+    <main class="main-content-wrapper" role="main">
+        <section class="size-curve-container">
+            <div class="size-curve-row">
+                <article class="panel-card" aria-label="Size Curve per Store Panel">
+                    @RenderPage("~/Pages/Common/Header.cshtml", label)
+                    <div class="table-responsive-wrapper">
+                        @RenderPage("~/Pages/Common/TableWithPagination.cshtml", tableHeaders, tableRows, true, 25)
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+
