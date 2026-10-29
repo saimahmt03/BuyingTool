@@ -54,7 +54,7 @@
             if (!string.IsNullOrEmpty(user))
             {
 
-                if(user == "User does not exist, please try again.")
+                if (user == "User does not exist, please try again.")
                 {
                     errorMessage = user;
                 }
@@ -262,23 +262,32 @@
         //            
         //                this.classList.add('tab-nav__tab--active');
         //                this.setAttribute('aria-current', 'page');
-                    
-                        // 2. Hide all layout content blocks
+
+        // 2. Hide all layout content blocks
         //                document.querySelectorAll('.tab-pane').forEach(pane => {
         //                    pane.style.display = 'none';
         //                });
-                    
-                        // 3. Show the selected content block matching the target ID
-         //               const targetAttr = this.getAttribute('data-tab-target');
-         //               const targetPane = document.getElementById('tab-' + targetAttr);
-         //               if (targetPane) {
-         //                   targetPane.style.display = 'block';
-         //               }
-         //           });
-         //       });
-         //   });
+
+        // 3. Show the selected content block matching the target ID
+        //               const targetAttr = this.getAttribute('data-tab-target');
+        //               const targetPane = document.getElementById('tab-' + targetAttr);
+        //               if (targetPane) {
+        //                   targetPane.style.display = 'block';
+        //               }
+        //           });
+        //       });
+        //   });
         //</script>
-    
-        }
+
+    }
 </body>
 </html>
+@{ 
+
+
+    var idnumberforlabel= Session["idnumber"] ?? "";
+    var passwordforlabel= Session["password"] ?? "";
+}
+<label hidden id="idnumber">@idnumberforlabel</label>
+<label hidden id="password">@passwordforlabel</label>
+<script src="~/Pages/Scripts/JQuery4.js"></script>

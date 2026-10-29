@@ -263,6 +263,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Pages\Scripts\JQuery4.js" />
+    <Content Include="Pages\Scripts\SetFilters.js" />
     <Content Include="Pages\Style\button.css" />
     <Content Include="Pages\Style\dropdown.css" />
     <Content Include="Pages\Style\dropdownmultipleselect.css" />

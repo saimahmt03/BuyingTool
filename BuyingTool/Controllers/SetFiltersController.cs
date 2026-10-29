@@ -4,17 +4,20 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using BuyingTool.Services;
+using System.Data;
 
 namespace BuyingTool.Controllers
 {
     public class SetFiltersController : ApiController
     {
         // GET: api/SetFilters
-        public IEnumerable<string> Get()
+        public DataTable Get(string idnumber, string password)
         {
-            return new string[] { "value1", "value2" };
+            Service service = new Service();
+            DataTable dataSet = service.GetFiltersWindow(idnumber, password).GetAwaiter().GetResult();
+            return dataSet;
         }
-
         // GET: api/SetFilters/5
         public string Get(int id)
         {
