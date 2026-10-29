@@ -303,39 +303,41 @@
             {
                 errorMessage = "Please select table you want to download.";
             }
+            else
+            {
+                string userInputFileName = Request.Form["customFileName"];
+                string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + userInputFileName;
 
-            string userInputFileName = Request.Form["customFileName"];
-            string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + userInputFileName;
+                if (selectedTable == "Store Grade (Cummulative)")
+                {
+                    tableHeaders = tableHeaders1;
+                    tableRows = tableRows1;
+                }
+                else if (selectedTable == "Distribution Plan per Store Grade")
+                {
+                    tableHeaders = tableHeaders3;
+                    tableRows = tableRows3;
+                }
+                else if (selectedTable == "Territory (Cummulative)")
+                {
+                    tableHeaders = tableHeaders2;
+                    tableRows = tableRows2;
+                }
+                else if (selectedTable == "Distribution Plan per Territory")
+                {
+                    tableHeaders = tableHeaders4;
+                    tableRows = tableRows4;
+                }
+                else if (selectedTable == "Distribution Plan per Drops")
+                {
+                    tableHeaders = tableHeaders5;
+                    tableRows = tableRows5;
+                }
 
-            if (selectedTable == "Store Grade (Cummulative)")
-            {
-                tableHeaders = tableHeaders1;
-                tableRows = tableRows1;
+                service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+                       .GetAwaiter()
+                       .GetResult();
             }
-            else if (selectedTable == "Distribution Plan per Store Grade")
-            {
-                tableHeaders = tableHeaders3;
-                tableRows = tableRows3;
-            }
-            else if (selectedTable == "Territory (Cummulative)")
-            {
-                tableHeaders = tableHeaders2;
-                tableRows = tableRows2;
-            }
-            else if (selectedTable == "Distribution Plan per Territory")
-            {
-                tableHeaders = tableHeaders4;
-                tableRows = tableRows4;
-            }
-            else if (selectedTable == "Distribution Plan per Drops")
-            {
-                tableHeaders = tableHeaders5;
-                tableRows = tableRows5;
-            }
-
-            service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
-                   .GetAwaiter()
-                   .GetResult();
         }
         else if (action == "Go")
         {
@@ -418,7 +420,7 @@
                         <div class="col export-btn-col">
                             @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
                         </div>
-                        <div>
+                        <div class="row">
                             @if (!string.IsNullOrEmpty(errorMessage))
                             {
                                 <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>

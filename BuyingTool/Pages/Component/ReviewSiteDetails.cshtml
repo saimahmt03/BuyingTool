@@ -164,6 +164,11 @@
         }
     }
 
+    if(!string.IsNullOrEmpty(dbResponse))
+    {
+        dbResponse = "No Data Available.";
+    }
+
 
     // Loading CSS Files with version ticks
     var headerCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header.css")).Ticks.ToString();
