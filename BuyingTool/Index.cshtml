@@ -84,7 +84,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@(isLoggedIn ? "Dashboard" : "Login - Buying Tool Report")</title>
-</head> 
+</head>
 <body>
     @if (!isLoggedIn)
     {
@@ -159,64 +159,64 @@
             </div>
         </header>
 
-        // OLD 
-<main class="content-wrapper" role="main">
-    @if (activeTab == "Main")
-    {
-        <section id="tab-main" class="tab-pane" aria-label="Main Content">
-            @RenderPage("~/Pages/Component/Main.cshtml", activeTab)
-        </section>
-    }
-    else if (activeTab == "1. Set Filters")
-    {
-        <section id="tab-1.-set-filters" class="tab-pane" aria-label="Set Filters">
-            @RenderPage("~/Pages/Component/SetFiltersWindow.cshtml", activeTab)
-        </section>
-    }
-    else if (activeTab == "2. Review Summary")
-    {
-        <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
-            @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
-        </section>
+        // OLD
+        <main class="content-wrapper" role="main">
+            @if (activeTab == "Main")
+            {
+                <section id="tab-main" class="tab-pane" aria-label="Main Content">
+                    @RenderPage("~/Pages/Component/Main.cshtml", activeTab)
+                </section>
+            }
+            else if (activeTab == "1. Set Filters")
+            {
+                <section id="tab-1.-set-filters" class="tab-pane" aria-label="Set Filters">
+                    @RenderPage("~/Pages/Component/SetFiltersWindow.cshtml", activeTab)
+                </section>
+            }
+            else if (activeTab == "2. Review Summary")
+            {
+                <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
+                    @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
+                </section>
 
-        @*if (isCalculated)
-        {
-            <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
-                @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
-            </section>
-        }
-        else
-        {
-            <div class="alert alert-warning" role="alert">
-                Please click the *Calculate* button first to unlock the Review Summary.
-            </div>
-        }*@
-    }
-    else if (activeTab == "3. Review Site Details")
-    {
-        <section id="tab-3.-review-site-details" class="tab-pane" aria-label="Review Site Details">
-            @RenderPage("~/Pages/Component/ReviewSiteDetails.cshtml", activeTab)
-        </section>
-    }
-    else if (activeTab == "4. Export")
-    {
-        <section id="tab-4.-export" class="tab-pane" aria-label="Export">
-            @RenderPage("~/Pages/Component/Export.cshtml", activeTab)
-        </section>
-    }
-    else if (activeTab == "Size Curve")
-    {
-        <section id="tab-size-curve" class="tab-pane" aria-label="Size Curve">
-            @RenderPage("~/Pages/Component/SizeCurve.cshtml", activeTab)
-        </section>
-    }
-    else if (activeTab == "Monitoring")
-    {
-        <section id="tab-size-curve" class="tab-pane" aria-label="Size Curve">
-            @RenderPage("~/Pages/Component/Monitoring.cshtml", activeTab)
-        </section>
-    }
-</main>
+                @*if (isCalculated)
+                    {
+                        <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
+                            @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
+                        </section>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            Please click the *Calculate* button first to unlock the Review Summary.
+                        </div>
+                    }*@
+            }
+            else if (activeTab == "3. Review Site Details")
+            {
+                <section id="tab-3.-review-site-details" class="tab-pane" aria-label="Review Site Details">
+                    @RenderPage("~/Pages/Component/ReviewSiteDetails.cshtml", activeTab)
+                </section>
+            }
+            else if (activeTab == "4. Export")
+            {
+                <section id="tab-4.-export" class="tab-pane" aria-label="Export">
+                    @RenderPage("~/Pages/Component/Export.cshtml", activeTab)
+                </section>
+            }
+            else if (activeTab == "Size Curve")
+            {
+                <section id="tab-size-curve" class="tab-pane" aria-label="Size Curve">
+                    @RenderPage("~/Pages/Component/SizeCurve.cshtml", activeTab)
+                </section>
+            }
+            else if (activeTab == "Monitoring")
+            {
+                <section id="tab-size-curve" class="tab-pane" aria-label="Size Curve">
+                    @RenderPage("~/Pages/Component/Monitoring.cshtml", activeTab)
+                </section>
+            }
+        </main>
 
         // NEW
         //<main class="content-wrapper" role="main">
@@ -251,15 +251,15 @@
         //<script>
         //    document.addEventListener("DOMContentLoaded", function () {
         //        const tabs = document.querySelectorAll('.tab-nav__tab');
-        //    
+        //
         //        tabs.forEach(tab => {
         //            tab.addEventListener('click', function (e) {
         //                e.preventDefault();
-        //            
+        //
         //                // 1. Manage Active States on the Nav links
         //                document.querySelector('.tab-nav__tab--active')?.classList.remove('tab-nav__tab--active');
         //                document.querySelector('[aria-current="page"]')?.removeAttribute('aria-current');
-        //            
+        //
         //                this.classList.add('tab-nav__tab--active');
         //                this.setAttribute('aria-current', 'page');
 
@@ -281,7 +281,18 @@
 
     }
 </body>
-</html>
+@{
+    if (Session["CalculationDone"] != null)
+    {
+        <p id="calculationdone" hidden>true</p>
+    }
+    else
+    {
+        <p id="calculationdone" hidden>false</p>
+    }
+}
+<script src="~/Pages/Scripts/Index.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 @{ 
 
 
@@ -290,4 +301,5 @@
 }
 <label hidden id="idnumber">@idnumberforlabel</label>
 <label hidden id="password">@passwordforlabel</label>
+</html>
 <script src="~/Pages/Scripts/JQuery4.js"></script>
