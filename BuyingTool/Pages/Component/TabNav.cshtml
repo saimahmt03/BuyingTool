@@ -18,8 +18,10 @@
 
 <nav class="tab-nav">
     <ul class="tab-nav__list">
+        @{var counter = 0;}
         @foreach (var tab in tabs)
         {
+            counter++;
             var isActive = (tab.Text == activeTab);
 
             var css = "tab-nav__tab";
@@ -30,7 +32,7 @@
             // Clicking a tab reloads the page with ?tab=<its name>
             var url = Href("~/") + "?tab=" + Uri.EscapeDataString(tab.Text);
 
-            <li class="tab-nav__item">
+            <li class="tab-nav__item" id="navTab-@counter">
                 <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)">@tab.Text</a>
             </li>
 
