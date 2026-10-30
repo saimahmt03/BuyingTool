@@ -1,5 +1,13 @@
 ﻿var datatable;
 var filtereddatatable;
+HTMLSelectElement.prototype.contains = function (value) {
+    for (var i = 0, l = this.options.length; i < l; i++) {
+        if (this.options[i].value == value) {
+            return true;
+        }
+    }
+    return false;
+}
 $(document).ready(function () {
     let url = window.location.origin;
     let apiurl = "/api/SetFilters"
@@ -63,32 +71,77 @@ function setFilterTable() {
         categoryset.add(filtereddatatable[i].Category);
         collectionset.add(filtereddatatable[i].Collection);
     }
-    for (var i = brand.length - 1; i >= 0; i--) {
-        if (!brandset.has(brand.options[i].value) && brand.options[i].value!='') {
-            brand.remove(i);
-        }
-    }
-    for (var i = division.length - 1; i >= 0; i--) {
-        if (!divisionset.has(division.options[i].value) && division.options[i].value != '') {
-            division.remove(i);
-        }
-    } for (var i = department.length - 1; i >= 0; i--) {
-        if (!departmentset.has(department.options[i].value) && department.options[i].value != '') {
-            department.remove(i);
-        }
-    } for (var i = category.length - 1; i >= 0; i--) {
-        if (!categoryset.has(category.options[i].value) && category.options[i].value != '') {
-            category.remove(i);
-        }
-    } for (var i = collection.length - 1; i >= 0;i--) {
-        if (!collectionset.has(collection.options[i].value) && collection.options[i].value != '') {
-            collection.remove(i);
-        }
-    }
+    
+    processSelect(brand, brandset);
+    processSelect(division, divisionset);
+    processSelect(department, departmentset);
+    processSelect(category, categoryset);
+    processSelect(collection, collectionset);
 
-    console.log(brandset);
-    console.log(divisionset);
-    console.log(departmentset);
-    console.log(categoryset);
-    console.log(collectionset);
+    sortSelect(brand);
+    sortSelect(division);
+    sortSelect(department);
+    sortSelect(category);
+    sortMultiSelect(collection);
 };
+function processSelect(element, set) {
+    //remove unnecessary except blank
+    for (var i = element.length - 1; i >= 0; i--) {
+        if (!set.has(element.options[i].value) && element.options[i].value != '') {
+            element.remove(i);
+        }
+    }
+    //insert missing
+    for (let value of set) {
+        if (!element.contains(value)) {
+            var option = document.createElement("option");
+            option.text = value;
+            element.add(option);
+        }
+    }
+}
+function sortSelect(element) {
+    //save selected value
+    var selection = element.value;
+    var tmpAry = new Array();
+    for (var i = 0; i < element.options.length; i++) {
+        tmpAry[i] = new Array();
+        tmpAry[i][0] = element.options[i].text;
+        tmpAry[i][1] = element.options[i].value;
+    }
+    //sort and replace
+    tmpAry.sort();
+    while (element.options.length > 0) {
+        element.options[0] = null;
+    }
+    for (var i = 0; i < tmpAry.length; i++) {
+        var op = new Option(tmpAry[i][0], tmpAry[i][1]);
+        element.options[i] = op;
+    }
+    //set selected value
+    element.value = selection;
+    return;
+}
+function sortMultiSelect(element) {
+    var tmpAry = new Array();
+    for (var i = 0; i < element.options.length; i++) {
+        tmpAry[i] = new Array();
+        tmpAry[i][0] = element.options[i].text;
+        tmpAry[i][1] = element.options[i].value;
+        tmpAry[i][2] = element.options[i].selected;
+    }
+    //sort and replace
+    tmpAry.sort();
+    while (element.options.length > 0) {
+        element.options[0] = null;
+    }
+    for (var i = 0; i < tmpAry.length; i++) {
+        var op = new Option(tmpAry[i][0], tmpAry[i][1]);
+        if (tmpAry[i][2]) {
+            //if selected, maintain selection
+            op.setAttribute('selected', 'selected');
+        }
+        element.options[i] = op;
+    }
+    return;
+}
