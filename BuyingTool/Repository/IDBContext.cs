@@ -79,7 +79,7 @@ namespace BuyingTool.Repository
 
         Task<(DataTable, string dbResponse)> GetExortedToAllocToolHistory(string idnumber);
 
-        Task<(DataTable, string dbResponse)> GetOverride(decimal input);
+        Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, Int16 input);
 
 
         #region New Filter Pulling - Normalize Table

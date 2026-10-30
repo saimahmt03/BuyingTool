@@ -9,7 +9,6 @@ namespace BuyingTool.Shared
     {
         // Verify user, User Id session
         public const string VerifyUserAccount = "[dbo].[usp_ValidateAccess]";
-        public const string VerifyUserAccount2 = "[dbo].[usp_Login]";
 
         // Calculation
         public const string GetCalculation = "[dbo].[usp_Get_Final_DataSet]";
@@ -37,7 +36,7 @@ namespace BuyingTool.Shared
         public const string GetStoreGradeAndSizeFilter = "[dbo].[usp_GetStoreGradeAndSizeByUser]";
 
         // Override
-        public const string GetOverride = "";
+        public const string GetOverride = "[dbo].[usp_OverrideDrops]";
 
         // New Filters Pulling
         public const string GetFiltersAttribute = "[dbo].[usp_GetFilters_Attributes]";

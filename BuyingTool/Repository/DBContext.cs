@@ -147,7 +147,7 @@ namespace BuyingTool.Repository
             return Task.FromResult((response, logMessage));
         }
 
-        public Task<(DataTable PerSiteTable, string AccountStatus, string LogMessage)> Get(string userId, string pass)
+        public Task<(string AccountStatus, string LogMessage)> Get(string userId, string pass)
         {
             string accountStatus = string.Empty;
             var perSiteTable = new DataTable();
@@ -169,7 +169,7 @@ namespace BuyingTool.Repository
 
                     using (DbCommand command = connection.CreateCommand())
                     {
-                        command.CommandText = StoredProcedures.VerifyUserAccount2;
+                        command.CommandText = StoredProcedures.AccoutVerification;
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandTimeout = 60;
 
@@ -191,12 +191,6 @@ namespace BuyingTool.Repository
                             {
                                 accountStatus = reader[0]?.ToString() ?? string.Empty;
                             }
-
-                            // 2. Advance to the second result set (The Data Table)
-                            if (reader.NextResult())
-                            {
-                                perSiteTable.Load(reader);
-                            }
                         }
                     }
                 }
@@ -212,7 +206,7 @@ namespace BuyingTool.Repository
                 //throw;
             }
 
-            return Task.FromResult((perSiteTable, accountStatus, logMessage));
+            return Task.FromResult((accountStatus, logMessage));
         }
 
         #endregion
@@ -389,12 +383,12 @@ namespace BuyingTool.Repository
             }
             catch (DbException ex)
             {
-                string logMessage = string.Concat("Database error in retrieving Period Plan Table. ", ex.Message);
+                string logMessage = string.Concat("Database error in retrieving Attribute Filters. ", ex.Message);
                 throw;
             }
             catch (Exception ex)
             {
-                string logMessage = string.Concat("System error in retreiving Period Plan Table. ", ex.Message);
+                string logMessage = string.Concat("System error in retrieving Attribute Filters. ", ex.Message);
                 throw;
             }
 
@@ -1195,16 +1189,16 @@ namespace BuyingTool.Repository
         }
 
         // OVERRIDE
-        public Task<(DataTable, string dbResponse)> GetOverride(decimal input)
+        public Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, Int16 input)
         {
             string logMessage = string.Empty;
+            string response = "Success";
             var overrideTable = new DataTable();
 
             try
             {
                 using (DbConnection connection = _databaseConnection.CreateConnection())
                 {
-
                     if (connection == null)
                     {
                         throw new InvalidOperationException("The database connection could not be created because CreateConnection() returned null.");
@@ -1225,13 +1219,17 @@ namespace BuyingTool.Repository
                         DbProviderFactory factory;
                         string errorMessage = _databaseConnection.TryGetDbProviderFactory(out factory);
 
-                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Input", input, DbType.String, factory));
+                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@UserID", idnumber ?? string.Empty, DbType.String, factory));
+                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Sizes", size ?? string.Empty, DbType.String, factory));
+                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@StoreGrades", storegrade ?? string.Empty, DbType.String, factory));
+
+                        // Fixed: Changed parameter name from @Input to @OverrideValue to match the stored procedure definition
+                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@OverrideValue", input, DbType.Int16, factory));
 
                         if (!string.IsNullOrEmpty(errorMessage))
                         {
                             throw new InvalidOperationException(errorMessage);
                         }
-
 
                         using (DbDataReader reader = command.ExecuteReader())
                         {
@@ -1243,15 +1241,17 @@ namespace BuyingTool.Repository
             catch (DbException ex)
             {
                 logMessage = string.Concat("Database error in Get Override. ", ex.Message);
+                response = "SP Error";
                 //throw;
             }
             catch (Exception ex)
             {
                 logMessage = string.Concat("System error in Get Override. ", ex.Message);
+                response = "System Error";
                 //throw;
             }
 
-            return Task.FromResult((overrideTable, logMessage));
+            return Task.FromResult((overrideTable, response, logMessage));
         }
     }
 }
