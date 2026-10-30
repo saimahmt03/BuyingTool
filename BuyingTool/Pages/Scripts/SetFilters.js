@@ -1,5 +1,11 @@
-﻿var datatable;
-var filtereddatatable;
+﻿var requiredTable;
+var stylesTable;
+var organizationTable;
+var attributesTable;
+var filteredRequiredTable;
+var filteredStylesTable;
+var filteredOrganizationTable;
+var filteredAttributesTable;
 HTMLSelectElement.prototype.contains = function (value) {
     for (var i = 0, l = this.options.length; i < l; i++) {
         if (this.options[i].value == value) {
@@ -19,7 +25,7 @@ $(document).ready(function () {
             "idnumber": idnumber,
         },
         success: function (data) {
-            datatable = data;
+            requiredTable = data;
         }
     });
 
@@ -33,6 +39,7 @@ $(document).ready(function () {
         success: function (data) {
             console.log('Style:');
             console.log(data);
+            stylesTable = data;
         }
     });
     let attributeapiurl = "/api/AttributeFilters"
@@ -45,6 +52,7 @@ $(document).ready(function () {
         success: function (data) {
             console.log('Attribute:');
             console.log(data);
+            attributesTable = data;
         }
     });
     let organizationapiurl = "/api/OrganizationFilters"
@@ -57,6 +65,7 @@ $(document).ready(function () {
         success: function (data) {
             console.log('Organization:');
             console.log(data);
+            organizationTable = data;
         }
     });
 });
@@ -65,8 +74,8 @@ function changeFilter(id) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
     }*/
-    filtereddatatable = buildFilterTable();
-    //console.log(filtereddatatable);
+    filteredRequiredTable = buildFilterTable();
+    //console.log(filteredRequiredTable);
     setFilterTable();
 };
 
@@ -78,7 +87,7 @@ function buildFilterTable() {
     var category = document.getElementById('dd_category');
     var periodplan = document.getElementById('dd_periodplans');
     var collection = document.getElementById('dd_collection');
-    return datatable.filter(row =>
+    return requiredTable.filter(row =>
         (brand.value == '' || row.Brand == brand.value) &&
         (division.value == '' || row.Division == division.value) &&
         (department.value == '' || row.Department == department.value) &&
@@ -100,12 +109,12 @@ function setFilterTable() {
     var categoryset = new Set();
     var periodplanset = new Set();
     var collectionset = new Set();
-    for (var i = 0; i < filtereddatatable.length; i++) {
-        brandset.add(filtereddatatable[i].Brand);
-        divisionset.add(filtereddatatable[i].Division);
-        departmentset.add(filtereddatatable[i].Department);
-        categoryset.add(filtereddatatable[i].Category);
-        collectionset.add(filtereddatatable[i].Collection);
+    for (var i = 0; i < filteredRequiredTable.length; i++) {
+        brandset.add(filteredRequiredTable[i].Brand);
+        divisionset.add(filteredRequiredTable[i].Division);
+        departmentset.add(filteredRequiredTable[i].Department);
+        categoryset.add(filteredRequiredTable[i].Category);
+        collectionset.add(filteredRequiredTable[i].Collection);
     }
     
     processSelect(brand, brandset);
