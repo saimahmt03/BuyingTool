@@ -19,7 +19,6 @@ $(document).ready(function () {
             "idnumber": idnumber,
         },
         success: function (data) {
-            console.log(data);
             datatable = data;
         }
     });
