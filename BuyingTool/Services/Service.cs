@@ -287,7 +287,7 @@ namespace BuyingTool.Services
         {
             var (response, dbResponse) = _dBContext.AccountVerification(idnumber, pass).GetAwaiter().GetResult();
 
-            if(response == "200")
+            if (response == "200")
             {
                 GetFiltersAttributeCache(idnumber).GetAwaiter().GetResult();
                 GetFiltersOrganizationCache(idnumber).GetAwaiter().GetResult();
