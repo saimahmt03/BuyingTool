@@ -10,16 +10,53 @@ HTMLSelectElement.prototype.contains = function (value) {
 }
 $(document).ready(function () {
     let url = window.location.origin;
-    let apiurl = "/api/SetFilters"
+    let requiredapiurl = "/api/RequiredFilters"
     let idnumber = document.getElementById('idnumber').innerHTML;
     $.ajax({
-        url: url + apiurl,
+        url: url + requiredapiurl,
         method: "GET",
         data: {
             "idnumber": idnumber,
         },
         success: function (data) {
             datatable = data;
+        }
+    });
+
+    let styleapiurl = "/api/StyleFilters"
+    $.ajax({
+        url: url + styleapiurl,
+        method: "GET",
+        data: {
+            "idnumber": idnumber,
+        },
+        success: function (data) {
+            console.log('Style:');
+            console.log(data);
+        }
+    });
+    let attributeapiurl = "/api/AttributeFilters"
+    $.ajax({
+        url: url + attributeapiurl,
+        method: "GET",
+        data: {
+            "idnumber": idnumber,
+        },
+        success: function (data) {
+            console.log('Attribute:');
+            console.log(data);
+        }
+    });
+    let organizationapiurl = "/api/OrganizationFilters"
+    $.ajax({
+        url: url + organizationapiurl,
+        method: "GET",
+        data: {
+            "idnumber": idnumber,
+        },
+        success: function (data) {
+            console.log('Organization:');
+            console.log(data);
         }
     });
 });
