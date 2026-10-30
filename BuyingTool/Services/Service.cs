@@ -121,6 +121,9 @@ namespace BuyingTool.Services
             }
         }
 
+
+
+
         // NEW Filter Pulling
         public Task<DataTable> GetFiltersAttributeCache(string userid)
         {
@@ -448,20 +451,25 @@ namespace BuyingTool.Services
         // Monitoring for Exported to Alloc
         public Task<(List<string> tableHeader, List<string[]> tableRows, string dbResponse)> GetExortedToAllocToolHistory()
         {
-            var trows = new List<string[]>();
-            var thead = new List<string>();
-            var dataSet = new DataTable();
-            string dbResponse = string.Empty;
-
             var userId = GetCurrentUserId();
 
-            (dataSet, dbResponse) = _dBContext.GetExortedToAllocToolHistory(userId).GetAwaiter().GetResult();
+            var (dataSet, dbResponse) = _dBContext.GetExortedToAllocToolHistory(userId).GetAwaiter().GetResult();
 
-            (thead, trows) = serviceHelper.PopulateDatatableHelper(dataSet).GetAwaiter().GetResult();
+            var (thead, trows) = serviceHelper.PopulateDatatableHelper(dataSet).GetAwaiter().GetResult();
 
             return Task.FromResult((thead, trows, dbResponse));
         }
 
+        public Task<(List<string> tableHeader, List<string[]> tableRows, string response, string dbResponse)> GetOverrideTable(string size, string storegrade, Int16 input)
+        {
+            var userId = GetCurrentUserId();
+
+            var (dataSet, response, dbResponse) = _dBContext.GetOverride(userId, size, storegrade, input).GetAwaiter().GetResult();
+
+            var (thead, trows) = serviceHelper.PopulateDatatableHelper(dataSet).GetAwaiter().GetResult();
+
+            return Task.FromResult((thead, trows, response, dbResponse));
+        }
         #endregion
 
 

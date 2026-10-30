@@ -7,6 +7,7 @@
     string selectedStoreGrades = string.Empty;
     string selectedSizes = string.Empty;
     string errorMessage = string.Empty;
+    string overrideErrorMessage = string.Empty;
 
     if (Session["StoreGrade"] != null && Session["Size"] != null)
     {
@@ -341,7 +342,22 @@
         }
         else if (action == "Go")
         {
-            string val = Request.Form["override"];
+            string overrideRaw = Request.Form["override"];
+            Int16 overridevalue = 0;
+
+            string storegrade = Session["StoreGrade"] as string;
+            string size = Session["Size"] as string;
+
+            if (string.IsNullOrEmpty(overrideRaw))
+            {
+                overrideErrorMessage = "Please enter the value.";
+            }
+            else
+            {
+                overridevalue = Convert.ToInt16(overrideRaw);
+
+                (tableHeaders5, tableRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(Session["Size"] as string, Session["StoreGrade"] as string, overridevalue).GetAwaiter().GetResult();
+            }
         }
     }
 
@@ -469,13 +485,21 @@
                     @RenderPage("~/Pages/Common/Header.cshtml", "Override Drops Quantity?")
                     <div class="row">
                         <div class="two-col">
-                            <div class="col-1">
-                                @RenderPage("~/Pages/Common/TextField.cshtml", "override", "", "", "numeric")
-                            </div>
-                            <div class="col-2">
-                                @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
-                            </div>
+                            <form method="post">
+                                <div class="col-1">
+                                    @RenderPage("~/Pages/Common/TextField.cshtml", "override", "Value", "", "numeric")
+                                </div>
+                                <div class="col-2">
+                                    @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
+                                </div>
+                            </form>
                         </div>
+                    </div>
+                    <div class="row">
+                        @if (!string.IsNullOrEmpty(overrideErrorMessage))
+                        {
+                            <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
+                        }
                     </div>
                 </article>
 
