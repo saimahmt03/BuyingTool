@@ -78,6 +78,9 @@
 
     isLoggedIn = Session["idnumber"] != null && !string.IsNullOrWhiteSpace(Session["idnumber"].ToString());
 }
+
+<script src="~/Pages/Scripts/Index.js"></script>
+<script src="~/Pages/Scripts/JQuery4.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -280,17 +283,17 @@
         //</script>
 
     }
+    @{
+        var idnumberforlabel = Session["idnumber"] ?? "";
+        if (Session["CalculationDone"] != null)
+        {
+            <p id="calculationdone" hidden>true</p>
+        }
+        else
+        {
+            <p id="calculationdone" hidden>false</p>
+        }
+    }
+    <label hidden id="idnumber">@idnumberforlabel</label>
 </body>
-@{
-    if (Session["CalculationDone"] != null)
-    {
-        <p id="calculationdone" hidden>true</p>
-    }
-    else
-    {
-        <p id="calculationdone" hidden>false</p>
-    }
-}
 </html>
-<script src="~/Pages/Scripts/Index.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>

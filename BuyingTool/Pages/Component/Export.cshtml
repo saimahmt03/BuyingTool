@@ -213,13 +213,18 @@
 
             if (status == "Success" && string.IsNullOrEmpty(errorMessage))
             {
-                errorMessage = "Successfully added.";
+                errorMessage = "Successfully processed.";
             }
             else
             {
-                errorMessage = errorMessage;
+                errorMessage = "We couldn’t process your request.\n\nPlease verify your Option and Plan Period, then try again.\n\nIf the issue persists, please contact your IT Partner for assistance.";
             }
         }
+    }
+
+    if (!string.IsNullOrEmpty(dbResponse))
+    {
+        dbResponse = "No Data Available.";
     }
 
 

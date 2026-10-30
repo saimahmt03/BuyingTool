@@ -514,15 +514,15 @@
                                     <div class="col">
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Required Filters*")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "brand", "Brand", brandList, brand, "", "100%")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "division", "Division", divisionList, division, "", "100%")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "department", "Department", departmentList, department, "", "100%")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "category", "Category", categoryList, category, "", "100%")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "brand", "Brand", brandList, brand, "", "100%", "changeFilter(dd_brand)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "division", "Division", divisionList, division, "", "100%", "changeFilter(dd_division)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "department", "Department", departmentList, department, "", "100%", "changeFilter(dd_department)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "category", "Category", categoryList, category, "", "100%", "changeFilter(dd_category)")
 
                                             <!-- Passes selectedPeriodPlans back so selection persists -->
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", periodPlanList, selectedPeriodPlans, "", "100%")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", periodPlanList, selectedPeriodPlans, "", "100%", "changeFilter(dd_periodplans)")
 
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", collectionList, selectedCollection, "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", collectionList, selectedCollection, "", "100%", "changeFilter(dd_collection)")
                                         </div>
 
                                         <div class="filter-group">
@@ -635,3 +635,4 @@
     *@
 
 </body>
+<script src="~/Pages/Scripts/SetFilters.js"></script>
