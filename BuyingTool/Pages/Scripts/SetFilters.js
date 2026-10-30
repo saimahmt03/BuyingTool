@@ -74,7 +74,7 @@ function changeFilter(id) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
     }*/
-    filteredRequiredTable = buildFilterTable();
+    buildFilterTable();
     //console.log(filteredRequiredTable);
     setFilterTable();
 };
@@ -87,7 +87,7 @@ function buildFilterTable() {
     var category = document.getElementById('dd_category');
     var periodplan = document.getElementById('dd_periodplans');
     var collection = document.getElementById('dd_collection');
-    return requiredTable.filter(row =>
+    filteredRequiredTable =  requiredTable.filter(row =>
         (brand.value == '' || row.Brand == brand.value) &&
         (division.value == '' || row.Division == division.value) &&
         (department.value == '' || row.Department == department.value) &&

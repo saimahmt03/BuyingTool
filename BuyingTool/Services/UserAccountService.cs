@@ -37,7 +37,7 @@ namespace BuyingTool.Services
 
             if (response == "Proceed")
             {
-                bool validated = _service.CheckMainTableForLogin(user.Id_Number, user.Password);
+                bool validated = _service.AccountVerification(user.Id_Number, user.Password);
 
                 if (validated)
                 {
