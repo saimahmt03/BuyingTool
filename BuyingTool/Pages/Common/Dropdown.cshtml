@@ -16,6 +16,8 @@
     var selected = PageData[3] as string;
     var style = PageData[4] as string;
     var labelWidth = PageData[5] as string;
+    var onchange = PageData[6] as string;
+    onchange = onchange ?? "";
 
     // Optional 7th parameter for onchange or custom attributes
 
@@ -39,7 +41,7 @@
 <div class="@css" style="--dd-label-width:@labelWidth">
     <label class="dropdown__label" for="@id">@label</label>
     <span class="dropdown__arrow" aria-hidden="true"></span>
-    <select class="dropdown__select" id="@id" name="@name">
+    <select class="dropdown__select" id="@id" name="@name" onchange="@onchange">
         <option value="">-- Select --</option>
         @foreach (var o in options)
         {

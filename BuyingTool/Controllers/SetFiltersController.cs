@@ -12,10 +12,10 @@ namespace BuyingTool.Controllers
     public class SetFiltersController : ApiController
     {
         // GET: api/SetFilters
-        public DataTable Get(string idnumber, string password)
+        public DataTable Get(string idnumber)
         {
             Service service = new Service();
-            DataTable dataSet = service.GetFiltersWindow(idnumber, password).GetAwaiter().GetResult();
+            DataTable dataSet = service.GetFiltersRequiredCache(idnumber).GetAwaiter().GetResult();
             return dataSet;
         }
         // GET: api/SetFilters/5
