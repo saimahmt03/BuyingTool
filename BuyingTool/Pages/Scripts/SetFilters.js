@@ -280,7 +280,7 @@ function setOrganizationFilterTable() {
     var channel = document.getElementById('dd_channel');
     var territory = document.getElementById('dd_territory');
     var area = document.getElementById('dd_area');
-    var outlet = document.getElementById('dd_outlet');
+    var outlet = document.getElementById('dd_outletType');
     var siteCode = document.getElementById('dd_siteCode');
     var siteName = document.getElementById('dd_siteName');
     var storeGrade = document.getElementById('dd_storeGrade');
