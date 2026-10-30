@@ -9,256 +9,7 @@
     string errorMessage = string.Empty;
     //bool justCalculated = false;
 
-    DataTable FiltersAttributeDataSet = service.GetFiltersAttributeCache(Session["idnumber"] as string).GetAwaiter().GetResult();
-    DataTable FiltersOrganizationDataSet = service.GetFiltersOrganizationCache(Session["idnumber"] as string).GetAwaiter().GetResult();
-    DataTable FiltersRequiredDataSet = service.GetFiltersRequiredCache(Session["idnumber"] as string).GetAwaiter().GetResult();
-    DataTable FiltersStyleDataSet = service.GetFiltersStylesCache(Session["idnumber"] as string).GetAwaiter().GetResult();
-
-    DataTable dataSet = service.GetFiltersWindow(Session["idnumber"] as string, Session["password"] as string).GetAwaiter().GetResult();
-
-    // Require filter
-    var brandList = dataSet != null
-                    ? dataSet.AsEnumerable()
-                             .Select(row => row.Field<string>("Brand"))
-                             .Where(val => !string.IsNullOrWhiteSpace(val))
-                             .Distinct()
-                             .ToList()
-                    : new List<string>();
-
-    var divisionList = dataSet != null
-                    ? dataSet.AsEnumerable()
-                             .Select(row => row.Field<string>("Division"))
-                             .Where(val => !string.IsNullOrWhiteSpace(val))
-                             .Distinct()
-                             .ToList()
-                    : new List<string>();
-
-    var departmentList = dataSet != null
-                    ? dataSet.AsEnumerable()
-                             .Select(row => row.Field<string>("Department"))
-                             .Where(val => !string.IsNullOrWhiteSpace(val))
-                             .Distinct()
-                             .ToList()
-                    : new List<string>();
-
-    var categoryList = dataSet != null
-                    ? dataSet.AsEnumerable()
-                             .Select(row => row.Field<string>("Category"))
-                             .Where(val => !string.IsNullOrWhiteSpace(val))
-                             .Distinct()
-                             .ToList()
-                    : new List<string>();
-
-    var periodPlanList = service.GetPeriodPlan()
-                               .GetAwaiter()
-                               .GetResult()
-                               .AsEnumerable()
-                               .Select(row => row.Field<string>("PlanPeriod"))
-                               .ToList();
-
-    var collectionList = dataSet != null
-                     ? dataSet.AsEnumerable()
-                              .Select(row => row.Field<string>("Collection_Age"))
-                              .Where(val => !string.IsNullOrWhiteSpace(val))
-                              .Distinct()
-                              .ToList()
-                     : new List<string>();
-
-    // Style
-    var styleCodeList = dataSet != null
-                    ? dataSet.AsEnumerable()
-                               .Select(row => row.Field<string>("Style_Code")) // Adjust column name if needed (e.g., "Style Code")
-                               .Where(val => !string.IsNullOrWhiteSpace(val))
-                               .Distinct()
-                               .ToList()
-                    : new List<string>();
-
-    var styleList = dataSet != null
-                    ? dataSet.AsEnumerable()
-                               .Select(row => row.Field<string>("Style")) // Adjust column name if needed
-                               .Where(val => !string.IsNullOrWhiteSpace(val))
-                               .Distinct()
-                               .OrderBy(val => int.TryParse(val, out int num) ? num : int.MaxValue) // Sorts numerically
-                               .ToList()
-                    : new List<string>();
-
-    // Organization
-    var regionList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Region"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var countryList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Country"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var channelList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Channel"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var territoryList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Territory"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var areaList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Area"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var outletTypeList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Outlet_Type")) // Adjust column name if needed (e.g., "Outlet Type")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var siteCodeList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Site_Code")) // Adjust column name if needed (e.g., "Site Code")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var siteNameList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Site_Name")) // Adjust column name if needed (e.g., "Site Name")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var storeGradeList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Store_Grade")) // Adjust column name if needed (e.g., "Store Grade")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    // Attribute
-    var colorList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Color"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var silhouetteList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Silhouette"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var collectionAttriList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Collection")) // Adjust column name if database uses spaces or a different name (e.g., "Collection_Attri")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var fitCutList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Fit_Cut")) // Adjust column name if needed (e.g., "Fit Cut")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var materialCompositionList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Material_Composition")) // Adjust column name if needed (e.g., "Material Composition")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var materialConstructionList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Material_Construction")) // Adjust column name if needed (e.g., "Material Construction")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var printTextureList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("PrintTexture")) // Adjust column name if needed (e.g., "Print Texture")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var productLineList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Product_Line")) // Adjust column name if needed (e.g., "Product Line")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var sleeveTypeList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Sleeve_Type")) // Adjust column name if needed (e.g., "Sleeve Type")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var styleCollectionList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Style_Collection")) // Adjust column name if needed (e.g., "Style Collection")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var subCategoryList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Sub_Category")) // Adjust column name if needed (e.g., "Sub Category")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var sizeGroupList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("SizeGroup")) // Adjust column name if needed (e.g., "Size Group")
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
-
-    var origSrpList = dataSet != null
-                ? dataSet.AsEnumerable()
-                       .Select(row => row["Orig_SRP"]?.ToString())
-                       .Where(val => !string.IsNullOrWhiteSpace(val))
-                       .Distinct()
-                       .ToList()
-                : new List<string>();
+   
 
     // Required
     string brand = string.Empty;
@@ -514,34 +265,34 @@
                                     <div class="col">
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Required Filters*")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "brand", "Brand", brandList, brand, "", "100%", "changeFilter(dd_brand)")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "division", "Division", divisionList, division, "", "100%", "changeFilter(dd_division)")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "department", "Department", departmentList, department, "", "100%", "changeFilter(dd_department)")
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "category", "Category", categoryList, category, "", "100%", "changeFilter(dd_category)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "brand", "Brand", new List<string>(), brand, "", "100%", "changeFilter(dd_brand)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "division", "Division", new List<string>(), division, "", "100%", "changeFilter(dd_division)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "department", "Department", new List<string>(), department, "", "100%", "changeFilter(dd_department)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "category", "Category", new List<string>(), category, "", "100%", "changeFilter(dd_category)")
 
                                             <!-- Passes selectedPeriodPlans back so selection persists -->
-                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", periodPlanList, selectedPeriodPlans, "", "100%", "changeFilter(dd_periodplans)")
+                                            @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", new List<string>(), selectedPeriodPlans, "", "100%", "changeFilter(dd_periodplans)")
 
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", collectionList, selectedCollection, "", "100%", "changeFilter(dd_collection)")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", new List<string>(), selectedCollection, "", "100%", "changeFilter(dd_collection)")
                                         </div>
 
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Styles")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecode", "Style Code", styleCodeList, selectedStyleCode, "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "style", "Style", styleList, "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecode", "Style Code", new List<string>(), selectedStyleCode, "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "style", "Style", new List<string>(), "", "", "100%", "changeStyle()")
                                         </div>
 
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Organization")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "region", "Region", regionList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "country", "Country", countryList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "channel", "Channel", channelList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "territory", "Territory", territoryList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "area", "Area", areaList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "outletType", "Outlet Type", outletTypeList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "siteCode", "Site Code", siteCodeList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "siteName", "Site Name", siteNameList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "storeGrade", "Store Grade", storeGradeList, "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "region", "Region", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "country", "Country", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "channel", "Channel", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "territory", "Territory", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "area", "Area", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "outletType", "Outlet Type", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "siteCode", "Site Code", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "siteName", "Site Name", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "storeGrade", "Store Grade", new List<string>(), "", "", "100%")
                                         </div>
                                     </div>
 
@@ -560,19 +311,19 @@
                                         </div>
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Attributes")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "color", "Color", colorList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "silhouette", "Silhouette", silhouetteList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collectionattri", "Collection", collectionAttriList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "fitcut", "Fit Cut", fitCutList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "materialcomposition", "Material Composition", materialCompositionList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "materialconstruction", "Material Construction", materialConstructionList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "printtexture", "PrintTexture", printTextureList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "productline", "Product Line", productLineList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sleevetype", "Sleeve Type", sleeveTypeList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecollection", "Style Collection", styleCollectionList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "subcategory", "Sub Category", subCategoryList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizegroup", "Size Group", sizeGroupList, "", "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "origsrp", "Orig SRP", origSrpList, "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "color", "Color", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "silhouette", "Silhouette", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collectionattri", "Collection", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "fitcut", "Fit Cut", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "materialcomposition", "Material Composition", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "materialconstruction", "Material Construction", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "printtexture", "PrintTexture", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "productline", "Product Line", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sleevetype", "Sleeve Type", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecollection", "Style Collection", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "subcategory", "Sub Category", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizegroup", "Size Group", new List<string>(), "", "", "100%")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "origsrp", "Orig SRP", new List<string>(), "", "", "100%")
                                         </div>
                                     </div>
                                 </div>
@@ -596,9 +347,9 @@
 
                             <div class="row">
                                 @if (!string.IsNullOrEmpty(errorMessage))
-                                {
+                                                {
                                     <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
-                                }
+                                            }
                             </div>
                         </form>
                     </div>
