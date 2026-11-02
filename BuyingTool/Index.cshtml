@@ -12,7 +12,7 @@
         string userId = Session["idnumber"] as string;
         if (!string.IsNullOrEmpty(userId))
         {
-            service.ClearFiltersWindowCache(userId);
+            //service.ClearFiltersWindowCache(userId);
             service.ClearFinalDataSetFilterCache(userId);
             service.ClearGetFiltersAttributeCache(userId);
             service.ClearGetFiltersOrganizationCache(userId);
@@ -99,7 +99,9 @@
         <link href="~/Pages/Style/login.css?v=@loginCss" rel="stylesheet" />
 
         <main class="content-wrapper" role="main">
+
             <section class="tab-pane login-pane" aria-label="Main Login">
+
                 <div class="login-header-group">
                     <h1 class="page-title">Buy and Allocation Report</h1>
                     <h2 class="login-sub-title">LOGIN</h2>
@@ -122,7 +124,9 @@
                         </div>
                     </form>
                 </div>
+            
             </section>
+
         </main>
     }
     else
@@ -162,7 +166,6 @@
             </div>
         </header>
 
-        // OLD
         <main class="content-wrapper" role="main">
             @if (activeTab == "Main")
             {
@@ -181,19 +184,6 @@
                 <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
                     @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
                 </section>
-
-                @*if (isCalculated)
-                    {
-                        <section id="tab-2.-review-summary" class="tab-pane" aria-label="Review Summary">
-                            @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
-                        </section>
-                    }
-                    else
-                    {
-                        <div class="alert alert-warning" role="alert">
-                            Please click the *Calculate* button first to unlock the Review Summary.
-                        </div>
-                    }*@
             }
             else if (activeTab == "3. Review Site Details")
             {
@@ -220,69 +210,8 @@
                 </section>
             }
         </main>
-
-        // NEW
-        //<main class="content-wrapper" role="main">
-        //
-        //    <div id="tab-main" class="tab-pane" style="@(activeTab == "Main" ? "" : "display:none;")">
-        //        @RenderPage("~/Pages/Component/Main.cshtml", activeTab)
-        //    </div>
-        //
-        //    <div id="tab-1-set-filters" class="tab-pane" style="@(activeTab == "1. Set Filters" ? "" : "display:none;")">
-        //        @RenderPage("~/Pages/Component/SetFiltersWindow.cshtml", activeTab)
-        //    </div>
-        //
-        //    <div id="tab-2-review-summary" class="tab-pane" style="@(activeTab == "2. Review Summary" ? "" : "display:none;")">
-        //        @RenderPage("~/Pages/Component/ReviewSummary.cshtml", activeTab)
-        //    </div>
-        //
-        //    <div id="tab-3-review-site-details" class="tab-pane" style="@(activeTab == "3. Review Site Details" ? "" : "display:none;")">
-        //        @RenderPage("~/Pages/Component/ReviewSiteDetails.cshtml", activeTab)
-        //    </div>
-        //
-        //    <div id="tab-4-export" class="tab-pane" style="@(activeTab == "4. Export" ? "" : "display:none;")">
-        //        @RenderPage("~/Pages/Component/Export.cshtml", activeTab)
-        //    </div>
-        //
-        //    <div id="tab-size-curve" class="tab-pane" style="@(activeTab == "Size Curve" ? "" : "display:none;")">
-        //        @RenderPage("~/Pages/Component/SizeCurve.cshtml", activeTab)
-        //    </div>
-        //
-        //</main>
-
-        <!-- NEW: Script to manage layout panel visibility instantly without a reload -->
-        //<script>
-        //    document.addEventListener("DOMContentLoaded", function () {
-        //        const tabs = document.querySelectorAll('.tab-nav__tab');
-        //
-        //        tabs.forEach(tab => {
-        //            tab.addEventListener('click', function (e) {
-        //                e.preventDefault();
-        //
-        //                // 1. Manage Active States on the Nav links
-        //                document.querySelector('.tab-nav__tab--active')?.classList.remove('tab-nav__tab--active');
-        //                document.querySelector('[aria-current="page"]')?.removeAttribute('aria-current');
-        //
-        //                this.classList.add('tab-nav__tab--active');
-        //                this.setAttribute('aria-current', 'page');
-
-        // 2. Hide all layout content blocks
-        //                document.querySelectorAll('.tab-pane').forEach(pane => {
-        //                    pane.style.display = 'none';
-        //                });
-
-        // 3. Show the selected content block matching the target ID
-        //               const targetAttr = this.getAttribute('data-tab-target');
-        //               const targetPane = document.getElementById('tab-' + targetAttr);
-        //               if (targetPane) {
-        //                   targetPane.style.display = 'block';
-        //               }
-        //           });
-        //       });
-        //   });
-        //</script>
-
     }
+    
     @{
         var idnumberforlabel = Session["idnumber"] ?? "";
         if (Session["CalculationDone"] != null)
@@ -295,5 +224,7 @@
         }
     }
     <label hidden id="idnumber">@idnumberforlabel</label>
+
+
 </body>
 </html>

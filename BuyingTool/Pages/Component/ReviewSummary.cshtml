@@ -77,146 +77,6 @@
         (tableHeaders5, tableRows5) = service.DatatableConvertToHT(table5).GetAwaiter().GetResult();
     }
 
-    <!--if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
-    {
-
-            string action = Request["actionButton"];
-
-            if (action == "Apply")
-            {
-                var tHeader1 = new List<string>();
-                var tRows1 = new List<string[]>();
-                var tHeader2 = new List<string>();
-                var tRows2 = new List<string[]>();
-                var tHeader3 = new List<string>();
-                var tRows3 = new List<string[]>();
-                var tHeader4 = new List<string>();
-                var tRows4 = new List<string[]>();
-                var tHeader5 = new List<string>();
-                var tRows5 = new List<string[]>();
-
-                Func<string, string> getSelectedValues = (fieldName) =>
-                {
-                    string[] values = Request.Form.GetValues(fieldName) ?? new string[0];
-                    if (values.Length > 1) return string.Join(",", values);
-                    return values.Length == 1 ? values[0] : string.Empty;
-                };
-
-                string selectedStoreGrade = getSelectedValues("store-grades");
-                string selectedSize = getSelectedValues("sizes");
-
-                var (tbls, DBresponse) = service.GetDistributionSummary(selectedSize, selectedStoreGrade).GetAwaiter().GetResult();
-
-                // Safely extract all 5 tables from the array
-                DataTable table6 = tbls != null && tbls.Length > 0 ? tbls[0] : null; // Store Grade Cumulative
-                DataTable table7 = tbls != null && tbls.Length > 1 ? tbls[1] : null; // Territory Cumulative
-                DataTable table8 = tbls != null && tbls.Length > 2 ? tbls[2] : null; // Distribution Plan per Store Grade
-                DataTable table9 = tbls != null && tbls.Length > 3 ? tbls[3] : null; // Distribution Plan per Territory
-                DataTable table10 = tbls != null && tbls.Length > 4 ? tbls[4] : null; // Distribution Plan per Drop
-
-                if (table6 != null)
-                {
-                    (tHeader1, tRows1) = service.DatatableConvertToHT(table6).GetAwaiter().GetResult();
-
-                    tableHeaders1 = tHeader1;
-                    tableRows1 = tRows1;
-                }
-
-                if (table7 != null)
-                {
-                    (tHeader2, tRows2) = service.DatatableConvertToHT(table7).GetAwaiter().GetResult();
-
-                    tableHeaders2 = tHeader2;
-                    tableRows2 = tRows2;
-                }
-
-                if (table8 != null)
-                {
-                    (tHeader3, tRows3) = service.DatatableConvertToHT(table8).GetAwaiter().GetResult();
-
-                    tableHeaders3 = tHeader3;
-                    tableRows3 = tRows3;
-                }
-
-                if (table9 != null)
-                {
-                    (tHeader4, tRows4) = service.DatatableConvertToHT(table9).GetAwaiter().GetResult();
-
-                    tableHeaders4 = tHeader4;
-                    tableRows4 = tRows4;
-                }
-
-                if (table10 != null)
-                {
-                    (tHeader5, tRows5) = service.DatatableConvertToHT(table10).GetAwaiter().GetResult();
-
-                    tableHeaders5 = tHeader5;
-                    tableRows5 = tRows5;
-                }
-            }
-            else if(action == "Export")
-            {
-
-                var tableHeaders = new List<string>();
-                var tableRows = new List<string[]>();
-
-                // Tables
-                // Store Grade (Cummulative):           tableHeaders1, tableRows1
-                // Distribution Plan per Store Grade:   tableHeaders3, tableRows3
-                // Territory (Cummulative):             tableHeaders2, tableRows2
-                // Distribution Plan per Territory:     tableHeaders4, tableRows4
-                // Distribution Plan per Drops:         tableHeaders5, tableRows5
-
-                selectedTable = Request.Form["Table"];
-
-                string userInputFileName = Request.Form["customFileName"];
-                string fileName = string.IsNullOrWhiteSpace(userInputFileName) ? "report_summary" : userInputFileName.Trim();
-
-                if(selectedTable == "Store Grade (Cummulative)")
-                {
-                    tableHeaders = tableHeaders1;
-                    tableRows = tableRows1;
-                }
-                else if(selectedTable == "Distribution Plan per Store Grade")
-                {
-                    tableHeaders = tableHeaders3;
-                    tableRows = tableRows3;
-                }
-                else if(selectedTable == "Territory (Cummulative)")
-                {
-                    tableHeaders = tableHeaders2;
-                    tableRows = tableRows2;
-                }
-                else if(selectedTable == "Distribution Plan per Territory")
-                {
-                    tableHeaders = tableHeaders4;
-                    tableRows = tableRows4;
-                }
-                else if(selectedTable == "Distribution Plan per Drops")
-                {
-                    tableHeaders = tableHeaders5;
-                    tableRows = tableRows5;
-                }
-
-                service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
-                           .GetAwaiter()
-                           .GetResult();
-
-            }
-            else if(action == "Go")
-            {
-                string val = Request.Form["override"];
-            }
-
-
-
-        }
-        -->
-
-
-    //string selectedStoreGrades = string.Empty;
-    //string selectedSizes = string.Empty;
-
     if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
     {
         string action = Request["actionButton"];
@@ -300,7 +160,7 @@
 
             selectedTable = Request.Form["Table"];
 
-            if(string.IsNullOrEmpty(selectedTable))
+            if (string.IsNullOrEmpty(selectedTable))
             {
                 errorMessage = "Please select table you want to download.";
             }
@@ -357,11 +217,14 @@
                 overridevalue = Convert.ToInt16(overrideRaw);
 
                 (tableHeaders5, tableRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(Session["Size"] as string, Session["StoreGrade"] as string, overridevalue).GetAwaiter().GetResult();
+                overrideErrorMessage = string.Empty;
             }
+
+
+            Session["StoreGrade"] = storegrade;
+            Session["Size"] = size;
         }
     }
-
-    //var errorMsg = !string.IsNullOrEmpty(dbResponse) ? dbResponse : DBresponse;
 
     // Loading CSS File for each component
     var headerCss = System.IO.File
@@ -400,6 +263,7 @@
         <section class="summary-container">
 
             <form method="post">
+
                 <div class="action-toolbar-row">
                     <div class="three-col-filter-left-side">
                         <div class="col">
@@ -411,10 +275,6 @@
                         <div class="col apply-btn-col">
                             @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
                         </div>
-                        <!--if (!string.IsNullOrEmpty(errorMsg))
-                        {
-                            <div class="error-message" style="color: #ff4d4d; margin-top: 10px; margin-bottom: 15px; font-weight: 500;">errorMsg</div>
-                        }-->
                     </div>
                     <div class="three-col-filter-right-side">
                         <div class="col dropdown-selection-col">
@@ -430,8 +290,8 @@
                                    placeholder="Enter filename..."
                                    value="ReportSummary"
                                    style="width: 200px; display: inline-block;" />
-                           
-                           
+
+
                         </div>
                         <div class="col export-btn-col">
                             @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
@@ -443,73 +303,73 @@
                             }
                         </div>
                     </div>
+                </div><br>
+
+
+                <!-- ROW 1: Store Grade Pair -->
+                <div class="dashboard-row">
+                    <article class="panel-card cumulative-panel" aria-label="Store Grade Cumulative Panel">
+                        @RenderPage("~/Pages/Common/Header.cshtml", "Store Grade (Cummulative)")
+                        <div class="table-responsive-wrapper">
+                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders1, tableRows1)
+                        </div>
+                    </article>
+                    <article class="panel-card distribution-panel" aria-label="Distribution Plan per Store Grade Panel">
+                        @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Store Grade")A
+                        <div class="table-responsive-wrapper">
+                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders3, tableRows3)
+                        </div>
+                    </article>
                 </div>
-            </form>
 
-            <!-- ROW 1: Store Grade Pair -->
-            <div class="dashboard-row">
-                <article class="panel-card cumulative-panel" aria-label="Store Grade Cumulative Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", "Store Grade (Cummulative)")
-                    <div class="table-responsive-wrapper">
-                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders1, tableRows1)
-                    </div>
-                </article>
-                <article class="panel-card distribution-panel" aria-label="Distribution Plan per Store Grade Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Store Grade")
-                    <div class="table-responsive-wrapper">
-                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders3, tableRows3)
-                    </div>
-                </article>
-            </div>
+                <!-- ROW 2: Territory Pair -->
+                <div class="dashboard-row">
+                    <article class="panel-card cumulative-panel" aria-label="Territory Cumulative Panel">
+                        @RenderPage("~/Pages/Common/Header.cshtml", "Territory (Cummulative)")
+                        <div class="table-responsive-wrapper">
+                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders2, tableRows2)
+                        </div>
+                    </article>
+                    <article class="panel-card distribution-panel" aria-label="Distribution Plan per Territory Panel">
+                        @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Territory")
+                        <div class="table-responsive-wrapper">
+                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders4, tableRows4)
+                        </div>
+                    </article>
+                </div>
 
-            <!-- ROW 2: Territory Pair -->
-            <div class="dashboard-row">
-                <article class="panel-card cumulative-panel" aria-label="Territory Cumulative Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", "Territory (Cummulative)")
-                    <div class="table-responsive-wrapper">
-                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders2, tableRows2)
-                    </div>
-                </article>
-                <article class="panel-card distribution-panel" aria-label="Distribution Plan per Territory Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Territory")
-                    <div class="table-responsive-wrapper">
-                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders4, tableRows4)
-                    </div>
-                </article>
-            </div>
+                <!-- ROW 3: Override Drops Pair -->
+                <div class="dashboard-row">
 
-            <!-- ROW 3: Override Drops Pair -->
-            <div class="dashboard-row">
-
-                <article class="panel-card cumulative-panel" aria-label="Override Drops Quantity Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", "Override Drops Quantity?")
-                    <div class="row">
-                        <div class="two-col">
-                            <form method="post">
+                    <article class="panel-card cumulative-panel" aria-label="Override Drops Quantity Panel">
+                        @RenderPage("~/Pages/Common/Header.cshtml", "Override Drops Quantity?")
+                        <div class="row">
+                            <div class="two-col">
                                 <div class="col-1">
                                     @RenderPage("~/Pages/Common/TextField.cshtml", "override", "Value", "", "numeric")
                                 </div>
                                 <div class="col-2">
                                     @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
                                 </div>
-                            </form>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        @if (!string.IsNullOrEmpty(overrideErrorMessage))
-                        {
-                            <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
-                        }
-                    </div>
-                </article>
+                        <div class="row">
+                            @if (!string.IsNullOrEmpty(overrideErrorMessage))
+                            {
+                                <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
+                            }
+                        </div>
+                    </article>
 
-                <article class="panel-card distribution-panel" aria-label="Distribution Plan per Drops Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Drops")
-                    <div class="table-responsive-wrapper">
-                        @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders5, tableRows5)
-                    </div>
-                </article>
-            </div>
+                    <article class="panel-card distribution-panel" aria-label="Distribution Plan per Drops Panel">
+                        @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Drops")
+                        <div class="table-responsive-wrapper">
+                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders5, tableRows5)
+                        </div>
+                    </article>
+                </div>
+
+            </form>
 
         </section>
     </main>
