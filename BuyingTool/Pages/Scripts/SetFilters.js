@@ -165,21 +165,24 @@ function setRequiredFilterTable() {
     
     processSelect(brand, brandset);
     processSelect(division, divisionset);
+    processSelect(periodplan, periodplanset);
     processSelect(department, departmentset);
     processSelect(category, categoryset);
-    processSelect(collection, collectionset);
-    processSelect(periodplan, periodplanset);
+    processMultiSelect(collection, collectionset);
 
+    /*
     sortSelect(brand);
     sortSelect(division);
     sortSelect(department);
     sortSelect(category);
     sortSelect(periodplan);
-    sortMultiSelect(collection);
+    sortMultiSelect(collection);*/
 };
 function buildStylesFilterTable() {
     var brand = document.getElementById('dd_brand');
     var category = document.getElementById('dd_category');
+    var style = document.getElementById('dd_style');
+    var stylecode = document.getElementById('dd_stylecode');
 
     //todo, what happens if null category
     var collection = document.getElementById('dd_collection');
@@ -202,11 +205,8 @@ function setStylesFilterTable() {
         stylecodeset.add(filteredStylesTable[i].Style_Code);
     }
 
-    processSelect(style, styleset);
-    processSelect(stylecode, stylecodeset);
-
-    sortMultiSelect(style);
-    sortMultiSelect(stylecode);
+    processMultiSelect(style, styleset);
+    processMultiSelect(stylecode, stylecodeset);
 };
 function buildAttributesFilterTable() {
     var style = document.getElementById('dd_style');
@@ -259,20 +259,21 @@ function setAttributesFilterTable() {
         origsrpset.add(filteredAttributesTable[i]['Orig SRP']);
     }
 
-    processSelect(color, colorset);
-    processSelect(silhouette, silhouetteset);
-    processSelect(collectionattri, collectionattriset);
-    processSelect(fitcut, fitcutset);
-    processSelect(materialcomposition, materialcompositionset);
-    processSelect(materialconstruction, materialconstructionset);
-    processSelect(printtexture, printtextureset);
-    processSelect(productline, productlineset);
-    processSelect(sleevetype, sleevetypeset);
-    processSelect(stylecollection, stylecollectionset);
-    processSelect(subcategory, subcategoryset);
-    processSelect(sizegroup, sizegroupset);
-    processSelect(origsrp, origsrpset);
+    processMultiSelect(color, colorset);
+    processMultiSelect(silhouette, silhouetteset);
+    processMultiSelect(collectionattri, collectionattriset);
+    processMultiSelect(fitcut, fitcutset);
+    processMultiSelect(materialcomposition, materialcompositionset);
+    processMultiSelect(materialconstruction, materialconstructionset);
+    processMultiSelect(printtexture, printtextureset);
+    processMultiSelect(productline, productlineset);
+    processMultiSelect(sleevetype, sleevetypeset);
+    processMultiSelect(stylecollection, stylecollectionset);
+    processMultiSelect(subcategory, subcategoryset);
+    processMultiSelect(sizegroup, sizegroupset);
+    processMultiSelect(origsrp, origsrpset);
 
+    /*
     sortMultiSelect(color);
     sortMultiSelect(silhouette);
     sortMultiSelect(collectionattri);
@@ -285,7 +286,7 @@ function setAttributesFilterTable() {
     sortMultiSelect(stylecollection);
     sortMultiSelect(subcategory);
     sortMultiSelect(sizegroup);
-    sortMultiSelect(origsrp);
+    sortMultiSelect(origsrp);*/
 };
 
 function buildOrganizationFilterTable() {
@@ -326,16 +327,17 @@ function setOrganizationFilterTable() {
         storeGradeset.add(filteredOrganizationTable[i]['Store Grade']);
     }
 
-    processSelect(region, regionset);
-    processSelect(country, countryset);
-    processSelect(channel, channelset);
-    processSelect(territory, territoryset);
-    processSelect(area, areaset);
-    processSelect(outlet, outletset);
-    processSelect(siteCode, siteCodeset);
-    processSelect(siteName, siteNameset);
-    processSelect(storeGrade, storeGradeset);
+    processMultiSelect(region, regionset);
+    processMultiSelect(country, countryset);
+    processMultiSelect(channel, channelset);
+    processMultiSelect(territory, territoryset);
+    processMultiSelect(area, areaset);
+    processMultiSelect(outlet, outletset);
+    processMultiSelect(siteCode, siteCodeset);
+    processMultiSelect(siteName, siteNameset);
+    processMultiSelect(storeGrade, storeGradeset);
 
+    /*
     sortMultiSelect(region);
     sortMultiSelect(country);
     sortMultiSelect(channel);
@@ -344,22 +346,54 @@ function setOrganizationFilterTable() {
     sortMultiSelect(outlet);
     sortMultiSelect(siteCode);
     sortMultiSelect(siteName);
-    sortMultiSelect(storeGrade);
+    sortMultiSelect(storeGrade);*/
 };
 function processSelect(element, set) {
+
+    var selection = element.value;
     //remove unnecessary except blank
+    /*
     for (var i = element.length - 1; i >= 0; i--) {
         if (!set.has(element.options[i].value) && element.options[i].value != '') {
             element.remove(i);
         }
+    }*/
+    while (element.length > 0) {
+        element.remove(0);
     }
     //insert missing
-    for (let value of set) {
+
+    element.options[0] = new Option('-- Select --','');
+    let counter = 1;
+    for (let value of set) {/*
         if (!element.contains(value)) {
             var option = document.createElement("option");
             option.text = value;
             element.add(option);
+        }*/
+        element.options[counter] = new Option(value,value);
+        counter++;
+    }
+    element.value = selection;
+}
+function processMultiSelect(element, set) {
+    var SelectedList = [];
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.push(element.options[0].value)
         }
+        element.remove(0);
+    }
+
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        element.options[counter] = new Option(value, value);
+        if (SelectedList[0] == value) {
+            element.options[counter].selected = true;
+            SelectedList.pop();
+        }
+        counter++;
     }
 }
 function sortSelect(element) {
