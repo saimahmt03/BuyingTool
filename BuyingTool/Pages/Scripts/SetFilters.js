@@ -1,11 +1,13 @@
-﻿var requiredTable;
-var stylesTable;
-var organizationTable;
-var attributesTable;
-var filteredRequiredTable;
-var filteredStylesTable;
-var filteredOrganizationTable;
-var filteredAttributesTable;
+﻿var requiredTable = [];
+var stylesTable = [];
+var organizationTable = [];
+var periodPlanTable = [];
+var attributesTable = [];
+var filteredRequiredTable = [];
+var filteredStylesTable = [];
+var filteredOrganizationTable = [];
+var filteredAttributesTable = [];
+var filteredPeriodPlanTable = [];
 HTMLSelectElement.prototype.contains = function (value) {
     for (var i = 0, l = this.options.length; i < l; i++) {
         if (this.options[i].value == value) {
@@ -70,6 +72,20 @@ $(document).ready(function () {
             //ORGANIZATION : brand
             buildOrganizationFilterTable();
             setOrganizationFilterTable();
+        }
+    });
+    let periodplanapiurl = "/api/PeriodPlanFilters"
+    $.ajax({
+        url: url + periodplanapiurl,
+        method: "GET",
+        data: {
+            "idnumber": idnumber,
+        },
+        success: function (data) {
+            periodPlanTable = data;
+            //ORGANIZATION : brand
+            buildRequiredFilterTable();
+            setRequiredFilterTable();
         }
     });
 
@@ -143,17 +159,22 @@ function setRequiredFilterTable() {
         categoryset.add(filteredRequiredTable[i].Category);
         collectionset.add(filteredRequiredTable[i].Collection);
     }
+    for (var i = 0; i < periodPlanTable.length; i++) {
+        periodplanset.add(periodPlanTable[i].PlanPeriod);
+    }
     
     processSelect(brand, brandset);
     processSelect(division, divisionset);
     processSelect(department, departmentset);
     processSelect(category, categoryset);
     processSelect(collection, collectionset);
+    processSelect(periodplan, periodplanset);
 
     sortSelect(brand);
     sortSelect(division);
     sortSelect(department);
     sortSelect(category);
+    sortSelect(periodplan);
     sortMultiSelect(collection);
 };
 function buildStylesFilterTable() {
