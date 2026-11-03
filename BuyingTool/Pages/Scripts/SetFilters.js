@@ -383,6 +383,7 @@ function processMultiSelect(element, set) {
             }
             counter++;
         }
+        counter++;
     }
 }
 
