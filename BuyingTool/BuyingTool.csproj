@@ -294,6 +294,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\PeriodPlanFiltersController.cs" />
     <Compile Include="Controllers\OrganizationFiltersController.cs" />
     <Compile Include="Controllers\AttributeFiltersController.cs" />
     <Compile Include="Controllers\StyleFiltersController.cs" />
