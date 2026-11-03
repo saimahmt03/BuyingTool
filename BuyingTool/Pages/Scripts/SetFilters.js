@@ -135,7 +135,7 @@ function buildRequiredFilterTable() {
         (division.value == '' || row.Division == division.value) &&
         (department.value == '' || row.Department == department.value) &&
         (category.value == '' || row.Category == category.value) &&
-        (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.has(row.Collection))
+        (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Collection))
     );
 };
 function setRequiredFilterTable() {
@@ -187,7 +187,7 @@ function buildStylesFilterTable() {
     filteredStylesTable = stylesTable.filter(row =>
         (brand.value == '' || row.Brand == brand.value) &&
         (category.value == '' || row.Category == category.value) &&
-        (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.has(row.Collection))
+        (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Collection))
     );
    
 };
@@ -212,7 +212,7 @@ function buildAttributesFilterTable() {
     var style = document.getElementById('dd_style');
     let selectedValues = Array.from(style.selectedOptions).map(option => option.value);
     filteredAttributesTable = attributesTable.filter(row =>
-        (selectedValues.length == 0||(selectedValues.length == 1 && selectedValues[0]=='')|| selectedValues.has(row.Style))
+        (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Style))
     );
 };
 function setAttributesFilterTable() {
