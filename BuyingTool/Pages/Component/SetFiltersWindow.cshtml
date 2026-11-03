@@ -9,7 +9,7 @@
     string errorMessage = string.Empty;
     //bool justCalculated = false;
 
-   
+
 
     // Required
     string brand = string.Empty;
@@ -51,7 +51,7 @@
     {
         string action = Request.Form["actionButton"];
 
-        
+
         brand = Request.Form["brand"];
         division = Request.Form["division"];
         department = Request.Form["department"];
@@ -66,7 +66,7 @@
             return values.Length == 1 ? values[0] : string.Empty;
         };
 
-        selectedCollection = Request.Form["collection"];
+        selectedCollection = getSelectedValues("collection");
 
         // Style
         selectedStyleCode = getSelectedValues("stylecode");
@@ -124,9 +124,48 @@
             }
             else
             {
+                (tableHeaders, tableRows) = service.GetOptionGalTable(
+                   brand,
+                   division,
+                   department,
+                   category,
+                   selectedCollection,
+                   selectedPeriodPlans,
+
+                   selectedColor,
+                   selectedSilhouette,
+                   selectedCollectionAttri,
+                   selectedFitCut,
+                   selectedMaterialComposition,
+                   selectedMaterialConstruction,
+                   selectedPrintTexture,
+                   selectedProductLine,
+                   selectedSleeveType,
+                   selectedStyleCollection,
+                   selectedSizeGroup,
+                   selectedStyleCode,
+                   selectedStyle,
+                   selectedSubCategory,
+                   selectedOrigSrp,
+                   selectedSiteCode,
+                   selectedRegion,
+                   selectedCountry,
+                   selectedChannel,
+                   selectedTerritory,
+                   selectedArea,
+                   selectedOutletType,
+                   selectedSiteName,
+                   selectedStoreGrade,
+                   null // tagFilter parameter
+               ).GetAwaiter().GetResult();
+
+                // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
+                Session["OptionGalHeaders"] = tableHeaders;
+                Session["OptionGalRows"] = tableRows;
+
                 service.GetSizeCurveTable(brand, division, department, category, selectedPeriodPlans)
-                       .GetAwaiter()
-                       .GetResult();
+               .GetAwaiter()
+               .GetResult();
 
                 var result = service.GetCalculation(brand, division, department, category, selectedCollection, selectedPeriodPlans, wosDeci, plcDeci, factorRateDeci)
                                     .GetAwaiter()
@@ -134,7 +173,18 @@
 
                 // Unlock tabs 2, 3, 4 and Size Curve
                 Session["CalculationDone"] = true;
-                //justCalculated = true;
+
+                Session["Brand"] = brand;
+                Session["Division"] = division;
+                Session["Category"] = category;
+                Session["Department"] = department;
+                Session["PeriodPlan"] = selectedPeriodPlans;
+                Session["Collection"] = selectedCollection;
+                Session["Style"] = selectedStyle;
+                Session["StyleCode"] = selectedStyleCode;
+
+
+                Response.Redirect("~/?tab=2.%20Review%20Summary");
             }
         }
         else if (action == "Display")
@@ -191,6 +241,8 @@
                 Session["Department"] = department;
                 Session["PeriodPlan"] = selectedPeriodPlans;
                 Session["Collection"] = selectedCollection;
+                Session["Style"] = selectedStyle;
+                Session["StyleCode"] = selectedStyleCode;
             }
         }
         else
@@ -274,6 +326,7 @@
                                             @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", new List<string>(), selectedPeriodPlans, "", "100%", "changeFilter(dd_periodplans)")
 
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", new List<string>(), selectedCollection, "", "100%", "changeFilter(dd_collection)")
+                                            
                                         </div>
 
                                         <div class="filter-group">

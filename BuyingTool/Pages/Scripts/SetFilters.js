@@ -8,6 +8,7 @@ var filteredStylesTable = [];
 var filteredOrganizationTable = [];
 var filteredAttributesTable = [];
 var filteredPeriodPlanTable = [];
+
 HTMLSelectElement.prototype.contains = function (value) {
     for (var i = 0, l = this.options.length; i < l; i++) {
         if (this.options[i].value == value) {
@@ -16,10 +17,12 @@ HTMLSelectElement.prototype.contains = function (value) {
     }
     return false;
 }
+
 $(document).ready(function () {
     let url = window.location.origin;
     let requiredapiurl = "/api/RequiredFilters"
     let idnumber = document.getElementById('idnumber').innerHTML;
+
     $.ajax({
         url: url + requiredapiurl,
         method: "GET",
@@ -43,6 +46,8 @@ $(document).ready(function () {
         success: function (data) {
             stylesTable = data;
             buildStylesFilterTable();
+            setStylesFilterTable();
+            getSessionStyleSavedData();
             setStylesFilterTable();
         }
     });
@@ -84,12 +89,54 @@ $(document).ready(function () {
         success: function (data) {
             periodPlanTable = data;
             //ORGANIZATION : brand
-            buildRequiredFilterTable();
-            setRequiredFilterTable();
+            setPeriodPlanTable();
         }
     });
-
 });
+
+function getSessionRequiredSavedData(){
+    let sessionBrand = document.getElementById('sessionBrand');
+    let sessionDivision = document.getElementById('sessionDivision');
+    let sessionCategory = document.getElementById('sessionCategory');
+    let sessionDepartment = document.getElementById('sessionDepartment');
+    let sessionCollection = document.getElementById('sessionCollection').innerHTML.split(',');
+
+
+    var brand = document.getElementById('dd_brand');
+    var division = document.getElementById('dd_division');
+    var department = document.getElementById('dd_department');
+    var category = document.getElementById('dd_category');
+    var collection = document.getElementById('dd_collection');
+    brand.value = sessionBrand.innerHTML;
+    division.value = sessionDivision.innerHTML;
+    category.value = sessionCategory.innerHTML;
+    department.value = sessionDepartment.innerHTML;
+    var counter = 1;
+    for (let value in sessionCollection) {
+        collection.options[counter] = new Option(sessionCollection[value], sessionCollection[value]);
+        collection.options[counter].selected = true;
+        counter++;
+    }
+}
+
+function getSessionStyleSavedData() {
+
+    let sessionStyle = document.getElementById('sessionStyle').innerHTML.split(',');
+    let sessionStyleCode = document.getElementById('sessionStyleCode').innerHTML.split(',');
+    var stylecode = document.getElementById('dd_stylecode');
+    var style = document.getElementById('dd_style');
+    var counter = 1;
+    for (let value in sessionStyle) {
+        style.options[counter] = new Option(sessionStyle[value], sessionStyle[value]);
+        style.options[counter].selected = true;
+    }
+    counter = 1;
+    for (let value in sessionStyleCode) {
+        stylecode.options[counter] = new Option(sessionStyleCode[value], sessionStyleCode[value]);
+        stylecode.options[counter].selected = true;
+    }
+}
+
 function changeFilter(id) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
@@ -113,10 +160,9 @@ function changeFilter(id) {
             setStylesFilterTable();
             break;
     }
-
 };
-function changeStyle() {
 
+function changeStyle() {
     buildAttributesFilterTable();
     setAttributesFilterTable();
 };
@@ -126,7 +172,6 @@ function buildRequiredFilterTable() {
     var division = document.getElementById('dd_division');
     var department = document.getElementById('dd_department');
     var category = document.getElementById('dd_category');
-    var periodplan = document.getElementById('dd_periodplans');
     var collection = document.getElementById('dd_collection');
     let selectedValues = Array.from(collection.selectedOptions).map(option => option.value);
     filteredRequiredTable =  requiredTable.filter(row =>
@@ -137,19 +182,17 @@ function buildRequiredFilterTable() {
         (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Collection))
     );
 };
-function setRequiredFilterTable() {
 
+function setRequiredFilterTable() {
     var brand = document.getElementById('dd_brand');
     var division = document.getElementById('dd_division');
     var department = document.getElementById('dd_department');
     var category = document.getElementById('dd_category');
-    var periodplan = document.getElementById('dd_periodplans');
     var collection = document.getElementById('dd_collection');
     var brandset = new Set();
     var divisionset = new Set();
     var departmentset = new Set();
     var categoryset = new Set();
-    var periodplanset = new Set();
     var collectionset = new Set();
     for (var i = 0; i < filteredRequiredTable.length; i++) {
         brandset.add(filteredRequiredTable[i].Brand);
@@ -158,25 +201,28 @@ function setRequiredFilterTable() {
         categoryset.add(filteredRequiredTable[i].Category);
         collectionset.add(filteredRequiredTable[i].Collection);
     }
-    for (var i = 0; i < periodPlanTable.length; i++) {
-        periodplanset.add(periodPlanTable[i].PlanPeriod);
-    }
-    
+
     processSelect(brand, brandset);
     processSelect(division, divisionset);
-    processSelect(periodplan, periodplanset);
     processSelect(department, departmentset);
     processSelect(category, categoryset);
     processMultiSelect(collection, collectionset);
-
-    /*
-    sortSelect(brand);
-    sortSelect(division);
-    sortSelect(department);
-    sortSelect(category);
-    sortSelect(periodplan);
-    sortMultiSelect(collection);*/
+    getSessionRequiredSavedData();
 };
+
+function setPeriodPlanTable() {
+    var periodplan = document.getElementById('dd_periodplans');
+    var periodplanset = new Set();
+    for (var i = 0; i < periodPlanTable.length; i++) {
+        periodplanset.add(periodPlanTable[i].PlanPeriod);
+    }
+    processSelect(periodplan, periodplanset);
+
+    let sessionPeriodPlan = document.getElementById('sessionPeriodPlan');
+    var periodplan = document.getElementById('dd_periodplans');
+    periodplan.value = sessionPeriodPlan.innerHTML;
+}
+
 function buildStylesFilterTable() {
     var brand = document.getElementById('dd_brand');
     var category = document.getElementById('dd_category');
@@ -193,6 +239,7 @@ function buildStylesFilterTable() {
     );
    
 };
+
 function setStylesFilterTable() {
 
     var style = document.getElementById('dd_style');
@@ -207,6 +254,7 @@ function setStylesFilterTable() {
     processMultiSelect(style, styleset);
     processMultiSelect(stylecode, stylecodeset);
 };
+
 function buildAttributesFilterTable() {
     var style = document.getElementById('dd_style');
     let selectedValues = Array.from(style.selectedOptions).map(option => option.value);
@@ -214,6 +262,7 @@ function buildAttributesFilterTable() {
         (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Style))
     );
 };
+
 function setAttributesFilterTable() {
 
     var color = document.getElementById('dd_color');
@@ -294,6 +343,7 @@ function buildOrganizationFilterTable() {
         (brand.value == '' || row.Brand == brand.value)
     );
 };
+
 function setOrganizationFilterTable() {
 
     var region = document.getElementById('dd_region');
@@ -347,6 +397,7 @@ function setOrganizationFilterTable() {
     sortMultiSelect(siteName);
     sortMultiSelect(storeGrade);*/
 };
+
 function processSelect(element, set) {
 
     var selection = element.value;
@@ -362,7 +413,8 @@ function processSelect(element, set) {
         }
     }
     element.value = selection;
-}
+};
+
 function processMultiSelect(element, set) {
     var SelectedList = [];
     while (element.length > 0) {
@@ -383,9 +435,8 @@ function processMultiSelect(element, set) {
             }
             counter++;
         }
-        counter++;
     }
-}
+};
 
 function sortSelect(element) {
     //save selected value
@@ -408,7 +459,8 @@ function sortSelect(element) {
     //set selected value
     element.value = selection;
     return;
-}
+};
+
 function sortMultiSelect(element) {
     var tmpAry = new Array();
     for (var i = 0; i < element.options.length; i++) {
@@ -431,4 +483,4 @@ function sortMultiSelect(element) {
         element.options[i] = op;
     }
     return;
-}
+};

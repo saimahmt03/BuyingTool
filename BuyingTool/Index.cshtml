@@ -222,8 +222,25 @@
         {
             <p id="calculationdone" hidden>false</p>
         }
+        var sessionBrand = Session["Brand"] ;
+        var sessionDivision = Session["Division"] ;
+        var sessionCategory = Session["Category"] ;
+        var sessionDepartment = Session["Department"] ;
+        var sessionPeriodPlan = Session["PeriodPlan"] ;
+        var sessionCollection = Session["Collection"];
+        var sessionStyle = Session["Style"];
+        var sessionStyleCode = Session["StyleCode"];
     }
     <label hidden id="idnumber">@idnumberforlabel</label>
+
+    <label hidden id="sessionBrand">@sessionBrand</label>
+    <label hidden id="sessionDivision">@sessionDivision</label>
+    <label hidden id="sessionCategory">@sessionCategory</label>
+    <label hidden id="sessionDepartment">@sessionDepartment</label>
+    <label hidden id="sessionPeriodPlan">@sessionPeriodPlan</label>
+    <label hidden id="sessionCollection">@sessionCollection</label>
+    <label hidden id="sessionStyle">@sessionStyle</label>
+    <label hidden id="sessionStyleCode">@sessionStyleCode</label>
 
 
 </body>
