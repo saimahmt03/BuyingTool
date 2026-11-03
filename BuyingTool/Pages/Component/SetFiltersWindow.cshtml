@@ -371,19 +371,5 @@
         </section>
     </main>
 
-    @*
-        @if (justCalculated)
-        {
-            <script>
-                // NEW: The tab bar was drawn before Calculate ran, so unlock it in the browser now.
-                document.querySelectorAll('.tab-locked').forEach(function (t) {
-                    t.classList.remove('tab-locked');
-                    t.removeAttribute('aria-disabled');
-                    t.removeAttribute('tabindex');
-                });
-            </script>
-        }
-    *@
-
 </body>
 <script src="~/Pages/Scripts/SetFilters.js"></script>

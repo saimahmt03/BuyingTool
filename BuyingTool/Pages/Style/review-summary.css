@@ -1,6 +1,6 @@
 ﻿/* =================================================================
     Review Summary Layout Styles (.NET Framework 4.7.2 / Razor v3)
-    ================================================================= */
+    ================================================================ */
 :root {
     --bg-main: #e0e0e0;
     --panel-bg: #ececec;
@@ -150,6 +150,56 @@ header {
     max-width: 100%;
     -webkit-overflow-scrolling: touch;
 }
+
+/* =================================================================
+    Override Drops Quantity Panel Layout & Textfield Fix
+    ================================================================ */
+.panel-card[aria-label="Override Drops Quantity Panel"] .two-col {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.panel-card[aria-label="Override Drops Quantity Panel"] .col-1 {
+    flex: 1;
+    min-width: 0;
+}
+
+    /* Restrict the text field width so it doesn't span 100% and overlap the Go button */
+    .panel-card[aria-label="Override Drops Quantity Panel"] .col-1 input,
+    .panel-card[aria-label="Override Drops Quantity Panel"] .col-1 .form-control {
+        width: 120px !important;
+        max-width: 100%;
+    }
+
+.panel-card[aria-label="Override Drops Quantity Panel"] .col-2 {
+    flex-shrink: 0;
+}
+
+/* =================================================================
+    Cumulative Panels Header Adjustment (Store Grade & Territory)
+    ================================================================ */
+.panel-card.cumulative-panel > *:first-child *,
+.panel-card[aria-label="Store Grade Cumulative Panel"] header *,
+.panel-card[aria-label="Territory Cumulative Panel"] header * {
+    font-size: 13.5px !important; /* Reduced 1.5 steps lower from the 18px general rule */
+}
+
+/* =================================================================
+    Table Column Header Wrap Fix: Move (MAX), (AVE), (MIN) to next line
+    ================================================================ */
+.panel-card.cumulative-panel table th {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+}
+
+    /* Target table headers containing Order QTY and force the modifier label onto a new line */
+    .panel-card.cumulative-panel table th:nth-child(n+2) {
+        /* If your table component renders text cleanly, setting a constrained width or flex/inline-block forces wrapping */
+        max-width: 90px;
+    }
 
 /* Flexible adjustment for smaller screens/tablets */
 @media (max-width: 1024px) {
