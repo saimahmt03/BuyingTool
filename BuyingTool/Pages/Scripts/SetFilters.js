@@ -90,7 +90,6 @@ $(document).ready(function () {
     });
 
 });
-
 function changeFilter(id) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
@@ -351,28 +350,16 @@ function setOrganizationFilterTable() {
 function processSelect(element, set) {
 
     var selection = element.value;
-    //remove unnecessary except blank
-    /*
-    for (var i = element.length - 1; i >= 0; i--) {
-        if (!set.has(element.options[i].value) && element.options[i].value != '') {
-            element.remove(i);
-        }
-    }*/
     while (element.length > 0) {
         element.remove(0);
     }
-    //insert missing
-
     element.options[0] = new Option('-- Select --','');
     let counter = 1;
-    for (let value of set) {/*
-        if (!element.contains(value)) {
-            var option = document.createElement("option");
-            option.text = value;
-            element.add(option);
-        }*/
-        element.options[counter] = new Option(value,value);
-        counter++;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
     }
     element.value = selection;
 }
@@ -388,14 +375,18 @@ function processMultiSelect(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        element.options[counter] = new Option(value, value);
-        if (SelectedList[0] == value) {
-            element.options[counter].selected = true;
-            SelectedList.pop();
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList[0] === value) {
+                element.options[counter].selected = true;
+                SelectedList.pop();
+            }
+            counter++;
         }
         counter++;
     }
 }
+
 function sortSelect(element) {
     //save selected value
     var selection = element.value;

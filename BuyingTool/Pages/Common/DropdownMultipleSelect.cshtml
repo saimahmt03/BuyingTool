@@ -40,8 +40,8 @@
             multiple
             size="1"
             onfocus="this.size=5;"
-            onblur="this.size=1;"
-            onchange="this.size=1; this.blur(); @onChangeAction">
+            onblur="this.size=1;@onChangeAction"
+            onchange="this.size=1; this.blur();">
         <option value="" selected="@(!hasValue)">-- Select --</option>
         @foreach (var o in options)
         {
