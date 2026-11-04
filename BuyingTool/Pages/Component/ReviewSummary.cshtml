@@ -153,6 +153,36 @@
                 tableRows5 = tRows5;
             }
         }
+        else if (action == "Go")
+        {
+            var tHeader5 = new List<string>();
+            var tRows5 = new List<string[]>();
+
+            string overrideRaw = Request.Form["override"];
+            Int16 overridevalue = 0;
+
+            string storegrade = Session["StoreGrade"] as string;
+            string size = Session["Size"] as string;
+
+            if (string.IsNullOrEmpty(overrideRaw))
+            {
+                overrideErrorMessage = "Please enter the value.";
+            }
+            else
+            {
+                overridevalue = Convert.ToInt16(overrideRaw);
+
+                (tHeader5, tRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(Session["Size"] as string, Session["StoreGrade"] as string, overridevalue).GetAwaiter().GetResult();
+
+                tableHeaders5 = tHeader5;
+                tableRows5 = tRows5;
+
+                overrideErrorMessage = string.Empty;
+            }
+
+            Session["StoreGrade"] = storegrade;
+            Session["Size"] = size;
+        }
         else if (action == "Export")
         {
             var tableHeaders = new List<string>();
@@ -167,8 +197,7 @@
             else
             {
                 string userInputFileName = Request.Form["customFileName"];
-                string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + userInputFileName;
-
+                string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + "_" + userInputFileName;
                 if (selectedTable == "Store Grade (Cummulative)")
                 {
                     tableHeaders = tableHeaders1;

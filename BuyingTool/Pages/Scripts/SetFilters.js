@@ -50,6 +50,8 @@ $(document).ready(function () {
             buildStylesFilterTable();
             getSessionStyleSavedData();
             setStylesFilterTable();
+            getSessionStyleSavedData();
+            setStylesFilterTable();
         }
     });
     let attributeapiurl = "/api/AttributeFilters"
