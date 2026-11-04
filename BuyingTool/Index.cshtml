@@ -124,7 +124,7 @@
                         </div>
                     </form>
                 </div>
-            
+
             </section>
 
         </main>
@@ -211,7 +211,7 @@
             }
         </main>
     }
-    
+
     @{
         var idnumberforlabel = Session["idnumber"] ?? "";
         if (Session["CalculationDone"] != null)
@@ -222,14 +222,38 @@
         {
             <p id="calculationdone" hidden>false</p>
         }
-        var sessionBrand = Session["Brand"] ;
-        var sessionDivision = Session["Division"] ;
-        var sessionCategory = Session["Category"] ;
-        var sessionDepartment = Session["Department"] ;
-        var sessionPeriodPlan = Session["PeriodPlan"] ;
+        var sessionBrand = Session["Brand"];
+        var sessionDivision = Session["Division"];
+        var sessionCategory = Session["Category"];
+        var sessionDepartment = Session["Department"];
+        var sessionPeriodPlan = Session["PeriodPlan"];
         var sessionCollection = Session["Collection"];
         var sessionStyle = Session["Style"];
         var sessionStyleCode = Session["StyleCode"];
+
+        var sessionRegion = Session["Region"];
+        var sessionCountry = Session["Country"];
+        var sessionChannel = Session["Channel"];
+        var sessionTerritory = Session["Territory"];
+        var sessionArea = Session["Area"];
+        var sessionOutletType = Session["OutletType"];
+        var sessionSiteCode = Session["SiteCode"];
+        var sessionSiteName = Session["SiteName"];
+        var sessionStoreGrade = Session["StoreGrade"];
+
+        var sessionColor = Session["Color"] ;
+        var sessionSilhouette = Session["Silhouette"] ;
+        var sessionCollectionAttri = Session["CollectionAttri"] ;
+        var sessionFitCut = Session["FitCut"] ;
+        var sessionMaterialComposition = Session["MaterialComposition"] ;
+        var sessionMaterialConstruction = Session["MaterialConstruction"] ;
+        var sessionPrintTexture = Session["PrintTexture"] ;
+        var sessionProductLine = Session["ProductLine"] ;
+        var sessionSleeveType = Session["SleeveType"] ;
+        var sessionStyleCollection = Session["StyleCollection"] ;
+        var sessionSubCategory = Session["SubCategory"] ;
+        var sessionSizeGroup = Session["SizeGroup"] ;
+        var sessionOrigSrp = Session["OrigSrp"] ;
     }
     <label hidden id="idnumber">@idnumberforlabel</label>
 
@@ -242,6 +266,29 @@
     <label hidden id="sessionStyle">@sessionStyle</label>
     <label hidden id="sessionStyleCode">@sessionStyleCode</label>
 
+    <label hidden id="sessionRegion">@sessionRegion</label>
+    <label hidden id="sessionCountry">@sessionCountry</label>
+    <label hidden id="sessionChannel">@sessionChannel</label>
+    <label hidden id="sessionTerritory">@sessionTerritory</label>
+    <label hidden id="sessionArea">@sessionArea</label>
+    <label hidden id="sessionOutletType">@sessionOutletType</label>
+    <label hidden id="sessionSiteCode">@sessionSiteCode</label>
+    <label hidden id="sessionSiteName">@sessionSiteName</label>
+    <label hidden id="sessionStoreGrade">@sessionStoreGrade</label>
+
+    <label hidden id="sessionColor">@sessionColor</label>
+    <label hidden id="sessionSilhouette">@sessionSilhouette</label>
+    <label hidden id="sessionCollectionAttri">@sessionCollectionAttri</label>
+    <label hidden id="sessionFitCut">@sessionFitCut</label>
+    <label hidden id="sessionMaterialComposition">@sessionMaterialComposition</label>
+    <label hidden id="sessionMaterialConstruction">@sessionMaterialConstruction</label>
+    <label hidden id="sessionPrintTexture">@sessionPrintTexture</label>
+    <label hidden id="sessionProductLine">@sessionProductLine</label>
+    <label hidden id="sessionSleeveType">@sessionSleeveType</label>
+    <label hidden id="sessionStyleCollection">@sessionStyleCollection</label>
+    <label hidden id="sessionSubCategory">@sessionSubCategory</label>
+    <label hidden id="sessionSizeGroup">@sessionSizeGroup</label>
+    <label hidden id="sessionOrigSrp">@sessionOrigSrp</label>
 
 </body>
 </html>
