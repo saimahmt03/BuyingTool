@@ -212,7 +212,6 @@ function changeFilter(element) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
     }*/
-    console.log(element.id);
     buildRequiredFilterTable();
     setRequiredFilterTable(element.id);
 
@@ -222,6 +221,14 @@ function changeFilter(element) {
             setStylesFilterTable(element.id);
             buildOrganizationFilterTable();
             setOrganizationFilterTable();
+            break;
+        case 'dd_division':
+            buildStylesFilterTable();
+            setStylesFilterTable(element.id);
+            break;
+        case 'dd_department':
+            buildStylesFilterTable();
+            setStylesFilterTable(element.id);
             break;
         case 'dd_category':
             buildStylesFilterTable();
@@ -235,7 +242,6 @@ function changeFilter(element) {
 };
 
 function changeStyle(element) {
-    console.log(element.id);
     buildStylesFilterTable();
     setStylesFilterTable(element.id);
     buildAttributesFilterTable();
@@ -315,12 +321,16 @@ function buildStylesFilterTable() {
     var collection = document.getElementById('dd_collection');
     var style = document.getElementById('dd_style');
     var stylecode = document.getElementById('dd_stylecode');
+    var division = document.getElementById('dd_division');
+    var department = document.getElementById('dd_department');
     let selectedCollections = Array.from(collection.selectedOptions).map(option => option.value);
     let selectedStyles = Array.from(style.selectedOptions).map(option => option.value);
     let selectedStyleCodes = Array.from(stylecode.selectedOptions).map(option => option.value);
     filteredStylesTable = stylesTable.filter(row =>
         (brand.value == '' || row.Brand == brand.value) &&
         (category.value == '' || row.Category == category.value) &&
+        (division.value == '' || row.Division == division.value) &&
+        (department.value == '' || row.Department == department.value) &&
         (selectedCollections.length == 0 || (selectedCollections.length == 1 && selectedCollections[0] == '') || selectedCollections.includes(row.Collection))/*&&
         (selectedStyles.length == 0 || (selectedStyles.length == 1 && selectedStyles[0] == '') || selectedStyles.includes(row.Style))&&
         (selectedStyleCodes.length == 0 || (selectedStyleCodes.length == 1 && selectedStyleCodes[0] == '') || selectedStyleCodes.includes(row.Style_Code))*/
