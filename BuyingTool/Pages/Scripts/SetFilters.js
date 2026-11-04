@@ -33,6 +33,8 @@ $(document).ready(function () {
             requiredTable = data;
             buildRequiredFilterTable();
             setRequiredFilterTable();
+            getSessionRequiredSavedData();
+            setRequiredFilterTable();
         }
     });
 
@@ -46,6 +48,7 @@ $(document).ready(function () {
         success: function (data) {
             stylesTable = data;
             buildStylesFilterTable();
+            getSessionStyleSavedData();
             setStylesFilterTable();
             getSessionStyleSavedData();
             setStylesFilterTable();
@@ -62,6 +65,7 @@ $(document).ready(function () {
             attributesTable = data;
             //ATTRIBUTES: styles inner join
             buildAttributesFilterTable();
+            getSessionAttributesSavedData();
             setAttributesFilterTable();
         }
     });
@@ -76,6 +80,7 @@ $(document).ready(function () {
             organizationTable = data;
             //ORGANIZATION : brand
             buildOrganizationFilterTable();
+            getSessionOrganizationSavedData()
             setOrganizationFilterTable();
         }
     });
@@ -90,6 +95,10 @@ $(document).ready(function () {
             periodPlanTable = data;
             //ORGANIZATION : brand
             setPeriodPlanTable();
+
+            let sessionPeriodPlan = document.getElementById('sessionPeriodPlan');
+            var periodplan = document.getElementById('dd_periodplans');
+            periodplan.value = sessionPeriodPlan.innerHTML;
         }
     });
 });
@@ -99,8 +108,7 @@ function getSessionRequiredSavedData(){
     let sessionDivision = document.getElementById('sessionDivision');
     let sessionCategory = document.getElementById('sessionCategory');
     let sessionDepartment = document.getElementById('sessionDepartment');
-    let sessionCollection = document.getElementById('sessionCollection').innerHTML.split(',');
-
+    let sessionCollection = document.getElementById('sessionCollection').innerHTML.split(',').sort();
 
     var brand = document.getElementById('dd_brand');
     var division = document.getElementById('dd_division');
@@ -111,58 +119,131 @@ function getSessionRequiredSavedData(){
     division.value = sessionDivision.innerHTML;
     category.value = sessionCategory.innerHTML;
     department.value = sessionDepartment.innerHTML;
-    var counter = 1;
-    for (let value in sessionCollection) {
-        collection.options[counter] = new Option(sessionCollection[value], sessionCollection[value]);
-        collection.options[counter].selected = true;
-        counter++;
-    }
+    populateMultiSelect(sessionCollection, collection);
 }
 
 function getSessionStyleSavedData() {
 
-    let sessionStyle = document.getElementById('sessionStyle').innerHTML.split(',');
-    let sessionStyleCode = document.getElementById('sessionStyleCode').innerHTML.split(',');
+    let sessionStyle = document.getElementById('sessionStyle').innerHTML.split(',').sort();
+    let sessionStyleCode = document.getElementById('sessionStyleCode').innerHTML.split(',').sort();
     var stylecode = document.getElementById('dd_stylecode');
     var style = document.getElementById('dd_style');
-    var counter = 1;
-    for (let value in sessionStyle) {
-        style.options[counter] = new Option(sessionStyle[value], sessionStyle[value]);
-        style.options[counter].selected = true;
-    }
-    counter = 1;
-    for (let value in sessionStyleCode) {
-        stylecode.options[counter] = new Option(sessionStyleCode[value], sessionStyleCode[value]);
-        stylecode.options[counter].selected = true;
-    }
+    populateMultiSelect(sessionStyle, style);
+    populateMultiSelect(sessionStyleCode, stylecode);
 }
 
-function changeFilter(id) {
+function getSessionOrganizationSavedData() {
+
+    let sessionRegion = document.getElementById('sessionRegion').innerHTML.split(',').sort();
+    let sessionCountry = document.getElementById('sessionCountry').innerHTML.split(',').sort();
+    let sessionChannel = document.getElementById('sessionChannel').innerHTML.split(',').sort();
+    let sessionTerritory = document.getElementById('sessionTerritory').innerHTML.split(',').sort();
+    let sessionArea = document.getElementById('sessionArea').innerHTML.split(',').sort();
+    let sessionOutletType = document.getElementById('sessionOutletType').innerHTML.split(',').sort();
+    let sessionSiteCode = document.getElementById('sessionSiteCode').innerHTML.split(',').sort();
+    let sessionSiteName = document.getElementById('sessionSiteName').innerHTML.split(',').sort();
+    let sessionStoreGrade = document.getElementById('sessionStoreGrade').innerHTML.split(',').sort();
+    var region = document.getElementById('dd_region');
+    var country = document.getElementById('dd_country');
+    var channel = document.getElementById('dd_channel');
+    var territory = document.getElementById('dd_territory');
+    var area = document.getElementById('dd_area');
+    var outlet = document.getElementById('dd_outletType');
+    var siteCode = document.getElementById('dd_siteCode');
+    var siteName = document.getElementById('dd_siteName');
+    var storeGrade = document.getElementById('dd_storeGrade');
+    populateMultiSelect(sessionRegion, region);
+    populateMultiSelect(sessionCountry, country);
+    populateMultiSelect(sessionChannel, channel);
+    populateMultiSelect(sessionTerritory, territory);
+    populateMultiSelect(sessionArea, area);
+    populateMultiSelect(sessionOutletType, outlet);
+    populateMultiSelect(sessionSiteCode, siteCode);
+    populateMultiSelect(sessionSiteName, siteName);
+    populateMultiSelect(sessionOutletType, outlet);
+    populateMultiSelect(sessionStoreGrade, storeGrade);
+}
+
+function getSessionAttributesSavedData() {
+
+    let sessionColor = document.getElementById('sessionColor').innerHTML.split(',').sort();
+    let sessionSilhouette = document.getElementById('sessionSilhouette').innerHTML.split(',').sort();
+    let sessionCollectionAttri = document.getElementById('sessionCollectionAttri').innerHTML.split(',').sort();
+    let sessionFitCut = document.getElementById('sessionFitCut').innerHTML.split(',').sort();
+    let sessionMaterialComposition = document.getElementById('sessionMaterialComposition').innerHTML.split(',').sort();
+    let sessionMaterialConstruction = document.getElementById('sessionMaterialConstruction').innerHTML.split(',').sort();
+    let sessionPrintTexture = document.getElementById('sessionPrintTexture').innerHTML.split(',').sort();
+    let sessionProductLine = document.getElementById('sessionProductLine').innerHTML.split(',').sort();
+    let sessionSleeveType = document.getElementById('sessionSleeveType').innerHTML.split(',').sort();
+    let sessionStyleCollection = document.getElementById('sessionStyleCollection').innerHTML.split(',').sort();
+    let sessionSubCategory = document.getElementById('sessionSubCategory').innerHTML.split(',').sort();
+    let sessionSizeGroup = document.getElementById('sessionSizeGroup').innerHTML.split(',').sort();
+    let sessionOrigSrp = document.getElementById('sessionOrigSrp').innerHTML.split(',').sort();
+
+    var color = document.getElementById('dd_color');
+    var silhouette = document.getElementById('dd_silhouette');
+    var collectionattri = document.getElementById('dd_collectionattri');
+    var fitcut = document.getElementById('dd_fitcut');
+    var materialcomposition = document.getElementById('dd_materialcomposition');
+    var materialconstruction = document.getElementById('dd_materialconstruction');
+    var printtexture = document.getElementById('dd_printtexture');
+    var productline = document.getElementById('dd_productline');
+    var sleevetype = document.getElementById('dd_sleevetype');
+    var stylecollection = document.getElementById('dd_stylecollection');
+    var subcategory = document.getElementById('dd_subcategory');
+    var sizegroup = document.getElementById('dd_sizegroup');
+    var origsrp = document.getElementById('dd_origsrp');
+    populateMultiSelect(sessionColor, color);
+    populateMultiSelect(sessionSilhouette, silhouette);
+    populateMultiSelect(sessionCollectionAttri, collectionattri);
+    populateMultiSelect(sessionFitCut, fitcut);
+    populateMultiSelect(sessionMaterialComposition, materialcomposition);
+    populateMultiSelect(sessionMaterialConstruction, materialconstruction);
+    populateMultiSelect(sessionPrintTexture, printtexture);
+    populateMultiSelect(sessionProductLine, productline);
+    populateMultiSelect(sessionSleeveType, sleevetype);
+    populateMultiSelect(sessionStyleCollection, stylecollection);
+    populateMultiSelect(sessionSubCategory, subcategory);
+    populateMultiSelect(sessionSizeGroup, sizegroup);
+    populateMultiSelect(sessionOrigSrp, origsrp);
+}
+
+function changeFilter(element) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
     }*/
     buildRequiredFilterTable();
-    setRequiredFilterTable();
+    setRequiredFilterTable(element.id);
 
-    switch (id.id) {
+    switch (element.id) {
         case 'dd_brand':
             buildStylesFilterTable();
-            setStylesFilterTable();
+            setStylesFilterTable(element.id);
             buildOrganizationFilterTable();
             setOrganizationFilterTable();
             break;
+        case 'dd_division':
+            buildStylesFilterTable();
+            setStylesFilterTable(element.id);
+            break;
+        case 'dd_department':
+            buildStylesFilterTable();
+            setStylesFilterTable(element.id);
+            break;
         case 'dd_category':
             buildStylesFilterTable();
-            setStylesFilterTable();
+            setStylesFilterTable(element.id);
             break;
         case 'dd_collection':
             buildStylesFilterTable();
-            setStylesFilterTable();
+            setStylesFilterTable(element.id);
             break;
     }
 };
 
-function changeStyle() {
+function changeStyle(element) {
+    buildStylesFilterTable();
+    setStylesFilterTable(element.id);
     buildAttributesFilterTable();
     setAttributesFilterTable();
 };
@@ -183,7 +264,7 @@ function buildRequiredFilterTable() {
     );
 };
 
-function setRequiredFilterTable() {
+function setRequiredFilterTable(excludestring) {
     var brand = document.getElementById('dd_brand');
     var division = document.getElementById('dd_division');
     var department = document.getElementById('dd_department');
@@ -201,13 +282,25 @@ function setRequiredFilterTable() {
         categoryset.add(filteredRequiredTable[i].Category);
         collectionset.add(filteredRequiredTable[i].Collection);
     }
+    if (excludestring != 'dd_brand') {
+        processSelect(brand, brandset);
+    }
 
-    processSelect(brand, brandset);
-    processSelect(division, divisionset);
-    processSelect(department, departmentset);
-    processSelect(category, categoryset);
-    processMultiSelect(collection, collectionset);
-    getSessionRequiredSavedData();
+    if (excludestring != 'dd_division') {
+        processSelect(division, divisionset);
+    }
+
+    if (excludestring != 'dd_department') {
+        processSelect(department, departmentset);
+    }
+
+    if (excludestring != 'dd_category') {
+        processSelect(category, categoryset);
+    }
+
+    if (excludestring != 'dd_collection') {
+        processMultiSelect(collection, collectionset);
+    }
 };
 
 function setPeriodPlanTable() {
@@ -218,29 +311,34 @@ function setPeriodPlanTable() {
     }
     processSelect(periodplan, periodplanset);
 
-    let sessionPeriodPlan = document.getElementById('sessionPeriodPlan');
-    var periodplan = document.getElementById('dd_periodplans');
-    periodplan.value = sessionPeriodPlan.innerHTML;
+
 }
 
 function buildStylesFilterTable() {
     var brand = document.getElementById('dd_brand');
     var category = document.getElementById('dd_category');
-    var style = document.getElementById('dd_style');
-    var stylecode = document.getElementById('dd_stylecode');
-
     //todo, what happens if null category
     var collection = document.getElementById('dd_collection');
-    let selectedValues = Array.from(collection.selectedOptions).map(option => option.value);
+    var style = document.getElementById('dd_style');
+    var stylecode = document.getElementById('dd_stylecode');
+    var division = document.getElementById('dd_division');
+    var department = document.getElementById('dd_department');
+    let selectedCollections = Array.from(collection.selectedOptions).map(option => option.value);
+    let selectedStyles = Array.from(style.selectedOptions).map(option => option.value);
+    let selectedStyleCodes = Array.from(stylecode.selectedOptions).map(option => option.value);
     filteredStylesTable = stylesTable.filter(row =>
         (brand.value == '' || row.Brand == brand.value) &&
         (category.value == '' || row.Category == category.value) &&
-        (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Collection))
+        (division.value == '' || row.Division == division.value) &&
+        (department.value == '' || row.Department == department.value) &&
+        (selectedCollections.length == 0 || (selectedCollections.length == 1 && selectedCollections[0] == '') || selectedCollections.includes(row.Collection))/*&&
+        (selectedStyles.length == 0 || (selectedStyles.length == 1 && selectedStyles[0] == '') || selectedStyles.includes(row.Style))&&
+        (selectedStyleCodes.length == 0 || (selectedStyleCodes.length == 1 && selectedStyleCodes[0] == '') || selectedStyleCodes.includes(row.Style_Code))*/
     );
    
 };
 
-function setStylesFilterTable() {
+function setStylesFilterTable(excludestring) {
 
     var style = document.getElementById('dd_style');
     var stylecode = document.getElementById('dd_stylecode');
@@ -250,9 +348,12 @@ function setStylesFilterTable() {
         styleset.add(filteredStylesTable[i].Style);
         stylecodeset.add(filteredStylesTable[i].Style_Code);
     }
-
-    processMultiSelect(style, styleset);
-    processMultiSelect(stylecode, stylecodeset);
+    if (excludestring != 'dd_style') {
+        processMultiSelect(style, styleset);
+    }
+    if (excludestring != 'dd_stylecode') {
+        processMultiSelect(stylecode, stylecodeset);
+    }
 };
 
 function buildAttributesFilterTable() {
@@ -320,21 +421,6 @@ function setAttributesFilterTable() {
     processMultiSelect(subcategory, subcategoryset);
     processMultiSelect(sizegroup, sizegroupset);
     processMultiSelect(origsrp, origsrpset);
-
-    /*
-    sortMultiSelect(color);
-    sortMultiSelect(silhouette);
-    sortMultiSelect(collectionattri);
-    sortMultiSelect(fitcut);
-    sortMultiSelect(materialcomposition);
-    sortMultiSelect(materialconstruction);
-    sortMultiSelect(printtexture);
-    sortMultiSelect(productline);
-    sortMultiSelect(sleevetype);
-    sortMultiSelect(stylecollection);
-    sortMultiSelect(subcategory);
-    sortMultiSelect(sizegroup);
-    sortMultiSelect(origsrp);*/
 };
 
 function buildOrganizationFilterTable() {
@@ -386,20 +472,10 @@ function setOrganizationFilterTable() {
     processMultiSelect(siteName, siteNameset);
     processMultiSelect(storeGrade, storeGradeset);
 
-    /*
-    sortMultiSelect(region);
-    sortMultiSelect(country);
-    sortMultiSelect(channel);
-    sortMultiSelect(territory);
-    sortMultiSelect(area);
-    sortMultiSelect(outlet);
-    sortMultiSelect(siteCode);
-    sortMultiSelect(siteName);
-    sortMultiSelect(storeGrade);*/
 };
 
 function processSelect(element, set) {
-
+    set = new Set([...set].sort());
     var selection = element.value;
     while (element.length > 0) {
         element.remove(0);
@@ -416,71 +492,34 @@ function processSelect(element, set) {
 };
 
 function processMultiSelect(element, set) {
-    var SelectedList = [];
+    set = new Set([...set].sort());
+    var SelectedList = new Set();
     while (element.length > 0) {
         if (element.options[0].selected) {
-            SelectedList.push(element.options[0].value)
+            SelectedList.add(element.options[0].value)
         }
         element.remove(0);
     }
-
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
         if (value != null && value != 'null') {
             element.options[counter] = new Option(value, value);
-            if (SelectedList[0] === value) {
+            if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
-                SelectedList.pop();
             }
             counter++;
         }
     }
 };
 
-function sortSelect(element) {
-    //save selected value
-    var selection = element.value;
-    var tmpAry = new Array();
-    for (var i = 0; i < element.options.length; i++) {
-        tmpAry[i] = new Array();
-        tmpAry[i][0] = element.options[i].text;
-        tmpAry[i][1] = element.options[i].value;
-    }
-    //sort and replace
-    tmpAry.sort();
-    while (element.options.length > 0) {
-        element.options[0] = null;
-    }
-    for (var i = 0; i < tmpAry.length; i++) {
-        var op = new Option(tmpAry[i][0], tmpAry[i][1]);
-        element.options[i] = op;
-    }
-    //set selected value
-    element.value = selection;
-    return;
-};
-
-function sortMultiSelect(element) {
-    var tmpAry = new Array();
-    for (var i = 0; i < element.options.length; i++) {
-        tmpAry[i] = new Array();
-        tmpAry[i][0] = element.options[i].text;
-        tmpAry[i][1] = element.options[i].value;
-        tmpAry[i][2] = element.options[i].selected;
-    }
-    //sort and replace
-    tmpAry.sort();
-    while (element.options.length > 0) {
-        element.options[0] = null;
-    }
-    for (var i = 0; i < tmpAry.length; i++) {
-        var op = new Option(tmpAry[i][0], tmpAry[i][1]);
-        if (tmpAry[i][2]) {
-            //if selected, maintain selection
-            op.setAttribute('selected', 'selected');
+function populateMultiSelect(list, element) {
+    let counter = 1;
+    for (let value in list) {
+        if (list[value] != '') {
+            element.options[counter] = new Option(list[value], list[value]);
+            element.options[counter].selected = true;
         }
-        element.options[i] = op;
+        counter++;
     }
-    return;
-};
+}

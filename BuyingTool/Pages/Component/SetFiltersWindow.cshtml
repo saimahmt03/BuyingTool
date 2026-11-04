@@ -173,16 +173,39 @@
 
                 // Unlock tabs 2, 3, 4 and Size Curve
                 Session["CalculationDone"] = true;
-
                 Session["Brand"] = brand;
                 Session["Division"] = division;
                 Session["Category"] = category;
                 Session["Department"] = department;
                 Session["PeriodPlan"] = selectedPeriodPlans;
                 Session["Collection"] = selectedCollection;
+
                 Session["Style"] = selectedStyle;
                 Session["StyleCode"] = selectedStyleCode;
 
+                Session["Region"] = selectedRegion;
+                Session["Country"] = selectedCountry;
+                Session["Channel"] = selectedChannel;
+                Session["Territory"] = selectedTerritory;
+                Session["Area"] = selectedArea;
+                Session["OutletType"] = selectedOutletType;
+                Session["SiteCode"] = selectedSiteCode;
+                Session["SiteName"] = selectedSiteName;
+                Session["StoreGrade"] = selectedStoreGrade;
+
+                Session["Color"] = selectedColor;
+                Session["Silhouette"] = selectedSilhouette;
+                Session["CollectionAttri"] = selectedCollectionAttri;
+                Session["FitCut"] = selectedFitCut;
+                Session["MaterialComposition"] = selectedMaterialComposition;
+                Session["MaterialConstruction"] = selectedMaterialConstruction;
+                Session["PrintTexture"] = selectedPrintTexture;
+                Session["ProductLine"] = selectedProductLine;
+                Session["SleeveType"] = selectedSleeveType;
+                Session["StyleCollection"] = selectedStyleCollection;
+                Session["SubCategory"] = selectedSubCategory;
+                Session["SizeGroup"] = selectedSizeGroup;
+                Session["OrigSrp"] = selectedOrigSrp;
 
                 Response.Redirect("~/?tab=2.%20Review%20Summary");
             }
@@ -241,8 +264,33 @@
                 Session["Department"] = department;
                 Session["PeriodPlan"] = selectedPeriodPlans;
                 Session["Collection"] = selectedCollection;
+
                 Session["Style"] = selectedStyle;
                 Session["StyleCode"] = selectedStyleCode;
+
+                Session["Region"] = selectedRegion;
+                Session["Country"] = selectedCountry;
+                Session["Channel"] = selectedChannel;
+                Session["Territory"] = selectedTerritory;
+                Session["Area"] = selectedArea;
+                Session["OutletType"] = selectedOutletType;
+                Session["SiteCode"] = selectedSiteCode;
+                Session["SiteName"] = selectedSiteName;
+                Session["StoreGrade"] = selectedStoreGrade;
+
+                Session["Color"] = selectedColor ;
+                Session["Silhouette"] = selectedSilhouette ;
+                Session["CollectionAttri"] = selectedCollectionAttri ;
+                Session["FitCut"] = selectedFitCut;
+                Session["MaterialComposition"] = selectedMaterialComposition;
+                Session["MaterialConstruction"] = selectedMaterialConstruction;
+                Session["PrintTexture"] = selectedPrintTexture;
+                Session["ProductLine"] = selectedProductLine;
+                Session["SleeveType"] = selectedSleeveType;
+                Session["StyleCollection"] = selectedStyleCollection;
+                Session["SubCategory"] = selectedSubCategory;
+                Session["SizeGroup"] = selectedSizeGroup;
+                Session["OrigSrp"] = selectedOrigSrp;
             }
         }
         else
@@ -252,6 +300,41 @@
             Session.Remove("OptionGalHeaders");
             Session.Remove("OptionGalRows");
             Session.Remove("CalculationDone");
+
+            Session.Remove("Brand");
+            Session.Remove("Division");
+            Session.Remove("Category");
+            Session.Remove("Department");
+            Session.Remove("PeriodPlan");
+            Session.Remove("Collection");
+
+            Session.Remove("Style");
+            Session.Remove("StyleCode");
+
+            Session.Remove("Region");
+            Session.Remove("Country");
+            Session.Remove("Channel");
+            Session.Remove("Territory");
+            Session.Remove("Area");
+            Session.Remove("OutletType");
+            Session.Remove("SiteCode");
+            Session.Remove("SiteName");
+            Session.Remove("StoreGrade");
+
+            Session.Remove("Color");
+            Session.Remove("Silhouette");
+            Session.Remove("CollectionAttri");
+            Session.Remove("FitCut");
+            Session.Remove("MaterialComposition");
+            Session.Remove("MaterialConstruction");
+            Session.Remove("PrintTexture");
+            Session.Remove("ProductLine");
+            Session.Remove("SleeveType");
+            Session.Remove("StyleCollection");
+            Session.Remove("SubCategory");
+            Session.Remove("SizeGroup");
+            Session.Remove("OrigSrp");
+
         }
     }
 
@@ -331,8 +414,8 @@
 
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Styles")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecode", "Style Code", new List<string>(), selectedStyleCode, "", "100%")
-                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "style", "Style", new List<string>(), "", "", "100%", "changeStyle()")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecode", "Style Code", new List<string>(), selectedStyleCode, "", "100%", "changeStyle(dd_stylecode)")
+                                            @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "style", "Style", new List<string>(), "", "", "100%", "changeStyle(dd_style)")
                                         </div>
 
                                         <div class="filter-group">
