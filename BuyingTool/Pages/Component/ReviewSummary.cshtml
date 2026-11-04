@@ -229,30 +229,6 @@
                        .GetResult();
             }
         }
-        else if (action == "Go")
-        {
-            string overrideRaw = Request.Form["override"];
-            Int16 overridevalue = 0;
-
-            string storegrade = Session["StoreGrade"] as string;
-            string size = Session["Size"] as string;
-
-            if (string.IsNullOrEmpty(overrideRaw))
-            {
-                overrideErrorMessage = "Please enter the value.";
-            }
-            else
-            {
-                overridevalue = Convert.ToInt16(overrideRaw);
-
-                (tableHeaders5, tableRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(Session["Size"] as string, Session["StoreGrade"] as string, overridevalue).GetAwaiter().GetResult();
-                overrideErrorMessage = string.Empty;
-            }
-
-
-            Session["StoreGrade"] = storegrade;
-            Session["Size"] = size;
-        }
     }
 
     // Loading CSS File for each component
