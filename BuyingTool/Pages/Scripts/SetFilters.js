@@ -31,9 +31,8 @@ $(document).ready(function () {
         },
         success: function (data) {
             requiredTable = data;
-            buildRequiredFilterTable();
-            setRequiredFilterTable();
             getSessionRequiredSavedData();
+            buildRequiredFilterTable();
             setRequiredFilterTable();
         }
     });
@@ -47,10 +46,8 @@ $(document).ready(function () {
         },
         success: function (data) {
             stylesTable = data;
+            getSessionStyleSavedData();
             buildStylesFilterTable();
-            getSessionStyleSavedData();
-            setStylesFilterTable();
-            getSessionStyleSavedData();
             setStylesFilterTable();
         }
     });
@@ -64,8 +61,8 @@ $(document).ready(function () {
         success: function (data) {
             attributesTable = data;
             //ATTRIBUTES: styles inner join
-            buildAttributesFilterTable();
             getSessionAttributesSavedData();
+            buildAttributesFilterTable();
             setAttributesFilterTable();
         }
     });
@@ -80,7 +77,8 @@ $(document).ready(function () {
             organizationTable = data;
             //ORGANIZATION : brand
             buildOrganizationFilterTable();
-            getSessionOrganizationSavedData()
+            getSessionOrganizationSavedData();
+            buildOrganizationFilterTable();
             setOrganizationFilterTable();
         }
     });
@@ -115,10 +113,10 @@ function getSessionRequiredSavedData(){
     var department = document.getElementById('dd_department');
     var category = document.getElementById('dd_category');
     var collection = document.getElementById('dd_collection');
-    brand.value = sessionBrand.innerHTML;
-    division.value = sessionDivision.innerHTML;
-    category.value = sessionCategory.innerHTML;
-    department.value = sessionDepartment.innerHTML;
+    populateSelect(sessionBrand.innerHTML, brand);
+    populateSelect(sessionDivision.innerHTML, division);
+    populateSelect(sessionCategory.innerHTML, category);
+    populateSelect(sessionDepartment.innerHTML, department);
     populateMultiSelect(sessionCollection, collection);
 }
 
@@ -513,6 +511,12 @@ function processMultiSelect(element, set) {
     }
 };
 
+function populateSelect(value, element) {
+    if (value != '') {
+        element.options.add( new Option(value, value));
+        element.value = value;
+    }
+}
 function populateMultiSelect(list, element) {
     let counter = 1;
     for (let value in list) {
