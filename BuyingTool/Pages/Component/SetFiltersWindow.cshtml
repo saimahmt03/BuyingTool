@@ -161,8 +161,8 @@
                 (transposedHeaders, transposedRows) = service.TransposeTable(tableHeaders, tableRows).GetAwaiter().GetResult();
 
                 // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
-                Session["OptionGalHeaders"] = tableHeaders;
-                Session["OptionGalRows"] = tableRows;
+                Session["OptionGalHeaders"] = transposedHeaders;
+                Session["OptionGalRows"] = transposedRows;
 
                 service.GetSizeCurveTable(brand, division, department, category, selectedPeriodPlans)
                        .GetAwaiter()
@@ -258,8 +258,8 @@
                 (transposedHeaders, transposedRows) = service.TransposeTable(tableHeaders, tableRows).GetAwaiter().GetResult();
 
                 // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
-                Session["OptionGalHeaders"] = tableHeaders;
-                Session["OptionGalRows"] = tableRows;
+                Session["OptionGalHeaders"] = transposedHeaders;
+                Session["OptionGalRows"] = transposedRows;
 
                 Session["Brand"] = brand;
                 Session["Division"] = division;
@@ -342,13 +342,13 @@
     }
 
     // NEW: Restore the last displayed table if this request didn't build a new one
-    if (tableHeaders.Count == 0 && Session["OptionGalHeaders"] != null &&
+    if (transposedHeaders.Count == 0 && Session["OptionGalHeaders"] != null &&
         Session["Brand"] != null && Session["Division"] != null && Session["Department"] != null
         && Session["PeriodPlan"] != null && Session["Collection"] != null
         )
     {
-        tableHeaders = Session["OptionGalHeaders"] as List<string> ?? new List<string>();
-        tableRows = Session["OptionGalRows"] as List<string[]> ?? new List<string[]>();
+        transposedHeaders = Session["OptionGalHeaders"] as List<string> ?? new List<string>();
+        transposedRows = Session["OptionGalRows"] as List<string[]> ?? new List<string[]>();
 
         brand = Session["Brand"] as string;
         division = Session["Division"] as string;
