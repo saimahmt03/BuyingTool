@@ -7,9 +7,6 @@
     var tableHeaders = new List<string>();
     var tableRows = new List<string[]>();
     string errorMessage = string.Empty;
-    //bool justCalculated = false;
-
-
 
     // Required
     string brand = string.Empty;
@@ -164,8 +161,8 @@
                 Session["OptionGalRows"] = tableRows;
 
                 service.GetSizeCurveTable(brand, division, department, category, selectedPeriodPlans)
-               .GetAwaiter()
-               .GetResult();
+                       .GetAwaiter()
+                       .GetResult();
 
                 var result = service.GetCalculation(brand, division, department, category, selectedCollection, selectedPeriodPlans, wosDeci, plcDeci, factorRateDeci)
                                     .GetAwaiter()

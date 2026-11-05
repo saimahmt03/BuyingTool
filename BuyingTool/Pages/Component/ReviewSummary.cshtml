@@ -75,177 +75,182 @@
     if (table5 != null)
     {
         (tableHeaders5, tableRows5) = service.DatatableConvertToHT(table5).GetAwaiter().GetResult();
+
+        if (string.IsNullOrEmpty(selectedStoreGrades) && string.IsNullOrEmpty(selectedSizes))
+        {
+            Session["TableHeaders5_Org"] = tableHeaders5;
+            Session["TableRows5_Org"] = tableRows5;
+        }
     }
 
     if (IsPost && !string.IsNullOrEmpty(Request["actionButton"]))
+    {
+        string action = Request["actionButton"];
+
+        Func<string, string> getSelectedValues = (fieldName) =>
         {
-            string action = Request["actionButton"];
+            string[] values = Request.Form.GetValues(fieldName) ?? new string[0];
+            return values.Length > 1 ? string.Join(",", values) : (values.Length == 1 ? values[0] : string.Empty);
+        };
 
-            // 1. Extract filters FIRST using a ternary operator (avoids unbraced if statements in Razor)
-            Func<string, string> getSelectedValues = (fieldName) =>
+        selectedStoreGrades = getSelectedValues("store-grades");
+        selectedSizes = getSelectedValues("sizes");
+
+        Session["StoreGrade"] = selectedStoreGrades;
+        Session["Size"] = selectedSizes;
+
+        if (action == "Apply")
+        {
+            var tHeader1 = new List<string>();
+            var tRows1 = new List<string[]>();
+            var tHeader2 = new List<string>();
+            var tRows2 = new List<string[]>();
+            var tHeader3 = new List<string>();
+            var tRows3 = new List<string[]>();
+            var tHeader4 = new List<string>();
+            var tRows4 = new List<string[]>();
+            var tHeader5 = new List<string>();
+            var tRows5 = new List<string[]>();
+
+            var (tbls, DBresponse) = service.GetDistributionSummary(selectedSizes, selectedStoreGrades).GetAwaiter().GetResult();
+
+            DataTable table6 = tbls != null && tbls.Length > 0 ? tbls[0] : null;
+            DataTable table7 = tbls != null && tbls.Length > 1 ? tbls[1] : null;
+            DataTable table8 = tbls != null && tbls.Length > 2 ? tbls[2] : null;
+            DataTable table9 = tbls != null && tbls.Length > 3 ? tbls[3] : null;
+            DataTable table10 = tbls != null && tbls.Length > 4 ? tbls[4] : null;
+
+            if (table6 != null)
             {
-                string[] values = Request.Form.GetValues(fieldName) ?? new string[0];
-                return values.Length > 1 ? string.Join(",", values) : (values.Length == 1 ? values[0] : string.Empty);
-            };
-
-            string postedStoreGrades = getSelectedValues("store-grades");
-            string postedSizes = getSelectedValues("sizes");
-
-            if (!string.IsNullOrEmpty(postedStoreGrades)) { selectedStoreGrades = postedStoreGrades; }
-            if (!string.IsNullOrEmpty(postedSizes)) { selectedSizes = postedSizes; }
-
-            if (!string.IsNullOrEmpty(selectedStoreGrades)) { Session["StoreGrade"] = selectedStoreGrades; }
-            if (!string.IsNullOrEmpty(selectedSizes)) { Session["Size"] = selectedSizes; }
-
-            // 2. Handle actions
-            if (action == "Apply")
-            {
-                var tHeader1 = new List<string>();
-                var tRows1 = new List<string[]>();
-                var tHeader2 = new List<string>();
-                var tRows2 = new List<string[]>();
-                var tHeader3 = new List<string>();
-                var tRows3 = new List<string[]>();
-                var tHeader4 = new List<string>();
-                var tRows4 = new List<string[]>();
-                var tHeader5 = new List<string>();
-                var tRows5 = new List<string[]>();
-
-                var (tbls, DBresponse) = service.GetDistributionSummary(selectedSizes, selectedStoreGrades).GetAwaiter().GetResult();
-
-                DataTable table6 = tbls != null && tbls.Length > 0 ? tbls[0] : null;
-                DataTable table7 = tbls != null && tbls.Length > 1 ? tbls[1] : null;
-                DataTable table8 = tbls != null && tbls.Length > 2 ? tbls[2] : null;
-                DataTable table9 = tbls != null && tbls.Length > 3 ? tbls[3] : null;
-                DataTable table10 = tbls != null && tbls.Length > 4 ? tbls[4] : null;
-
-                if (table6 != null)
-                {
-                    (tHeader1, tRows1) = service.DatatableConvertToHT(table6).GetAwaiter().GetResult();
-                    tableHeaders1 = tHeader1;
-                    tableRows1 = tRows1;
-                    Session["TableHeaders1"] = tHeader1;
-                    Session["TableRows1"] = tRows1;
-                }
-
-                if (table7 != null)
-                {
-                    (tHeader2, tRows2) = service.DatatableConvertToHT(table7).GetAwaiter().GetResult();
-                    tableHeaders2 = tHeader2;
-                    tableRows2 = tRows2;
-                    Session["TableHeaders2"] = tHeader2;
-                    Session["TableRows2"] = tRows2;
-                }
-
-                if (table8 != null)
-                {
-                    (tHeader3, tRows3) = service.DatatableConvertToHT(table8).GetAwaiter().GetResult();
-                    tableHeaders3 = tHeader3;
-                    tableRows3 = tRows3;
-                    Session["TableHeaders3"] = tHeader3;
-                    Session["TableRows3"] = tRows3;
-                }
-
-                if (table9 != null)
-                {
-                    (tHeader4, tRows4) = service.DatatableConvertToHT(table9).GetAwaiter().GetResult();
-                    tableHeaders4 = tHeader4;
-                    tableRows4 = tRows4;
-                    Session["TableHeaders4"] = tHeader4;
-                    Session["TableRows4"] = tRows4;
-                }
-
-                if (table10 != null)
-                {
-                    (tHeader5, tRows5) = service.DatatableConvertToHT(table10).GetAwaiter().GetResult();
-                    tableHeaders5 = tHeader5;
-                    tableRows5 = tRows5;
-                    Session["TableHeaders5"] = tHeader5;
-                    Session["TableRows5"] = tRows5;
-                }
+                (tHeader1, tRows1) = service.DatatableConvertToHT(table6).GetAwaiter().GetResult();
+                tableHeaders1 = tHeader1;
+                tableRows1 = tRows1;
             }
-            else if (action == "Go")
+
+            if (table7 != null)
             {
-                var tHeader5 = new List<string>();
-                var tRows5 = new List<string[]>();
-
-                string overrideRaw = Request.Form["override"];
-                Int16 overridevalue = 0;
-
-                string storegrade = Session["StoreGrade"] as string;
-                string size = Session["Size"] as string;
-
-                if (string.IsNullOrEmpty(overrideRaw))
-                {
-                    overrideErrorMessage = "Please enter the value.";
-                }
-                else
-                {
-                    overridevalue = Convert.ToInt16(overrideRaw);
-
-                    (tHeader5, tRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(size, storegrade, overridevalue).GetAwaiter().GetResult();
-
-                    tableHeaders5 = tHeader5;
-                    tableRows5 = tRows5;
-
-                    // Save Table 5 to Session so Export can access overridden values
-                    Session["TableHeaders5"] = tHeader5;
-                    Session["TableRows5"] = tRows5;
-
-                    overrideErrorMessage = string.Empty;
-                }
-
-                Session["StoreGrade"] = storegrade;
-                Session["Size"] = size;
+                (tHeader2, tRows2) = service.DatatableConvertToHT(table7).GetAwaiter().GetResult();
+                tableHeaders2 = tHeader2;
+                tableRows2 = tRows2;
             }
-            else if (action == "Export")
+
+            if (table8 != null)
             {
-                var tableHeaders = new List<string>();
-                var tableRows = new List<string[]>();
+                (tHeader3, tRows3) = service.DatatableConvertToHT(table8).GetAwaiter().GetResult();
+                tableHeaders3 = tHeader3;
+                tableRows3 = tRows3;
+            }
 
-                selectedTable = Request.Form["Table"];
+            if (table9 != null)
+            {
+                (tHeader4, tRows4) = service.DatatableConvertToHT(table9).GetAwaiter().GetResult();
+                tableHeaders4 = tHeader4;
+                tableRows4 = tRows4;
+            }
 
-                if (string.IsNullOrEmpty(selectedTable))
-                {
-                    errorMessage = "Please select table you want to download.";
-                }
-                else
-                {
-                    string userInputFileName = Request.Form["customFileName"];
-                    string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + "_" + userInputFileName;
-
-                    if (selectedTable == "Store Grade (Cummulative)")
-                    {
-                        tableHeaders = Session["TableHeaders1"] as List<string> ?? tableHeaders1;
-                        tableRows = Session["TableRows1"] as List<string[]> ?? tableRows1;
-                    }
-                    else if (selectedTable == "Distribution Plan per Store Grade")
-                    {
-                        tableHeaders = Session["TableHeaders3"] as List<string> ?? tableHeaders3;
-                        tableRows = Session["TableRows3"] as List<string[]> ?? tableRows3;
-                    }
-                    else if (selectedTable == "Territory (Cummulative)")
-                    {
-                        tableHeaders = Session["TableHeaders2"] as List<string> ?? tableHeaders2;
-                        tableRows = Session["TableRows2"] as List<string[]> ?? tableRows2;
-                    }
-                    else if (selectedTable == "Distribution Plan per Territory")
-                    {
-                        tableHeaders = Session["TableHeaders4"] as List<string> ?? tableHeaders4;
-                        tableRows = Session["TableRows4"] as List<string[]> ?? tableRows4;
-                    }
-                    else if (selectedTable == "Distribution Plan per Drops")
-                    {
-                        tableHeaders = Session["TableHeaders5"] as List<string> ?? tableHeaders5;
-                        tableRows = Session["TableRows5"] as List<string[]> ?? tableRows5;
-                    }
-
-                    service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
-                        .GetAwaiter()
-                        .GetResult();
-                }
+            if (table10 != null)
+            {
+                (tHeader5, tRows5) = service.DatatableConvertToHT(table10).GetAwaiter().GetResult();
+                tableHeaders5 = tHeader5;
+                tableRows5 = tRows5;
             }
         }
+        else if (action == "Go")
+        {
+            var tHeader5 = new List<string>();
+            var tRows5 = new List<string[]>();
+
+            string overrideRaw = Request.Form["override"];
+            Int16 overridevalue = 0;
+
+            string storegrade = Session["StoreGrade"] as string;
+            string size = Session["Size"] as string;
+
+            if (string.IsNullOrEmpty(overrideRaw))
+            {
+                overrideErrorMessage = "Please enter the value.";
+            }
+            else
+            {
+                overridevalue = Convert.ToInt16(overrideRaw);
+
+                (tHeader5, tRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(size, storegrade, overridevalue).GetAwaiter().GetResult();
+
+                tableHeaders5 = tHeader5;
+                tableRows5 = tRows5;
+
+                Session["TableHeaders5"] = tHeader5;
+                Session["TableRows5"] = tRows5;
+
+                overrideErrorMessage = string.Empty;
+            }
+
+            Session["StoreGrade"] = storegrade;
+            Session["Size"] = size;
+        }
+        else if (action == "Export")
+        {
+            var tableHeaders = new List<string>();
+            var tableRows = new List<string[]>();
+
+            selectedTable = Request.Form["Table"];
+
+            if (string.IsNullOrEmpty(selectedTable))
+            {
+                errorMessage = "Please select table you want to download.";
+            }
+            else
+            {
+                string userInputFileName = Request.Form["customFileName"];
+                string fileName = string.IsNullOrWhiteSpace(selectedTable) ? "report_summary" : selectedTable.Trim() + "_" + userInputFileName;
+
+                if (selectedTable == "Store Grade (Cummulative)")
+                {
+                    tableHeaders = tableHeaders1;
+                    tableRows = tableRows1;
+                }
+                else if (selectedTable == "Distribution Plan per Store Grade")
+                {
+                    tableHeaders = tableHeaders3;
+                    tableRows = tableRows3;
+
+                }
+                else if (selectedTable == "Territory (Cummulative)")
+                {
+                    tableHeaders = tableHeaders2;
+                    tableRows = tableRows2;
+                }
+                else if (selectedTable == "Distribution Plan per Territory")
+                {
+                    tableHeaders = tableHeaders4;
+                    tableRows = tableRows4;
+                }
+                else if (selectedTable == "Distribution Plan per Drops")
+                {
+                    tableHeaders = tableHeaders5;
+                    tableRows = tableRows5;
+
+                    tableHeaders = Session["TableHeaders5"] as List<string> ?? tableHeaders5;
+                    tableRows = Session["TableRows5"] as List<string[]> ?? tableRows5;
+                }
+
+                service.ExportToExcel(tableHeaders, tableRows, fileName, HttpContext.Current.Response)
+                       .GetAwaiter()
+                       .GetResult();
+            }
+        }
+        else if (action == "Reset")
+        {
+            string storegrade = Session["StoreGrade"] as string;
+            string size = Session["Size"] as string;
+
+            tableHeaders5 = Session["TableHeaders5_Org"] as List<string>;
+            tableRows5 = Session["TableRows5_Org"] as List<string[]>;
+
+            Session["StoreGrade"] = storegrade;
+            Session["Size"] = size;
+        }
+    }
 
 
     // Loading CSS File for each component
@@ -376,10 +381,17 @@
                             </div>
                         </div>
                         <div class="row">
-                            @if (!string.IsNullOrEmpty(overrideErrorMessage))
-                            {
-                                <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
-                            }
+                            <div class="two-col">
+                                <div class="col-1">
+                                    @if (!string.IsNullOrEmpty(overrideErrorMessage))
+                                    {
+                                        <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
+                                    }
+                                </div>
+                                <div class="col-2">
+                                    @RenderPage("~/Pages/Common/Button.cshtml", "Reset", "submit", "actionButton", "Reset")
+                                </div>
+                            </div>
                         </div>
                     </article>
 
