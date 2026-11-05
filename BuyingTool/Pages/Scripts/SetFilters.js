@@ -90,13 +90,18 @@ $(document).ready(function () {
         },
         success: function (data) {
             periodPlanTable = data;
-            //ORGANIZATION : brand
             setPeriodPlanTable();
 
             let sessionPeriodPlan = document.getElementById('sessionPeriodPlan');
             var periodplan = document.getElementById('dd_periodplans');
             periodplan.value = sessionPeriodPlan.innerHTML;
         }
+    });
+
+    $("#dd_collection").on('focusout', function () {
+        //will return an array of the values for the selected options
+        var myselectedvalues = $(this).val();
+        console.log('test');
     });
 });
 function changeFilter(element) {
@@ -112,22 +117,32 @@ function changeFilter(element) {
             setStylesFilterTable(element.id);
             buildOrganizationFilterTable();
             setOrganizationFilterTable();
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_division':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_department':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_category':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_collection':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
     }
 };
@@ -386,6 +401,22 @@ function setStylesFilterTable(excludestring) {
     var origsrp = document.getElementById('dd_origsrp');
     var styleset2 = new Set();
     var stylecodeset2 = new Set();
+    for (let i = 0; i < style.length; i++) {
+        if (style.options[i].selected) {
+            var row = filteredStylesTable.find(value => value.Style == style.options[i].value);
+            if (row != null) {
+                stylecodeset2.add(row.Style_Code);
+            }
+        }
+    }
+    for (let i = 0; i < stylecode.length; i++) {
+        if (stylecode.options[i].selected) {
+            var row = filteredStylesTable.find(value => value.Style_Code == stylecode.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
     for (let i = 0; i < color.length; i++) {
         if (color.options[i].selected) {
             var row = filteredAttributesTable.find(value => value.Color == color.options[i].value);
@@ -492,6 +523,15 @@ function setStylesFilterTable(excludestring) {
     }
     if (styleset2.size >= 1) {
         styleset = styleset.intersection(styleset2);
+        for (var setcontent in styleset2) {
+            var row = filteredStylesTable.find(value => value.Style_Code == setcontent.value);
+            if (row != null) {
+                stylecodeset2.add
+            }
+        }
+    }
+    if (stylecodeset2.size >= 1) {
+        stylecodeset = stylecodeset.intersection(stylecodeset2);
     }
     if (excludestring != 'dd_style') {
         processMultiSelect(style, styleset);
@@ -504,6 +544,9 @@ function setStylesFilterTable(excludestring) {
 function buildAttributesFilterTable() {
     var style = document.getElementById('dd_style');
     let selectedValues = Array.from(style.selectedOptions).map(option => option.value);
+    if (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '')) {
+        selectedValues = getColumn(filteredStylesTable, 'Style');
+    }
     filteredAttributesTable = attributesTable.filter(row =>
         (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Style))
     );
@@ -674,6 +717,8 @@ function populateMultiSelect(list, element) {
         counter++;
     }
 }
+const getColumn = (anArray, columnName) =>
+    anArray.map(row => row[columnName]);
 //#endregion
 //#region get saved data
 function getSessionRequiredSavedData() {
