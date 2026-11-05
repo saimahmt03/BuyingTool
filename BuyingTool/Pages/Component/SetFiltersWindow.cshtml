@@ -6,6 +6,8 @@
 
     var tableHeaders = new List<string>();
     var tableRows = new List<string[]>();
+    var transposedHeaders = new List<string>();
+    var transposedRows = new List<string[]>();
     string errorMessage = string.Empty;
 
     // Required
@@ -156,6 +158,8 @@
                    null // tagFilter parameter
                ).GetAwaiter().GetResult();
 
+                (transposedHeaders, transposedRows) = service.TransposeTable(tableHeaders, tableRows).GetAwaiter().GetResult();
+
                 // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
                 Session["OptionGalHeaders"] = tableHeaders;
                 Session["OptionGalRows"] = tableRows;
@@ -250,6 +254,8 @@
                     selectedStoreGrade,
                     null // tagFilter parameter
                 ).GetAwaiter().GetResult();
+
+                (transposedHeaders, transposedRows) = service.TransposeTable(tableHeaders, tableRows).GetAwaiter().GetResult();
 
                 // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
                 Session["OptionGalHeaders"] = tableHeaders;
@@ -494,9 +500,11 @@
                 <div class="row">
                     @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Options Gallery")
                     <div class="table-responsive">
-                        <!--RenderPage("~/Pages/Common/Table.cshtml", tableHeaders, tableRows)-->
                         <!-- Unchanged: tableHeaders/tableRows are restored from Session in the code block above -->
-                        @RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", tableHeaders, tableRows, true, 21)
+                        <!---RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", tableHeaders, tableRows, true, 21)-->
+
+                        @RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", transposedHeaders, transposedRows, true, 10)
+
                     </div>
                 </div>
             </article>

@@ -469,7 +469,13 @@ namespace BuyingTool.Services
         {
             return Task.FromResult(serviceHelper.SliceFileName(filename).GetAwaiter().GetResult());
         }
-        
+
+        // Transpose Table from header to row and row to header
+        public Task<(List<string> tableHeader, List<string[]> tableRows)> TransposeTable(List<string> oldHeaders, List<string[]> oldRows)
+        {
+            return serviceHelper.TransposeTable(oldHeaders, oldRows);
+        }
+
         #endregion
 
         #endregion
