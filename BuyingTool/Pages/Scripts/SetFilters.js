@@ -207,6 +207,87 @@ function setRequiredFilterTable(excludestring) {
             }
         }
     }
+    var region = document.getElementById('dd_region');
+    var country = document.getElementById('dd_country');
+    var channel = document.getElementById('dd_channel');
+    var territory = document.getElementById('dd_territory');
+    var area = document.getElementById('dd_area');
+    var outlet = document.getElementById('dd_outletType');
+    var siteCode = document.getElementById('dd_siteCode');
+    var siteName = document.getElementById('dd_siteName');
+    var storeGrade = document.getElementById('dd_storeGrade');
+    for (let i = 0; i < region.length; i++) {
+        if (region.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value.Region == region.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < country.length; i++) {
+        if (country.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value.Country == country.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < channel.length; i++) {
+        if (channel.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value.Channel == channel.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < territory.length; i++) {
+        if (territory.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value.Territory == territory.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < area.length; i++) {
+        if (area.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value.Area == area.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < outlet.length; i++) {
+        if (outlet.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value['Outlet Type'] == outlet.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < siteCode.length; i++) {
+        if (siteCode.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value['Site Code'] == siteCode.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < siteName.length; i++) {
+        if (siteName.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value['Site Name'] == siteName.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
+    for (let i = 0; i < storeGrade.length; i++) {
+        if (storeGrade.options[i].selected) {
+            var row = filteredOrganizationTable.find(value => value['Store Grade'] == storeGrade.options[i].value);
+            if (row != null) {
+                brandset2.add(row.Brand);
+            }
+        }
+    }
     if (brandset2.size >= 1) {
         brandset = brandset.intersection(brandset2);
     }
@@ -288,6 +369,129 @@ function setStylesFilterTable(excludestring) {
     for (var i = 0; i < filteredStylesTable.length; i++) {
         styleset.add(filteredStylesTable[i].Style);
         stylecodeset.add(filteredStylesTable[i].Style_Code);
+    }
+
+    var color = document.getElementById('dd_color');
+    var silhouette = document.getElementById('dd_silhouette');
+    var collectionattri = document.getElementById('dd_collectionattri');
+    var fitcut = document.getElementById('dd_fitcut');
+    var materialcomposition = document.getElementById('dd_materialcomposition');
+    var materialconstruction = document.getElementById('dd_materialconstruction');
+    var printtexture = document.getElementById('dd_printtexture');
+    var productline = document.getElementById('dd_productline');
+    var sleevetype = document.getElementById('dd_sleevetype');
+    var stylecollection = document.getElementById('dd_stylecollection');
+    var subcategory = document.getElementById('dd_subcategory');
+    var sizegroup = document.getElementById('dd_sizegroup');
+    var origsrp = document.getElementById('dd_origsrp');
+    var styleset2 = new Set();
+    var stylecodeset2 = new Set();
+    for (let i = 0; i < color.length; i++) {
+        if (color.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value.Color == color.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < silhouette.length; i++) {
+        if (silhouette.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value.Silhouette == silhouette.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < fitcut.length; i++) {
+        if (fitcut.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Fit Cut'] == fitcut.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < collectionattri.length; i++) {
+        if (collectionattri.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value.Collection == collectionattri.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < materialcomposition.length; i++) {
+        if (materialcomposition.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Material Composition'] == materialcomposition.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < materialconstruction.length; i++) {
+        if (materialconstruction.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Material Construction'] == materialconstruction.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < printtexture.length; i++) {
+        if (printtexture.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value.PrintTexture == printtexture.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < productline.length; i++) {
+        if (productline.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Product Line'] == productline.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < sleevetype.length; i++) {
+        if (sleevetype.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Sleeve Type'] == sleevetype.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < stylecollection.length; i++) {
+        if (stylecollection.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Style Collection'] == stylecollection.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < subcategory.length; i++) {
+        if (subcategory.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Sub-Category'] == subcategory.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < sizegroup.length; i++) {
+        if (sizegroup.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value.SizeGroup == sizegroup.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    for (let i = 0; i < origsrp.length; i++) {
+        if (origsrp.options[i].selected) {
+            var row = filteredAttributesTable.find(value => value['Orig SRP'] == origsrp.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
+    if (styleset2.size >= 1) {
+        styleset = styleset.intersection(styleset2);
     }
     if (excludestring != 'dd_style') {
         processMultiSelect(style, styleset);
