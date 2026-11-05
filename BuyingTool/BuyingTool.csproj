@@ -265,6 +265,7 @@
     <Content Include="Pages\Scripts\Index.js" />
     <Content Include="Global.asax" />
     <Content Include="Pages\Scripts\JQuery4.js" />
+    <Content Include="Pages\Scripts\modal.js" />
     <Content Include="Pages\Scripts\SetFilters.js" />
     <Content Include="Pages\Style\button.css" />
     <Content Include="Pages\Style\dropdown.css" />
@@ -342,6 +343,7 @@
     <Content Include="Pages\Common\TableWithPagination.cshtml" />
     <Content Include="Pages\Common\TableWithImageAndPagination.cshtml" />
     <Content Include="Pages\Component\Monitoring.cshtml" />
+    <Content Include="Pages\Common\Modal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

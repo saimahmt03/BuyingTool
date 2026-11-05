@@ -187,7 +187,7 @@ namespace BuyingTool.Services
         #region Reverse Option Gallery Helper Method
         public Task<(List<string> headers, List<string[]> rows)> TransposeTable(List<string> oldHeaders, List<string[]> oldRows)
         {
-            var newHeaders = new List<string> { "Attribute" };
+            var newHeaders = new List<string> { "Image" };
 
             // Each old row now becomes a column in the new layout
             foreach (var row in oldRows)
