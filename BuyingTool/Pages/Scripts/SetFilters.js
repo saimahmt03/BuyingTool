@@ -9,6 +9,7 @@ var filteredOrganizationTable = [];
 var filteredAttributesTable = [];
 var filteredPeriodPlanTable = [];
 
+
 HTMLSelectElement.prototype.contains = function (value) {
     for (var i = 0, l = this.options.length; i < l; i++) {
         if (this.options[i].value == value) {
@@ -17,17 +18,17 @@ HTMLSelectElement.prototype.contains = function (value) {
     }
     return false;
 }
-
 $(document).ready(function () {
-    let url = window.location.origin;
-    let requiredapiurl = "/api/RequiredFilters";
-    let idnumber = document.getElementById('idnumber').innerHTML;
-    let styleapiurl = "/api/StyleFilters";
-    let attributeapiurl = "/api/AttributeFilters";
-    let organizationapiurl = "/api/OrganizationFilters";
-    let periodplanapiurl = "/api/PeriodPlanFilters";
+    ShowLoader();
+    var url = window.location.origin;
+    var requiredapiurl = "/api/RequiredFilters";
+    var idnumber = document.getElementById('idnumber').innerHTML;
+    var styleapiurl = "/api/StyleFilters";
+    var attributeapiurl = "/api/AttributeFilters";
+    var organizationapiurl = "/api/OrganizationFilters";
+    var periodplanapiurl = "/api/PeriodPlanFilters";
 
-    $.ajax({
+    const requiredapicall = $.ajax({
         url: url + requiredapiurl,
         method: "GET",
         data: {
@@ -35,12 +36,9 @@ $(document).ready(function () {
         },
         success: function (data) {
             requiredTable = data;
-            getSessionRequiredSavedData();
-            buildRequiredFilterTable();
-            setRequiredFilterTable();
         }
     });
-    $.ajax({
+    const styleapicall = $.ajax({
         url: url + styleapiurl,
         method: "GET",
         data: {
@@ -48,12 +46,9 @@ $(document).ready(function () {
         },
         success: function (data) {
             stylesTable = data;
-            getSessionStyleSavedData();
-            buildStylesFilterTable();
-            setStylesFilterTable();
         }
     });
-    $.ajax({
+    const attributeapicall = $.ajax({
         url: url + attributeapiurl,
         method: "GET",
         data: {
@@ -62,12 +57,10 @@ $(document).ready(function () {
         success: function (data) {
             attributesTable = data;
             //ATTRIBUTES: styles inner join
-            getSessionAttributesSavedData();
-            buildAttributesFilterTable();
-            setAttributesFilterTable();
         }
     });
-    $.ajax({
+
+    const organizationapicall = $.ajax({
         url: url + organizationapiurl,
         method: "GET",
         data: {
@@ -76,13 +69,9 @@ $(document).ready(function () {
         success: function (data) {
             organizationTable = data;
             //ORGANIZATION : brand
-            buildOrganizationFilterTable();
-            getSessionOrganizationSavedData();
-            buildOrganizationFilterTable();
-            setOrganizationFilterTable();
         }
     });
-    $.ajax({
+    const periodplanapicall = $.ajax({
         url: url + periodplanapiurl,
         method: "GET",
         data: {
@@ -90,19 +79,41 @@ $(document).ready(function () {
         },
         success: function (data) {
             periodPlanTable = data;
-            //ORGANIZATION : brand
-            setPeriodPlanTable();
-
-            let sessionPeriodPlan = document.getElementById('sessionPeriodPlan');
-            var periodplan = document.getElementById('dd_periodplans');
-            periodplan.value = sessionPeriodPlan.innerHTML;
         }
     });
+    $.when(requiredapicall, styleapicall, attributeapicall, organizationapicall, periodplanapicall).then(function() {
+
+        getSessionRequiredSavedData();
+        getSessionAttributesSavedData();
+        getSessionStyleSavedData();
+        getSessionOrganizationSavedData();
+
+        buildRequiredFilterTable();
+        buildStylesFilterTable();
+        buildAttributesFilterTable();
+        buildOrganizationFilterTable();
+        setRequiredFilterTable();
+        setStylesFilterTable();
+        setAttributesFilterTable();
+        setOrganizationFilterTable();
+        setPeriodPlanTable();
+
+        let sessionPeriodPlan = document.getElementById('sessionPeriodPlan');
+        var periodplan = document.getElementById('dd_periodplans');
+        periodplan.value = sessionPeriodPlan.innerHTML;
+
+        HideLoader();
+    });
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 });
+//#region button behavior
 function changeFilter(element) {
    /* for (i = 0; i < id.length;i++) {
         console.log(id.options[i].value);
     }*/
+
+    ShowLoader();
     buildRequiredFilterTable();
     setRequiredFilterTable(element.id);
 
@@ -112,35 +123,48 @@ function changeFilter(element) {
             setStylesFilterTable(element.id);
             buildOrganizationFilterTable();
             setOrganizationFilterTable();
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_division':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_department':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_category':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
         case 'dd_collection':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildAttributesFilterTable();
+            setAttributesFilterTable();
             break;
     }
+    HideLoader();
 };
 
 function changeStyle(element) {
+    ShowLoader();
     buildStylesFilterTable();
     setStylesFilterTable(element.id);
     buildAttributesFilterTable();
     setAttributesFilterTable();
     buildRequiredFilterTable();
     setRequiredFilterTable();
+    HideLoader();
 };
-
+//#endregion
 function buildRequiredFilterTable() {
     var brand = document.getElementById('dd_brand');
     var division = document.getElementById('dd_division');
@@ -155,7 +179,6 @@ function buildRequiredFilterTable() {
         (category.value == '' || row.Category == category.value) &&
         (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Collection))
     );
-
 };
 
 function setRequiredFilterTable(excludestring) {
@@ -207,6 +230,7 @@ function setRequiredFilterTable(excludestring) {
             }
         }
     }
+
     var region = document.getElementById('dd_region');
     var country = document.getElementById('dd_country');
     var channel = document.getElementById('dd_channel');
@@ -216,6 +240,7 @@ function setRequiredFilterTable(excludestring) {
     var siteCode = document.getElementById('dd_siteCode');
     var siteName = document.getElementById('dd_siteName');
     var storeGrade = document.getElementById('dd_storeGrade');
+
     for (let i = 0; i < region.length; i++) {
         if (region.options[i].selected) {
             var row = filteredOrganizationTable.find(value => value.Region == region.options[i].value);
@@ -306,19 +331,15 @@ function setRequiredFilterTable(excludestring) {
     if (excludestring != 'dd_brand') {
         processSelect(brand, brandset);
     }
-
     if (excludestring != 'dd_division') {
         processSelect(division, divisionset);
     }
-
     if (excludestring != 'dd_department') {
         processSelect(department, departmentset);
     }
-
     if (excludestring != 'dd_category') {
         processSelect(category, categoryset);
     }
-
     if (excludestring != 'dd_collection') {
         processMultiSelect(collection, collectionset);
     }
@@ -332,8 +353,6 @@ function setPeriodPlanTable() {
         periodplanset.add(periodPlanTable[i].PlanPeriod);
     }
     processSelect(periodplan, periodplanset);
-
-
 }
 
 function buildStylesFilterTable() {
@@ -356,9 +375,7 @@ function buildStylesFilterTable() {
         (selectedCollections.length == 0 || (selectedCollections.length == 1 && selectedCollections[0] == '') || selectedCollections.includes(row.Collection))/*&&
         (selectedStyles.length == 0 || (selectedStyles.length == 1 && selectedStyles[0] == '') || selectedStyles.includes(row.Style))&&
         (selectedStyleCodes.length == 0 || (selectedStyleCodes.length == 1 && selectedStyleCodes[0] == '') || selectedStyleCodes.includes(row.Style_Code))*/
-    );
-   
-};
+    );};
 
 function setStylesFilterTable(excludestring) {
 
@@ -370,7 +387,6 @@ function setStylesFilterTable(excludestring) {
         styleset.add(filteredStylesTable[i].Style);
         stylecodeset.add(filteredStylesTable[i].Style_Code);
     }
-
     var color = document.getElementById('dd_color');
     var silhouette = document.getElementById('dd_silhouette');
     var collectionattri = document.getElementById('dd_collectionattri');
@@ -386,6 +402,22 @@ function setStylesFilterTable(excludestring) {
     var origsrp = document.getElementById('dd_origsrp');
     var styleset2 = new Set();
     var stylecodeset2 = new Set();
+    for (let i = 0; i < style.length; i++) {
+        if (style.options[i].selected) {
+            var row = filteredStylesTable.find(value => value.Style == style.options[i].value);
+            if (row != null) {
+                stylecodeset2.add(row.Style_Code);
+            }
+        }
+    }
+    for (let i = 0; i < stylecode.length; i++) {
+        if (stylecode.options[i].selected) {
+            var row = filteredStylesTable.find(value => value.Style_Code == stylecode.options[i].value);
+            if (row != null) {
+                styleset2.add(row.Style);
+            }
+        }
+    }
     for (let i = 0; i < color.length; i++) {
         if (color.options[i].selected) {
             var row = filteredAttributesTable.find(value => value.Color == color.options[i].value);
@@ -492,6 +524,15 @@ function setStylesFilterTable(excludestring) {
     }
     if (styleset2.size >= 1) {
         styleset = styleset.intersection(styleset2);
+        for (var setcontent in styleset2) {
+            var row = filteredStylesTable.find(value => value.Style_Code == setcontent.value);
+            if (row != null) {
+                stylecodeset2.add
+            }
+        }
+    }
+    if (stylecodeset2.size >= 1) {
+        stylecodeset = stylecodeset.intersection(stylecodeset2);
     }
     if (excludestring != 'dd_style') {
         processMultiSelect(style, styleset);
@@ -504,6 +545,9 @@ function setStylesFilterTable(excludestring) {
 function buildAttributesFilterTable() {
     var style = document.getElementById('dd_style');
     let selectedValues = Array.from(style.selectedOptions).map(option => option.value);
+    if (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '')) {
+        selectedValues = getColumn(filteredStylesTable, 'Style');
+    }
     filteredAttributesTable = attributesTable.filter(row =>
         (selectedValues.length == 0 || (selectedValues.length == 1 && selectedValues[0] == '') || selectedValues.includes(row.Style))
     );
@@ -674,6 +718,8 @@ function populateMultiSelect(list, element) {
         counter++;
     }
 }
+const getColumn = (anArray, columnName) =>
+    anArray.map(row => row[columnName]);
 //#endregion
 //#region get saved data
 function getSessionRequiredSavedData() {

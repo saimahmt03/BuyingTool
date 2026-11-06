@@ -79,8 +79,8 @@
     isLoggedIn = Session["idnumber"] != null && !string.IsNullOrWhiteSpace(Session["idnumber"].ToString());
 }
 
-<script src="~/Pages/Scripts/Index.js"></script>
 <script src="~/Pages/Scripts/JQuery4.js"></script>
+<script src="~/Pages/Scripts/Index.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,6 +89,9 @@
     <title>@(isLoggedIn ? "Dashboard" : "Login - Buying Tool Report")</title>
 </head>
 <body>
+    <div id="loaderOverlay">
+        <div id="loader"></div>
+    </div>
     @if (!isLoggedIn)
     {
         // --- VIEW 1: LOGIN SCREEN ---
@@ -241,21 +244,21 @@
         var sessionSiteName = Session["SiteName"];
         var sessionStoreGrade = Session["StoreGrade"];
 
-        var sessionColor = Session["Color"] ;
-        var sessionSilhouette = Session["Silhouette"] ;
-        var sessionCollectionAttri = Session["CollectionAttri"] ;
-        var sessionFitCut = Session["FitCut"] ;
-        var sessionMaterialComposition = Session["MaterialComposition"] ;
-        var sessionMaterialConstruction = Session["MaterialConstruction"] ;
-        var sessionPrintTexture = Session["PrintTexture"] ;
-        var sessionProductLine = Session["ProductLine"] ;
-        var sessionSleeveType = Session["SleeveType"] ;
-        var sessionStyleCollection = Session["StyleCollection"] ;
-        var sessionSubCategory = Session["SubCategory"] ;
-        var sessionSizeGroup = Session["SizeGroup"] ;
-        var sessionOrigSrp = Session["OrigSrp"] ;
+        var sessionColor = Session["Color"];
+        var sessionSilhouette = Session["Silhouette"];
+        var sessionCollectionAttri = Session["CollectionAttri"];
+        var sessionFitCut = Session["FitCut"];
+        var sessionMaterialComposition = Session["MaterialComposition"];
+        var sessionMaterialConstruction = Session["MaterialConstruction"];
+        var sessionPrintTexture = Session["PrintTexture"];
+        var sessionProductLine = Session["ProductLine"];
+        var sessionSleeveType = Session["SleeveType"];
+        var sessionStyleCollection = Session["StyleCollection"];
+        var sessionSubCategory = Session["SubCategory"];
+        var sessionSizeGroup = Session["SizeGroup"];
+        var sessionOrigSrp = Session["OrigSrp"];
     }
-    
+
     <label hidden id="idnumber">@idnumberforlabel</label>
 
     <label hidden id="sessionBrand">@sessionBrand</label>
@@ -293,3 +296,35 @@
 
 </body>
 </html>
+
+<style>
+    #loaderOverlay {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        background-color: rgba(255,255,255,0.5);
+        z-index: 99;
+        visibility: hidden;
+    }
+
+    #loader {
+        place-self: center;
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
