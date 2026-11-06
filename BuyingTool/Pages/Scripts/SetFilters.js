@@ -835,8 +835,17 @@ function setAttributesFilterTable(element = '') {
 
 function buildOrganizationFilterTable() {
     var brand = document.getElementById('dd_brand');
+    var sitecode = document.getElementById('dd_siteCode');
+    let selectedSiteCode = Array.from(sitecode.selectedOptions).map(option => option.value);
+    var sitename = document.getElementById('dd_siteName');
+    let selectedSiteName = Array.from(sitename.selectedOptions).map(option => option.value);
+    var storegrade = document.getElementById('dd_storeGrade');
+    let selectedStoreGrade = Array.from(storegrade.selectedOptions).map(option => option.value);
     filteredOrganizationTable = organizationTable.filter(row =>
-        (brand.value == '' || row.Brand == brand.value)
+        (brand.value == '' || row.Brand == brand.value) &&
+        (selectedSiteCode.length == 0 || (selectedSiteCode.length == 1 && selectedSiteCode[0] == '') || selectedSiteCode.includes(row['Site Code'])) &&
+        (selectedSiteName.length == 0 || (selectedSiteName.length == 1 && selectedSiteName[0] == '') || selectedSiteName.includes(row['Site Name'])) &&
+        (selectedStoreGrade.length == 0 || (selectedStoreGrade.length == 1 && selectedStoreGrade[0] == '') || selectedStoreGrade.includes(row['Store Grade']))
     );
 };
 
