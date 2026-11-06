@@ -630,7 +630,7 @@ function setAttributesFilterTable() {
     processMultiSelect(stylecollection, stylecollectionset);
     processMultiSelect(subcategory, subcategoryset);
     processMultiSelect(sizegroup, sizegroupset);
-    processMultiSelect(origsrp, origsrpset);
+    processOrigSrp(origsrp, origsrpset);
 };
 
 function buildOrganizationFilterTable() {
@@ -717,6 +717,32 @@ function onlyAddSelect(element, set) {
     }
     element.value = selection;
 };
+function processOrigSrp(element, set) {
+    set.delete('null');
+    set.delete(null);
+    set = Array.from(set);
+    set = set.sort(function (a, b) {
+        return parseInt(a) - parseInt(b);
+    });
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
 function processMultiSelect(element, set) {
     set = new Set([...set].sort());
     var SelectedList = new Set();
@@ -767,6 +793,7 @@ function populateSelect(value, element) {
         element.value = value;
     }
 }
+
 function populateMultiSelect(list, element) {
     let counter = 1;
     for (let value in list) {
@@ -777,8 +804,10 @@ function populateMultiSelect(list, element) {
         counter++;
     }
 }
+
 const getColumn = (anArray, columnName) =>
     anArray.map(row => row[columnName]);
+
 //#endregion
 //#region get saved data
 function getSessionRequiredSavedData() {
