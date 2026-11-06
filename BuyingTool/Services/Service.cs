@@ -235,6 +235,13 @@ namespace BuyingTool.Services
         }
 
         #endregion
+        #region SortReference
+        public Task<DataTable> GetSortReference()
+        {
+            var dtMainTable = _dBContext.GetSortReference().GetAwaiter().GetResult();
+            return Task.FromResult(dtMainTable);
+        }
+        #endregion
 
         #region DBContext In Use
         // Account Verification

@@ -8,7 +8,17 @@ var filteredStylesTable = [];
 var filteredOrganizationTable = [];
 var filteredAttributesTable = [];
 var filteredPeriodPlanTable = [];
-
+var areaSortReference = new Map();
+var brandSortReference = new Map();
+var channelSortReference = new Map();
+var collectionSortReference = new Map();
+var departmentSortReference = new Map();
+var divisionSortReference = new Map();
+var periodPlanSortReference = new Map();
+//var sizeSortReference = new Map();
+var styleSortReference = new Map();
+var styleCodeSortReference = new Map();
+var territorySortReference = new Map();
 
 HTMLSelectElement.prototype.contains = function (value) {
     for (var i = 0, l = this.options.length; i < l; i++) {
@@ -27,7 +37,50 @@ $(document).ready(function () {
     var attributeapiurl = "/api/AttributeFilters";
     var organizationapiurl = "/api/OrganizationFilters";
     var periodplanapiurl = "/api/PeriodPlanFilters";
-
+    var sortreferenceapiurl = "/api/SortReference";
+    const sortreferenceapicall = $.ajax({
+        url: url + sortreferenceapiurl,
+        method: "GET",
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                switch (data[i]['FieldName']) {
+                    case 'Area':
+                        areaSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Brand':
+                        brandSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Channel':
+                        channelSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Collection Age':
+                        collectionSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Department':
+                        departmentSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Division':
+                        divisionSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Plan Period':
+                        periodPlanSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Size':
+                        //sizeSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Style':
+                        styleSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Style Code':
+                        styleCodeSortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+                    case 'Territory':
+                        territorySortReference.set(data[i]['FieldValue'], data[i]['FieldOrder']);
+                        break;
+            }
+            }
+        }
+    });
     const requiredapicall = $.ajax({
         url: url + requiredapiurl,
         method: "GET",
@@ -81,7 +134,7 @@ $(document).ready(function () {
             periodPlanTable = data;
         }
     });
-    $.when(requiredapicall, styleapicall, attributeapicall, organizationapicall, periodplanapicall).then(function() {
+    $.when(requiredapicall, styleapicall, attributeapicall, organizationapicall, periodplanapicall, sortreferenceapicall).then(function() {
 
         getSessionRequiredSavedData();
         getSessionAttributesSavedData();
@@ -329,22 +382,22 @@ function setRequiredFilterTable(excludestring) {
         collectionset = collectionset.intersection(collectionset2);
     }
     if (excludestring != 'dd_brand') {
-        processSelect(brand, brandset);
+        processBrand(brand, brandset);
     }
     else {
-        onlyAddSelect(brand, brandset);
+        onlyAddBrand(brand, brandset);
     }
     if (excludestring != 'dd_division') {
-        processSelect(division, divisionset);
+        processDivision(division, divisionset);
     }
     else {
-        onlyAddSelect(division, divisionset);
+        onlyAddDivision(division, divisionset);
     }
     if (excludestring != 'dd_department') {
-        processSelect(department, departmentset);
+        processDepartment(department, departmentset);
     }
     else {
-        onlyAddSelect(department, departmentset);
+        onlyAddDepartment(department, departmentset);
     }
     if (excludestring != 'dd_category') {
         processSelect(category, categoryset);
@@ -353,10 +406,10 @@ function setRequiredFilterTable(excludestring) {
         onlyAddSelect(category, categoryset);
     }
     if (excludestring != 'dd_collection') {
-        processMultiSelect(collection, collectionset);
+        processCollection(collection, collectionset);
     }
     else {
-        onlyAddMultiSelect(collection, collectionset);
+        onlyAddCollection(collection, collectionset);
     }
 };
 
@@ -367,7 +420,7 @@ function setPeriodPlanTable() {
     for (var i = 0; i < periodPlanTable.length; i++) {
         periodplanset.add(periodPlanTable[i].PlanPeriod);
     }
-    processSelect(periodplan, periodplanset);
+    processPeriodPlan(periodplan, periodplanset);
 }
 
 function buildStylesFilterTable() {
@@ -550,16 +603,16 @@ function setStylesFilterTable(excludestring) {
         stylecodeset = stylecodeset.intersection(stylecodeset2);
     }
     if (excludestring != 'dd_style') {
-        processMultiSelect(style, styleset);
+        processStyle(style, styleset);
     }
     else {
-        onlyAddMultiSelect(style, styleset);
+        onlyAddStyle(style, styleset);
     }
     if (excludestring != 'dd_stylecode') {
-        processMultiSelect(stylecode, stylecodeset);
+        processStyleCode(stylecode, stylecodeset);
     }
     else {
-        onlyAddMultiSelect(stylecode, stylecodeset);
+        onlyAddStyleCode(stylecode, stylecodeset);
     }
 };
 
@@ -674,9 +727,9 @@ function setOrganizationFilterTable() {
 
     processMultiSelect(region, regionset);
     processMultiSelect(country, countryset);
-    processMultiSelect(channel, channelset);
-    processMultiSelect(territory, territoryset);
-    processMultiSelect(area, areaset);
+    processChannel(channel, channelset);
+    processTerritory(territory, territoryset);
+    processArea(area, areaset);
     processMultiSelect(outlet, outletset);
     processMultiSelect(siteCode, siteCodeset);
     processMultiSelect(siteName, siteNameset);
@@ -717,6 +770,244 @@ function onlyAddSelect(element, set) {
     }
     element.value = selection;
 };
+function processMultiSelect(element, set) {
+    set = new Set([...set].sort());
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+//#region field specific sorting
+
+function processBrand(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return brandSortReference.get(a) - brandSortReference.get(b);
+    }));
+    var selection = element.value;
+    while (element.length > 0) {
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
+function processDivision(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return divisionSortReference.get(a) - divisionSortReference.get(b);
+    }));
+    var selection = element.value;
+    while (element.length > 0) {
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
+function processDepartment(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return departmentSortReference.get(a) - departmentSortReference.get(b);
+    }));
+    var selection = element.value;
+    while (element.length > 0) {
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
+function processCollection(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return collectionSortReference.get(a) - collectionSortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function processArea(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return areaSortReference.get(a) - areaSortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function processChannel(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return channelSortReference.get(a) - channelSortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function processPeriodPlan(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return periodPlanSortReference.get(a) - periodPlanSortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function processStyle(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return styleSortReference.get(a) - styleSortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function processStyleCode(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return styleCodeSortReference.get(a) - styleCodeSortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function processTerritory(element, set) {
+    set = new Set([...set].sort(function (a, b) {
+        return territorySortReference.get(a) - territorySortReference.get(b);
+    }));
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        element.remove(0);
+    }
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
 function processOrigSrp(element, set) {
     set.delete('null');
     set.delete(null);
@@ -743,15 +1034,76 @@ function processOrigSrp(element, set) {
         }
     }
 };
-function processMultiSelect(element, set) {
-    set = new Set([...set].sort());
+
+function onlyAddBrand(element, set) {
+    var selection = element.value;
+    while (element.length > 0) {
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return brandSortReference.get(a) - brandSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
+function onlyAddDivision(element, set) {
+    var selection = element.value;
+    while (element.length > 0) {
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return divisionSortReference.get(a) - divisionSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
+function onlyAddDepartment(element, set) {
+    var selection = element.value;
+    while (element.length > 0) {
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return departmentSortReference.get(a) - departmentSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
+function onlyAddCollection(element, set) {
     var SelectedList = new Set();
     while (element.length > 0) {
         if (element.options[0].selected) {
             SelectedList.add(element.options[0].value)
         }
+        set.add(element.options[0].value);
         element.remove(0);
     }
+    set = new Set([...set].sort(function (a, b) {
+        return collectionSortReference.get(a) - collectionSortReference.get(b);
+    }));
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
@@ -764,6 +1116,151 @@ function processMultiSelect(element, set) {
         }
     }
 };
+function onlyAddArea(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return areaSortReference.get(a) - areaSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function onlyAddChannel(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return channelSortReference.get(a) - channelSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function onlyAddPeriodPlan(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return periodPlanSortReference.get(a) - periodPlanSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function onlyAddStyle(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return styleSortReference.get(a) - styleSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function onlyAddStyleCode(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return styleCodeSortReference.get(a) - styleCodeSortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function onlyAddTerritory(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort(function (a, b) {
+        return territorySortReference.get(a) - territorySortReference.get(b);
+    }));
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+//#endregion
 function onlyAddMultiSelect(element, set) {
     var SelectedList = new Set();
     while (element.length > 0) {

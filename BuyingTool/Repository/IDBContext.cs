@@ -91,7 +91,7 @@ namespace BuyingTool.Repository
         // NEW Login
         Task<(string response, string dbResponse)> AccountVerification(string idnumber, string pass);
         #endregion
-
+        Task<DataTable> GetSortReference();
 
     }
 }
