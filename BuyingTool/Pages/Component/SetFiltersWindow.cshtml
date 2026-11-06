@@ -6,7 +6,14 @@
 
     var tableHeaders = new List<string>();
     var tableRows = new List<string[]>();
+    var transposedHeaders = new List<string>();
+    var transposedRows = new List<string[]>();
     string errorMessage = string.Empty;
+
+    // Modal state variables
+    bool showModal = false;
+    string modalTitle = string.Empty;
+    string modalBodyContent = string.Empty;
 
     // Required
     string brand = string.Empty;
@@ -118,6 +125,10 @@
             if (mandatoryFieldsMissing)
             {
                 errorMessage = "Please fill the required filters.";
+
+                showModal = true;
+                modalTitle = "Processing Error";
+                modalBodyContent = errorMessage;
             }
             else
             {
@@ -156,9 +167,11 @@
                    null // tagFilter parameter
                ).GetAwaiter().GetResult();
 
+                (transposedHeaders, transposedRows) = service.TransposeTable(tableHeaders, tableRows).GetAwaiter().GetResult();
+
                 // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
-                Session["OptionGalHeaders"] = tableHeaders;
-                Session["OptionGalRows"] = tableRows;
+                Session["OptionGalHeaders"] = transposedHeaders;
+                Session["OptionGalRows"] = transposedRows;
 
                 service.GetSizeCurveTable(brand, division, department, category, selectedPeriodPlans)
                        .GetAwaiter()
@@ -212,6 +225,10 @@
             if (mandatoryFieldsMissing)
             {
                 errorMessage = "Please fill the required filters.";
+
+                showModal = true;
+                modalTitle = "Processing Error";
+                modalBodyContent = errorMessage;
             }
             else
             {
@@ -251,9 +268,11 @@
                     null // tagFilter parameter
                 ).GetAwaiter().GetResult();
 
+                (transposedHeaders, transposedRows) = service.TransposeTable(tableHeaders, tableRows).GetAwaiter().GetResult();
+
                 // NEW: Keep the table for later postbacks (Calculate, paging, etc.)
-                Session["OptionGalHeaders"] = tableHeaders;
-                Session["OptionGalRows"] = tableRows;
+                Session["OptionGalHeaders"] = transposedHeaders;
+                Session["OptionGalRows"] = transposedRows;
 
                 Session["Brand"] = brand;
                 Session["Division"] = division;
@@ -336,13 +355,13 @@
     }
 
     // NEW: Restore the last displayed table if this request didn't build a new one
-    if (tableHeaders.Count == 0 && Session["OptionGalHeaders"] != null &&
+    if (transposedHeaders.Count == 0 && Session["OptionGalHeaders"] != null &&
         Session["Brand"] != null && Session["Division"] != null && Session["Department"] != null
         && Session["PeriodPlan"] != null && Session["Collection"] != null
         )
     {
-        tableHeaders = Session["OptionGalHeaders"] as List<string> ?? new List<string>();
-        tableRows = Session["OptionGalRows"] as List<string[]> ?? new List<string[]>();
+        transposedHeaders = Session["OptionGalHeaders"] as List<string> ?? new List<string>();
+        transposedRows = Session["OptionGalRows"] as List<string[]> ?? new List<string[]>();
 
         brand = Session["Brand"] as string;
         division = Session["Division"] as string;
@@ -351,6 +370,12 @@
         selectedPeriodPlans = Session["PeriodPlan"] as string;
         //selectedCollection = Session["Collection"] as List<string> ?? new List<string>();
     }
+
+
+    var modalFooter = "<button type='button' class='button' onclick=\"closeModal('allocResultModal')\">OK</button>";
+    // Server-side check: Forces display to flex if showModal is true, otherwise hidden
+    string modalStyle = showModal ? "position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background-color: rgba(0, 0, 0, 0.6) !important; display: flex !important; justify-content: center !important; align-items: center !important; z-index: 99999 !important;" : "display: none !important;";
+
 
     var headerCssVersion = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header.css")).Ticks.ToString();
     var sectionheaderCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/sectionheader.css")).Ticks.ToString();
@@ -362,6 +387,8 @@
 
     var textfieldCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/textfield.css")).Ticks.ToString();
     var setfilterswindow = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/set-filters-window.css")).Ticks.ToString();
+
+    var modalJsVersion = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Scripts/modal.js")).Ticks.ToString();
 }
 
 <head>
@@ -375,6 +402,8 @@
 
     <link href="~/Pages/Style/textfield.css?v=@textfieldCss" rel="stylesheet" />
     <link href="~/Pages/Style/set-filters-window.css?v=@setfilterswindow" rel="stylesheet" />
+
+    <script src="~/Pages/Scripts/modal.js?v=@modalJsVersion"></script>
 </head>
 <body>
     <header role="banner">
@@ -479,10 +508,32 @@
                             </div>
 
                             <div class="row">
-                                @if (!string.IsNullOrEmpty(errorMessage))
-                                                {
-                                    <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
-                                            }
+
+                                <!--Modal-->
+                                <div class="modal-backdrop" id="allocResultModal" style="@modalStyle" aria-hidden="@(showModal ? "false" : "true")" onclick="handleBackdropClick(event, 'allocResultModal')">
+                                    <div class="modal-dialog" role="dialog" aria-labelledby="allocResultModal-title" aria-modal="true" style="background: #f4f4f4 !important; position: relative !important; z-index: 100000 !important; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 500px; width: 100%; overflow: hidden;">
+                                        <div class="modal-header" style="background: #f4f4f4 !important; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;">
+                                            <h3 id="allocResultModal-title" class="modal-title" style="margin: 0; font-size: 1.25rem; color: #333;">@modalTitle</h3>
+                                            <button type="button" class="modal-close" onclick="closeModal('allocResultModal')" aria-label="Close modal" style="background: transparent; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                                        </div>
+                                        <div class="modal-body" style="background: #f4f4f4 !important; padding: 20px; color: #333;">
+                                            @Html.Raw(modalBodyContent)
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(modalFooter))
+                                        {
+                                            <div class="modal-footer" style="background: #eeeeee !important; padding: 12px 20px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 10px;">
+                                                @Html.Raw(modalFooter)
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!--
+                                 if (!string.IsNullOrEmpty(errorMessage))
+                                 {
+                                    <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">errorMessage</div>
+                                 }
+                                -->
                             </div>
                         </form>
                     </div>
@@ -494,9 +545,11 @@
                 <div class="row">
                     @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Options Gallery")
                     <div class="table-responsive">
-                        <!--RenderPage("~/Pages/Common/Table.cshtml", tableHeaders, tableRows)-->
                         <!-- Unchanged: tableHeaders/tableRows are restored from Session in the code block above -->
-                        @RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", tableHeaders, tableRows, true, 21)
+                        <!---RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", tableHeaders, tableRows, true, 21)-->
+
+                        @RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", transposedHeaders, transposedRows, true, 10)
+
                     </div>
                 </div>
             </article>

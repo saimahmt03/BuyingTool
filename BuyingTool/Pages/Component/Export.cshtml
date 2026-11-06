@@ -7,6 +7,11 @@
     // Column name should be hiden
     string hideColumn = "Type, Store Grade";
 
+    // Modal state variables
+    bool showModal = false;
+    string modalTitle = string.Empty;
+    string modalBodyContent = string.Empty;
+
     if (IsPost)
     {
         string[] storeGrades =
@@ -211,13 +216,26 @@
                 (status, errorMessage) = service.ExportToAlloc(tableHeaders, tableRows, brand, collection, fiscalMonth, fiscalYear, matno, color).GetAwaiter().GetResult();
             }
 
+            //if (status == "Success" && string.IsNullOrEmpty(errorMessage))
+            //{
+            //    errorMessage = "Successfully processed.";
+            //}
+            //else
+            //{
+            //    errorMessage = "We couldn’t process your request.\n\nPlease verify your Option and Plan Period, then try again.\n\nIf the issue persists, please contact your IT Partner for assistance.";
+            //}
+
+            // Trigger modal instead of assigning inline errorMessage
+            showModal = true;
             if (status == "Success" && string.IsNullOrEmpty(errorMessage))
             {
-                errorMessage = "Successfully processed.";
+                modalTitle = "Success";
+                modalBodyContent = "<p>Successfully processed.</p>";
             }
             else
             {
-                errorMessage = "We couldn’t process your request.\n\nPlease verify your Option and Plan Period, then try again.\n\nIf the issue persists, please contact your IT Partner for assistance.";
+                modalTitle = "Processing Error";
+                modalBodyContent = "<p>We couldn’t process your request.</p><p>Please verify your Option and Plan Period, then try again.</p><p>If the issue persists, please contact your IT Partner for assistance.</p>";
             }
         }
     }
@@ -228,12 +246,19 @@
     }
 
 
+    var modalFooter = "<button type='button' class='button' onclick=\"closeModal('allocResultModal')\">OK</button>";
+    // Server-side check: Forces display to flex if showModal is true, otherwise hidden
+    string modalStyle = showModal ? "position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background-color: rgba(0, 0, 0, 0.6) !important; display: flex !important; justify-content: center !important; align-items: center !important; z-index: 99999 !important;" : "display: none !important;";
+
     var headerCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/header.css")).Ticks.ToString();
     var toolbarCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/toolbar.css")).Ticks.ToString();
     var buttonCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/button.css")).Ticks.ToString();
     var exportCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/export.css")).Ticks.ToString();
     var segmetedcontrolCss = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/segmented-control.css")).Ticks.ToString();
     var table1Css = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/table-with-pagination.css")).Ticks.ToString();
+
+    // Add this with your other CSS ticks at the top of your .cshtml file:
+    var modalJsVersion = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Scripts/modal.js")).Ticks.ToString();
 }
 
 <head>
@@ -243,6 +268,8 @@
     <link href="~/Pages/Style/segmented-control.css?v=@segmetedcontrolCss" rel="stylesheet" />
 
     <link href="~/Pages/Style/table-with-pagination.css?v=@table1Css" rel="stylesheet" />
+
+    <script src="~/Pages/Scripts/modal.js?v=@modalJsVersion"></script>
 </head>
 <body>
     <header role="banner">
@@ -276,28 +303,48 @@
 
 
                     <!-- Right-aligned Actions -->
-                    <div class="action-group-right">
+                <div class="action-group-right">
 
-                        <!-- Text input for the custom filename -->
-                        <input type="text"
-                               name="customFileName"
-                               id="customFileName"
-                               class="form-control"
-                               placeholder="Enter filename..."
-                               value="000000_colorname"
-                               style="width: 200px; display: inline-block;" />
+                    <!-- Text input for the custom filename -->
+                    <input type="text"
+                           name="customFileName"
+                           id="customFileName"
+                           class="form-control"
+                           placeholder="Enter filename..."
+                           value="000000_colorname"
+                           style="width: 200px; display: inline-block;" />
 
-                        <!-- Export to Excel Button -->
-                        @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+                    <!-- Export to Excel Button -->
+                    @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
 
-                        <!-- Export to Alloc Button -->
-                        @RenderPage("~/Pages/Common/Button.cshtml", "Export to Alloc Tool", "submit", "actionButton", "SaveToDb")
+                    <!-- Export to Alloc Button -->
+                    @RenderPage("~/Pages/Common/Button.cshtml", "Export to Alloc Tool", "submit", "actionButton", "SaveToDb")
 
-                        @if (!string.IsNullOrEmpty(errorMessage))
-                        {
-                            <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@errorMessage</div>
-                        }
+                    <!--Modal-->
+                    <div class="modal-backdrop" id="allocResultModal" style="@modalStyle" aria-hidden="@(showModal ? "false" : "true")" onclick="handleBackdropClick(event, 'allocResultModal')">
+                        <div class="modal-dialog" role="dialog" aria-labelledby="allocResultModal-title" aria-modal="true" style="background: #f4f4f4 !important; position: relative !important; z-index: 100000 !important; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 500px; width: 100%; overflow: hidden;">
+                            <div class="modal-header" style="background: #f4f4f4 !important; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;">
+                                <h3 id="allocResultModal-title" class="modal-title" style="margin: 0; font-size: 1.25rem; color: #333;">@modalTitle</h3>
+                                <button type="button" class="modal-close" onclick="closeModal('allocResultModal')" aria-label="Close modal" style="background: transparent; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                            </div>
+                            <div class="modal-body" style="background: #f4f4f4 !important; padding: 20px; color: #333;">
+                                @Html.Raw(modalBodyContent)
+                            </div>
+                            @if (!string.IsNullOrEmpty(modalFooter))
+                            {
+                                <div class="modal-footer" style="background: #eeeeee !important; padding: 12px 20px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 10px;">
+                                    @Html.Raw(modalFooter)
+                                </div>
+                            }
+                        </div>
                     </div>
+
+
+                    <!--if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">errorMessage</div>
+    }-->
+                </div>
 
                 </div>
             </form>
@@ -314,5 +361,6 @@
             </article>
 
         </section>
-        </main>
-    </body>
+    </main>
+
+</body>

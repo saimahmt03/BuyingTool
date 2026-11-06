@@ -56,12 +56,12 @@
 }
 
 .data-table__img {
+    width: 100px; /* Adjust this width as needed (e.g., 80px, 100px) */
+    height: auto; /* Maintains the aspect ratio */
+    max-height: 140px; /* Optional: prevents excessively tall images */
+    object-fit: cover;
     display: block;
-    width: 44px; /* Locked fixed width for clean thumbnails */
-    height: 44px; /* Locked fixed height */
-    object-fit: cover; /* Crops the image proportionally without distortion */
-    border-radius: 3px;
-    margin: 0 auto;
+    margin: 0 auto; /* Centers the image inside the table cell */
 }
 
 .data-table__img--empty {

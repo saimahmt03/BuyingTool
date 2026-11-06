@@ -1,0 +1,68 @@
+﻿@{
+    // How to call:
+    //   @RenderPage("~/Pages/Component/Modal.cshtml", id, title, bodyContent, footerContent)
+    //
+    //   id           : unique identifier for the modal (required for triggers/aria)
+    //   title        : text displayed in the modal header
+    //   bodyContent  : HTML string or content for the modal body
+    //   footerContent: HTML string or buttons for the modal footer (optional)
+
+    var id = PageData[0] as string;
+    var title = PageData[1] as string;
+    var bodyContent = PageData[2] as string;
+    var footerContent = PageData[3] as string;
+
+    if (string.IsNullOrEmpty(id)) { id = "defaultModal"; }
+}
+
+<!-- Modal Markup -->
+<div class="modal-backdrop" id="@id" style="display:none;" aria-hidden="true" onclick="handleBackdropClick(event, '@id')">
+    <div class="modal-dialog" role="dialog" aria-labelledby="@(id)-title" aria-modal="true">
+        <div class="modal-header">
+            <h3 id="@(id)-title" class="modal-title">@title</h3>
+            <button type="button" class="modal-close" onclick="closeModal('@id')" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            @Html.Raw(bodyContent)
+        </div>
+        @if (!string.IsNullOrEmpty(footerContent))
+        {
+            <div class="modal-footer">
+                @Html.Raw(footerContent)
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Scoped/Safe Component Script -->
+<script>
+    // Define global helpers only once if they don't already exist
+    if (typeof openModal === 'undefined') {
+        function openModal(modalId) {
+            var modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = "flex";
+                modal.setAttribute("aria-hidden", "false");
+            }
+        }
+    }
+
+    if (typeof closeModal === 'undefined') {
+        function closeModal(modalId) {
+            var modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = "none";
+                modal.setAttribute("aria-hidden", "true");
+            }
+        }
+    }
+
+    if (typeof handleBackdropClick === 'undefined') {
+        function handleBackdropClick(event, modalId) {
+            // Close only if they click the dark backdrop area, not the white modal box itself
+            if (event.target.id === modalId) {
+                closeModal(modalId);
+            }
+        }
+    }
+</script>

@@ -224,3 +224,52 @@ header {
     pointer-events: none; /* not clickable */
     opacity: 0.45;
 }
+
+
+/* =================================================================
+   Vertical Attribute Layout & Image Adjustments for Options Gallery
+   ================================================================= */
+
+/* Ensure table cells align properly for vertical attribute layout */
+.data-table th.data-table__label,
+.data-table td:first-child {
+    font-weight: bold;
+    background-color: var(--panel-bg);
+    text-align: left;
+    white-space: nowrap;
+    width: 140px; /* Fixed width for attribute labels column */
+}
+
+/* Make images centered and prominent when they appear in the header row */
+.data-table__header-cell img,
+.data-table__img {
+    max-width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* =================================================================
+   Center-Align Table Content & Images
+   ================================================================= */
+
+/* Target the precise header and cell classes */
+.data-table .data-table__header-cell,
+.data-table .data-table__cell {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+    /* Ensure images inside cells are centered as well */
+    .data-table .data-table__cell img,
+    .data-table .data-table__header-cell img {
+        display: block !important;
+        margin: 0 auto !important;
+    }
+
+/* Keep the attribute title column (first column) left-aligned */
+.data-table th.data-table__label,
+.data-table td:first-child {
+    text-align: left !important;
+    padding-left: 10px !important;
+}

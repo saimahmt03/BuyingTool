@@ -184,6 +184,36 @@ namespace BuyingTool.Services
 
         #endregion
 
+        #region Reverse Option Gallery Helper Method
+        public Task<(List<string> headers, List<string[]> rows)> TransposeTable(List<string> oldHeaders, List<string[]> oldRows)
+        {
+            var newHeaders = new List<string> { "Image" };
+
+            // Each old row now becomes a column in the new layout
+            foreach (var row in oldRows)
+            {
+                if (row.Length > 0)
+                {
+                    newHeaders.Add(row[0]); // Assuming index 0 or image is the identifier
+                }
+            }
+
+            var newRows = new List<string[]>();
+            int totalAttributes = oldHeaders.Count;
+
+            for (int colIndex = 1; colIndex < totalAttributes; colIndex++)
+            {
+                var attributeRow = new List<string> { oldHeaders[colIndex] };
+                foreach (var oldRow in oldRows)
+                {
+                    attributeRow.Add(oldRow.Length > colIndex ? oldRow[colIndex] : string.Empty);
+                }
+                newRows.Add(attributeRow.ToArray());
+            }
+
+            return Task.FromResult((newHeaders, newRows));
+        }
+        #endregion
 
         public Task<(string matno, string color)> SliceFileName(string filename)
         {
