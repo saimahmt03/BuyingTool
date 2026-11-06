@@ -1335,7 +1335,7 @@ function onlyAddOrigSrp(element, set) {
         if (element.options[0].selected) {
             SelectedList.add(element.options[0].value)
         }
-        set.add(element.options[0].value);
+        set.push(element.options[0].value);
         element.remove(0);
     }
     set = set.sort(function (a, b) {
