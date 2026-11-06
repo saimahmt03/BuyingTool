@@ -818,19 +818,85 @@ function setAttributesFilterTable(element = '') {
             origsrpset = origsrpset.intersection(origsrpset2);
         }
     }
-    processMultiSelect(color, colorset);
-    processMultiSelect(silhouette, silhouetteset);
-    processMultiSelect(collectionattri, collectionattriset);
-    processMultiSelect(fitcut, fitcutset);
-    processMultiSelect(materialcomposition, materialcompositionset);
-    processMultiSelect(materialconstruction, materialconstructionset);
-    processMultiSelect(printtexture, printtextureset);
-    processMultiSelect(productline, productlineset);
-    processMultiSelect(sleevetype, sleevetypeset);
-    processMultiSelect(stylecollection, stylecollectionset);
-    processMultiSelect(subcategory, subcategoryset);
-    processMultiSelect(sizegroup, sizegroupset);
-    processOrigSrp(origsrp, origsrpset);
+
+    if (element != 'dd_color') {
+        processMultiSelect(color, colorset);
+    }
+    else {
+        onlyAddMultiSelect(color, colorset);
+    }
+    if (element != 'dd_silhouette') {
+        processMultiSelect(silhouette, silhouetteset);
+    }
+    else {
+        onlyAddMultiSelect(silhouette, silhouetteset);
+    }
+    if (element != 'dd_collectionattri') {
+        processMultiSelect(collectionattri, collectionattriset);
+    }
+    else {
+        onlyAddMultiSelect(collectionattri, collectionattriset);
+    }
+    if (element != 'dd_fitcut') {
+        processMultiSelect(fitcut, fitcutset);
+    }
+    else {
+        onlyAddMultiSelect(fitcut, fitcutset);
+    }
+    if (element != 'dd_materialcomposition') {
+        processMultiSelect(materialcomposition, materialcompositionset);
+    }
+    else {
+        onlyAddMultiSelect(materialcomposition, materialcompositionset);
+    }
+    if (element != 'dd_materialconstruction') {
+        processMultiSelect(materialconstruction, materialconstructionset);
+    }
+    else {
+        onlyAddMultiSelect(materialconstruction, materialconstructionset);
+    }
+    if (element != 'dd_printtexture') {
+        processMultiSelect(printtexture, printtextureset);
+    }
+    else {
+        onlyAddMultiSelect(printtexture, printtextureset);
+    }
+    if (element != 'dd_productline') {
+        processMultiSelect(productline, productlineset);
+    }
+    else {
+        onlyAddMultiSelect(productline, productlineset);
+    }
+    if (element != 'dd_sleevetype') {
+        processMultiSelect(sleevetype, sleevetypeset);
+    }
+    else {
+        onlyAddMultiSelect(sleevetype, sleevetypeset);
+    }
+    if (element != 'dd_stylecollection') {
+        processMultiSelect(stylecollection, stylecollectionset);
+    }
+    else {
+        onlyAddMultiSelect(stylecollection, stylecollectionset);
+    }
+    if (element != 'dd_subcategory') {
+        processMultiSelect(subcategory, subcategoryset);
+    }
+    else {
+        onlyAddMultiSelect(subcategory, subcategoryset);
+    }
+    if (element != 'dd_sizegroup') {
+        processMultiSelect(sizegroup, sizegroupset);
+    }
+    else {
+        onlyAddMultiSelect(sizegroup, sizegroupset);
+    }
+    if (element != 'dd_origsrp') {
+        processOrigSrp(origsrp, origsrpset);
+    }
+    else {
+        onlyAddOrigSrp(origsrp, origsrpset);
+    }
 };
 
 function buildOrganizationFilterTable() {
@@ -942,9 +1008,24 @@ function setOrganizationFilterTable(element = '') {
     processTerritory(territory, territoryset);
     processArea(area, areaset);
     processMultiSelect(outlet, outletset);
-    processMultiSelect(siteCode, siteCodeset);
-    processMultiSelect(siteName, siteNameset);
-    processMultiSelect(storeGrade, storeGradeset);
+    if (element != 'dd_siteCode') {
+        processMultiSelect(siteCode, siteCodeset);
+    }
+    else {
+        onlyAddMultiSelect(siteCode, siteCodeset);
+    }
+    if (element != 'dd_siteName') {
+        processMultiSelect(siteName, siteNameset);
+    }
+    else {
+        onlyAddMultiSelect(siteName, siteNameset);
+    }
+    if (element != 'dd_storeGrade') {
+        processMultiSelect(storeGrade, storeGradeset);
+    }
+    else {
+        onlyAddMultiSelect(storeGrade, storeGradeset);
+    }
 
 };
 //#region private functions
@@ -1245,7 +1326,33 @@ function processOrigSrp(element, set) {
         }
     }
 };
-
+function onlyAddOrigSrp(element, set) {
+    set.delete('null');
+    set.delete(null);
+    set = Array.from(set);
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = set.sort(function (a, b) {
+        return parseInt(a) - parseInt(b);
+    });
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null' && value != '') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
 function onlyAddBrand(element, set) {
     var selection = element.value;
     while (element.length > 0) {
