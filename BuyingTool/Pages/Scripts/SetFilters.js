@@ -331,17 +331,32 @@ function setRequiredFilterTable(excludestring) {
     if (excludestring != 'dd_brand') {
         processSelect(brand, brandset);
     }
+    else {
+        onlyAddSelect(brand, brandset);
+    }
     if (excludestring != 'dd_division') {
         processSelect(division, divisionset);
+    }
+    else {
+        onlyAddSelect(division, divisionset);
     }
     if (excludestring != 'dd_department') {
         processSelect(department, departmentset);
     }
+    else {
+        onlyAddSelect(department, departmentset);
+    }
     if (excludestring != 'dd_category') {
         processSelect(category, categoryset);
     }
+    else {
+        onlyAddSelect(category, categoryset);
+    }
     if (excludestring != 'dd_collection') {
         processMultiSelect(collection, collectionset);
+    }
+    else {
+        onlyAddMultiSelect(collection, collectionset);
     }
 };
 
@@ -537,8 +552,14 @@ function setStylesFilterTable(excludestring) {
     if (excludestring != 'dd_style') {
         processMultiSelect(style, styleset);
     }
+    else {
+        onlyAddMultiSelect(style, styleset);
+    }
     if (excludestring != 'dd_stylecode') {
         processMultiSelect(stylecode, stylecodeset);
+    }
+    else {
+        onlyAddMultiSelect(stylecode, stylecodeset);
     }
 };
 
@@ -679,7 +700,23 @@ function processSelect(element, set) {
     }
     element.value = selection;
 };
-
+function onlyAddSelect(element, set) {
+    var selection = element.value;
+    while (element.length > 0) {
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort());
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null' &&value !='') {
+            element.options[counter] = new Option(value, value);
+            counter++;
+        }
+    }
+    element.value = selection;
+};
 function processMultiSelect(element, set) {
     set = new Set([...set].sort());
     var SelectedList = new Set();
@@ -693,6 +730,28 @@ function processMultiSelect(element, set) {
     let counter = 1;
     for (let value of set) {
         if (value != null && value != 'null') {
+            element.options[counter] = new Option(value, value);
+            if (SelectedList.has(value.toString())) {
+                element.options[counter].selected = true;
+            }
+            counter++;
+        }
+    }
+};
+function onlyAddMultiSelect(element, set) {
+    var SelectedList = new Set();
+    while (element.length > 0) {
+        if (element.options[0].selected) {
+            SelectedList.add(element.options[0].value)
+        }
+        set.add(element.options[0].value);
+        element.remove(0);
+    }
+    set = new Set([...set].sort());
+    element.options[0] = new Option('-- Select --', '');
+    let counter = 1;
+    for (let value of set) {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
