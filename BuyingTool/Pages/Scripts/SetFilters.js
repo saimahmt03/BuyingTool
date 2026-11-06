@@ -167,43 +167,60 @@ function changeFilter(element) {
     }*/
 
     ShowLoader();
-    buildRequiredFilterTable();
-    setRequiredFilterTable(element.id);
-
     switch (element.id) {
         case 'dd_brand':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildRequiredFilterTable();
+            setRequiredFilterTable(element.id);
             buildOrganizationFilterTable();
-            setOrganizationFilterTable();
+            setOrganizationFilterTable(element.id);
             buildAttributesFilterTable();
             setAttributesFilterTable();
             break;
         case 'dd_division':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildRequiredFilterTable();
+            setRequiredFilterTable(element.id);
             buildAttributesFilterTable();
             setAttributesFilterTable();
             break;
         case 'dd_department':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildRequiredFilterTable();
+            setRequiredFilterTable(element.id);
             buildAttributesFilterTable();
             setAttributesFilterTable();
             break;
         case 'dd_category':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildRequiredFilterTable();
+            setRequiredFilterTable(element.id);
             buildAttributesFilterTable();
             setAttributesFilterTable();
             break;
         case 'dd_collection':
             buildStylesFilterTable();
             setStylesFilterTable(element.id);
+            buildRequiredFilterTable();
+            setRequiredFilterTable(element.id);
             buildAttributesFilterTable();
             setAttributesFilterTable();
             break;
+        case 'dd_periodplans':
+            break;
+        default:
+            buildRequiredFilterTable();
+            setRequiredFilterTable(element.id);
+            buildOrganizationFilterTable();
+            setOrganizationFilterTable(element.id);
+            break;
     }
+
+
     HideLoader();
 };
 
@@ -212,9 +229,9 @@ function changeStyle(element) {
     buildStylesFilterTable();
     setStylesFilterTable(element.id);
     buildAttributesFilterTable();
-    setAttributesFilterTable();
+    setAttributesFilterTable(element.id);
     buildRequiredFilterTable();
-    setRequiredFilterTable();
+    setRequiredFilterTable(element.id);
     HideLoader();
 };
 //#endregion
@@ -234,7 +251,7 @@ function buildRequiredFilterTable() {
     );
 };
 
-function setRequiredFilterTable(excludestring) {
+function setRequiredFilterTable(excludestring ='') {
     var brand = document.getElementById('dd_brand');
     var division = document.getElementById('dd_division');
     var department = document.getElementById('dd_department');
@@ -257,29 +274,34 @@ function setRequiredFilterTable(excludestring) {
     var departmentset2 = new Set();
     var categoryset2 = new Set();
     var collectionset2 = new Set();
-    var style = document.getElementById('dd_style');
-    var stylecode = document.getElementById('dd_stylecode');
-    for (let i = 0; i < style.length; i++) {
-        if (style.options[i].selected) {
-            var row = filteredStylesTable.find(value => value.Style == style.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
-                divisionset2.add(row.Division);
-                departmentset2.add(row.Department);
-                categoryset2.add(row.Category);
-                collectionset2.add(row.Collection);
+
+    var attributesList = ['dd_color', 'dd_silhouette', 'dd_collectionattri', 'dd_fitcut', 'dd_materialcomposition', 'dd_materialconstruction', 'dd_printtexture', 'dd_productline', 'dd_sleevetype', 'dd_stylecollection', 'dd_subcategory', 'dd_sizegroup', 'dd_origsrp'];
+
+    if (attributesList.includes(excludestring)) {
+        var style = document.getElementById('dd_style');
+        var stylecode = document.getElementById('dd_stylecode');
+        for (let i = 0; i < style.length; i++) {
+            var filtered = filteredStylesTable.filter(value => value.Style == style.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                    divisionset2.add(row.Division);
+                    departmentset2.add(row.Department);
+                    categoryset2.add(row.Category);
+                    collectionset2.add(row.Collection);
+                }
             }
         }
-    }
-    for (let i = 0; i < stylecode.length; i++) {
-        if (stylecode.options[i].selected) {
-            var row = filteredStylesTable.find(value => value.Style_Code == stylecode.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
-                divisionset2.add(row.Division);
-                departmentset2.add(row.Department);
-                categoryset2.add(row.Category);
-                collectionset2.add(row.Collection);
+        for (let i = 0; i < stylecode.length; i++) {
+            var filtered = filteredStylesTable.filter(value => value.Style_Code == stylecode.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                    divisionset2.add(row.Division);
+                    departmentset2.add(row.Department);
+                    categoryset2.add(row.Category);
+                    collectionset2.add(row.Collection);
+                }
             }
         }
     }
@@ -296,73 +318,91 @@ function setRequiredFilterTable(excludestring) {
 
     for (let i = 0; i < region.length; i++) {
         if (region.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value.Region == region.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value.Region == region.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < country.length; i++) {
         if (country.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value.Country == country.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value.Country == country.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < channel.length; i++) {
         if (channel.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value.Channel == channel.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value.Channel == channel.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < territory.length; i++) {
         if (territory.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value.Territory == territory.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value.Territory == territory.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < area.length; i++) {
         if (area.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value.Area == area.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value.Area == area.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < outlet.length; i++) {
         if (outlet.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value['Outlet Type'] == outlet.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value['Outlet Type'] == outlet.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < siteCode.length; i++) {
         if (siteCode.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value['Site Code'] == siteCode.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value['Site Code'] == siteCode.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < siteName.length; i++) {
         if (siteName.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value['Site Name'] == siteName.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value['Site Name'] == siteName.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
     for (let i = 0; i < storeGrade.length; i++) {
         if (storeGrade.options[i].selected) {
-            var row = filteredOrganizationTable.find(value => value['Store Grade'] == storeGrade.options[i].value);
-            if (row != null) {
-                brandset2.add(row.Brand);
+            var filtered = filteredOrganizationTable.filter(value => value['Store Grade'] == storeGrade.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    brandset2.add(row.Brand);
+                }
             }
         }
     }
@@ -472,130 +512,162 @@ function setStylesFilterTable(excludestring) {
     var stylecodeset2 = new Set();
     for (let i = 0; i < style.length; i++) {
         if (style.options[i].selected) {
-            var row = filteredStylesTable.find(value => value.Style == style.options[i].value);
-            if (row != null) {
-                stylecodeset2.add(row.Style_Code);
+            var filtered = filteredStylesTable.filter(value => value.Style == style.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    stylecodeset2.add(row.Style_Code);
+                }
             }
         }
     }
     for (let i = 0; i < stylecode.length; i++) {
         if (stylecode.options[i].selected) {
-            var row = filteredStylesTable.find(value => value.Style_Code == stylecode.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredStylesTable.filter(value => value.Style_Code == stylecode.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < color.length; i++) {
         if (color.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value.Color == color.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value.Color == color.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < silhouette.length; i++) {
         if (silhouette.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value.Silhouette == silhouette.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value.Silhouette == silhouette.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < fitcut.length; i++) {
         if (fitcut.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Fit Cut'] == fitcut.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Fit Cut'] == fitcut.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < collectionattri.length; i++) {
         if (collectionattri.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value.Collection == collectionattri.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value.Collection == collectionattri.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < materialcomposition.length; i++) {
         if (materialcomposition.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Material Composition'] == materialcomposition.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Material Composition'] == materialcomposition.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < materialconstruction.length; i++) {
         if (materialconstruction.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Material Construction'] == materialconstruction.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Material Construction'] == materialconstruction.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < printtexture.length; i++) {
         if (printtexture.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value.PrintTexture == printtexture.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value.PrintTexture == printtexture.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < productline.length; i++) {
         if (productline.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Product Line'] == productline.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Product Line'] == productline.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < sleevetype.length; i++) {
         if (sleevetype.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Sleeve Type'] == sleevetype.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Sleeve Type'] == sleevetype.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < stylecollection.length; i++) {
         if (stylecollection.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Style Collection'] == stylecollection.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Style Collection'] == stylecollection.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < subcategory.length; i++) {
         if (subcategory.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Sub-Category'] == subcategory.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Sub-Category'] == subcategory.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < sizegroup.length; i++) {
         if (sizegroup.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value.SizeGroup == sizegroup.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value.SizeGroup == sizegroup.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     for (let i = 0; i < origsrp.length; i++) {
         if (origsrp.options[i].selected) {
-            var row = filteredAttributesTable.find(value => value['Orig SRP'] == origsrp.options[i].value);
-            if (row != null) {
-                styleset2.add(row.Style);
+            var filtered = filteredAttributesTable.filter(value => value['Orig SRP'] == origsrp.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    styleset2.add(row.Style);
+                }
             }
         }
     }
     if (styleset2.size >= 1) {
         styleset = styleset.intersection(styleset2);
-        for (var setcontent in styleset2) {
-            var row = filteredStylesTable.find(value => value.Style_Code == setcontent.value);
-            if (row != null) {
-                stylecodeset2.add
+        for (var setcontent of styleset2) {
+            var filtered = filteredStylesTable.filter(value => value.Style == setcontent);
+            for (var row of filtered) {
+                if (row != null) {
+                    stylecodeset2.add(row.Style_Code);
+                }
             }
         }
     }
@@ -627,33 +699,33 @@ function buildAttributesFilterTable() {
     );
 };
 
-function setAttributesFilterTable() {
+function setAttributesFilterTable(element = '') {
 
     var color = document.getElementById('dd_color');
-    var colorset = new Set();
     var silhouette = document.getElementById('dd_silhouette');
-    var silhouetteset = new Set();
     var collectionattri = document.getElementById('dd_collectionattri');
-    var collectionattriset = new Set();
     var fitcut = document.getElementById('dd_fitcut');
-    var fitcutset = new Set();
     var materialcomposition = document.getElementById('dd_materialcomposition');
-    var materialcompositionset = new Set();
     var materialconstruction = document.getElementById('dd_materialconstruction');
-    var materialconstructionset = new Set();
     var printtexture = document.getElementById('dd_printtexture');
-    var printtextureset = new Set();
     var productline = document.getElementById('dd_productline');
-    var productlineset = new Set();
     var sleevetype = document.getElementById('dd_sleevetype');
-    var sleevetypeset = new Set();
     var stylecollection = document.getElementById('dd_stylecollection');
-    var stylecollectionset = new Set();
     var subcategory = document.getElementById('dd_subcategory');
-    var subcategoryset = new Set();
     var sizegroup = document.getElementById('dd_sizegroup');
-    var sizegroupset = new Set();
     var origsrp = document.getElementById('dd_origsrp');
+    var colorset = new Set();
+    var silhouetteset = new Set();
+    var collectionattriset = new Set();
+    var fitcutset = new Set();
+    var materialcompositionset = new Set();
+    var materialconstructionset = new Set();
+    var printtextureset = new Set();
+    var productlineset = new Set();
+    var sleevetypeset = new Set();
+    var stylecollectionset = new Set();
+    var subcategoryset = new Set();
+    var sizegroupset = new Set();
     var origsrpset = new Set();
     for (var i = 0; i < filteredAttributesTable.length; i++) {
         colorset.add(filteredAttributesTable[i].Color);
@@ -670,7 +742,82 @@ function setAttributesFilterTable() {
         sizegroupset.add(filteredAttributesTable[i].SizeGroup);
         origsrpset.add(filteredAttributesTable[i]['Orig SRP']);
     }
-
+    var attributesList = ['dd_color', 'dd_silhouette', 'dd_collectionattri', 'dd_fitcut', 'dd_materialcomposition', 'dd_materialconstruction', 'dd_printtexture', 'dd_productline', 'dd_sleevetype', 'dd_stylecollection', 'dd_subcategory', 'dd_sizegroup','dd_origsrp'];
+    if (element != '' &&attributesList.includes(element)) {
+        var colorset2 = new Set();
+        var silhouetteset2 = new Set();
+        var collectionattriset2 = new Set();
+        var fitcutset2 = new Set();
+        var materialcompositionset2 = new Set();
+        var materialconstructionset2 = new Set();
+        var printtextureset2 = new Set();
+        var productlineset2 = new Set();
+        var sleevetypeset2 = new Set();
+        var stylecollectionset2 = new Set();
+        var subcategoryset2 = new Set();
+        var sizegroupset2 = new Set();
+        var origsrpset2 = new Set();
+        var style = document.getElementById('dd_style');
+        for (let i = 0; i < style.length; i++) {
+            var filtered = filteredAttributesTable.filter(value => value.Style == style.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    colorset2.add(row.Color);
+                    silhouetteset2.add(row.Silhouette);
+                    collectionattriset2.add(row.Collection);
+                    fitcutset2.add(row['Fit Cut']);
+                    materialcompositionset2.add(row['Material Composition']);
+                    materialconstructionset2.add(row['Material Construction']);
+                    printtextureset2.add(row.PrintTexture);
+                    productlineset2.add(row['Product Line']);
+                    sleevetypeset2.add(row['Sleeve Type']);
+                    stylecollectionset2.add(row['Style Collection']);
+                    subcategoryset2.add(row['Sub-Category']);
+                    sizegroupset2.add(row.SizeGroup);
+                    origsrpset2.add(row['Orig SRP']);
+                }
+            }
+        }
+        if (colorset2.size >= 1) {
+            colorset = colorset.intersection(colorset2);
+        }
+        if (silhouetteset2.size >= 1) {
+            silhouetteset = silhouetteset.intersection(silhouetteset2);
+        }
+        if (collectionattriset2.size >= 1) {
+            collectionattriset = collectionattriset.intersection(collectionattriset2);
+        }
+        if (fitcutset2.size >= 1) {
+            fitcutset = fitcutset.intersection(fitcutset2);
+        }
+        if (materialcompositionset2.size >= 1) {
+            materialcompositionset = materialcompositionset.intersection(materialcompositionset2);
+        }
+        if (materialconstructionset2.size >= 1) {
+            materialconstructionset = materialconstructionset.intersection(materialconstructionset2);
+        }
+        if (printtextureset2.size >= 1) {
+            printtextureset = printtextureset.intersection(printtextureset2);
+        }
+        if (productlineset2.size >= 1) {
+            productlineset = productlineset.intersection(productlineset2);
+        }
+        if (sleevetypeset2.size >= 1) {
+            sleevetypeset = sleevetypeset.intersection(sleevetypeset2);
+        }
+        if (stylecollectionset2.size >= 1) {
+            stylecollectionset = stylecollectionset.intersection(stylecollectionset2);
+        }
+        if (subcategoryset2.size >= 1) {
+            subcategoryset = subcategoryset.intersection(subcategoryset2);
+        }
+        if (sizegroupset2.size >= 1) {
+            sizegroupset = sizegroupset.intersection(sizegroupset2);
+        }
+        if (origsrpset2.size >= 1) {
+            origsrpset = origsrpset.intersection(origsrpset2);
+        }
+    }
     processMultiSelect(color, colorset);
     processMultiSelect(silhouette, silhouetteset);
     processMultiSelect(collectionattri, collectionattriset);
@@ -693,7 +840,7 @@ function buildOrganizationFilterTable() {
     );
 };
 
-function setOrganizationFilterTable() {
+function setOrganizationFilterTable(element = '') {
 
     var region = document.getElementById('dd_region');
     var country = document.getElementById('dd_country');
@@ -724,7 +871,62 @@ function setOrganizationFilterTable() {
         siteNameset.add(filteredOrganizationTable[i]['Site Name']);
         storeGradeset.add(filteredOrganizationTable[i]['Store Grade']);
     }
-
+    var organizationList = ['dd_region', 'dd_country', 'dd_channel', 'dd_territory', 'dd_area', 'dd_outletType', 'dd_siteCode', 'dd_siteName','dd_storeGrade'];
+    if (element != '' && organizationList.includes(element)) {
+        var regionset2 = new Set();
+        var countryset2 = new Set();
+        var channelset2 = new Set();
+        var territoryset2 = new Set();
+        var areaset2 = new Set();
+        var outletset2 = new Set();
+        var siteCodeset2 = new Set();
+        var siteNameset2 = new Set();
+        var storeGradeset2 = new Set();
+        var brand = document.getElementById('dd_brand');
+        for (let i = 0; i < brand.length; i++) {
+            var filtered = filteredOrganizationTable.filter(value => value.Brand == brand.options[i].value);
+            for (var row of filtered) {
+                if (row != null) {
+                    regionset2.add(row.Region);
+                    countryset2.add(row.Country);
+                    channelset2.add(row.Channel);
+                    territoryset2.add(row.Territory);
+                    areaset2.add(row.Area);
+                    outletset2.add(row['Outlet Type']);
+                    siteCodeset2.add(row['Site Code']);
+                    siteNameset2.add(row['Site Name']);
+                    storeGradeset2.add(row['Store Grade']);
+                }
+            }
+        }
+        if (regionset2.size >= 1) {
+            regionset = regionset.intersection(regionset2);
+        }
+        if (countryset2.size >= 1) {
+            countryset = countryset.intersection(countryset2);
+        }
+        if (channelset2.size >= 1) {
+            channelset = channelset.intersection(channelset2);
+        }
+        if (territoryset2.size >= 1) {
+            territoryset2 = territoryset.intersection(territoryset2);
+        }
+        if (areaset2.size >= 1) {
+            areaset = areaset.intersection(areaset2);
+        }
+        if (outletset2.size >= 1) {
+            outletset = outletset.intersection(outletset2);
+        }
+        if (siteCodeset2.size >= 1) {
+            siteCodeset = siteCodeset.intersection(siteCodeset2);
+        }
+        if (siteNameset2.size >= 1) {
+            siteNameset = siteNameset.intersection(siteNameset2);
+        }
+        if (storeGradeset2.size >= 1) {
+            storeGradeset = storeGradeset.intersection(storeGradeset2);
+        }
+    }
     processMultiSelect(region, regionset);
     processMultiSelect(country, countryset);
     processChannel(channel, channelset);
@@ -746,7 +948,7 @@ function processSelect(element, set) {
     element.options[0] = new Option('-- Select --','');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null'&& value !='') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -782,7 +984,7 @@ function processMultiSelect(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -804,7 +1006,7 @@ function processBrand(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -822,7 +1024,7 @@ function processDivision(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -840,7 +1042,7 @@ function processDepartment(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -861,7 +1063,7 @@ function processCollection(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -884,7 +1086,7 @@ function processArea(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -907,7 +1109,7 @@ function processChannel(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -930,7 +1132,7 @@ function processPeriodPlan(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -953,7 +1155,7 @@ function processStyle(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -976,7 +1178,7 @@ function processStyleCode(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -999,7 +1201,7 @@ function processTerritory(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1025,7 +1227,7 @@ function processOrigSrp(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1047,7 +1249,7 @@ function onlyAddBrand(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -1066,7 +1268,7 @@ function onlyAddDivision(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -1085,7 +1287,7 @@ function onlyAddDepartment(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             counter++;
         }
@@ -1107,7 +1309,7 @@ function onlyAddCollection(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1131,7 +1333,7 @@ function onlyAddArea(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1155,7 +1357,7 @@ function onlyAddChannel(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1179,7 +1381,7 @@ function onlyAddPeriodPlan(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1203,7 +1405,7 @@ function onlyAddStyle(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1227,7 +1429,7 @@ function onlyAddStyleCode(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
@@ -1251,7 +1453,7 @@ function onlyAddTerritory(element, set) {
     element.options[0] = new Option('-- Select --', '');
     let counter = 1;
     for (let value of set) {
-        if (value != null && value != 'null') {
+        if (value != null && value != 'null' && value != '') {
             element.options[counter] = new Option(value, value);
             if (SelectedList.has(value.toString())) {
                 element.options[counter].selected = true;
