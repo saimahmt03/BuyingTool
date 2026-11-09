@@ -239,20 +239,28 @@ namespace BuyingTool.Services
         }
 
         #endregion
+<<<<<<< HEAD
         
 
         #region Sort Reference
         
+=======
+        #region SortReference
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
         public Task<DataTable> GetSortReference()
         {
             var dtMainTable = _dBContext.GetSortReference().GetAwaiter().GetResult();
             return Task.FromResult(dtMainTable);
         }
+<<<<<<< HEAD
 
         #endregion
 
 
         #region Account Verification
+=======
+        #endregion
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
 
         // Account Verification
         public bool AccountVerification(string idnumber, string pass)

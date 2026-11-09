@@ -1276,6 +1276,7 @@ namespace BuyingTool.Repository
             return Task.FromResult((overrideTable, response, logMessage));
         }
 
+<<<<<<< HEAD
         #endregion
 
         #region STORE BREAKDOWN OR PER SITE        
@@ -1438,6 +1439,13 @@ namespace BuyingTool.Repository
         {
             string logMessage = string.Empty;
             var exportTable = new DataTable();
+=======
+        //#region SortReference
+
+        public Task<DataTable> GetSortReference()
+        {
+            var dataTable = new DataTable();
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
 
             try
             {
@@ -1455,11 +1463,16 @@ namespace BuyingTool.Repository
 
                     using (DbCommand command = connection.CreateCommand())
                     {
+<<<<<<< HEAD
                         command.CommandText = StoredProcedures.GetExport;
                         command.CommandType = CommandType.StoredProcedure;
 
                         // Increase timeout from default 30 seconds to 60 seconds (or more if needed)
                         command.CommandTimeout = 60;
+=======
+                        command.CommandText = "select * from [INTERIM_BUYING_TOOL].[dbo].[SortReference]";
+                        command.CommandType = CommandType.Text;
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
 
                         DbProviderFactory factory;
                         string errorMessage = _databaseConnection.TryGetDbProviderFactory(out factory);
@@ -1469,6 +1482,7 @@ namespace BuyingTool.Repository
                             throw new InvalidOperationException(errorMessage);
                         }
 
+<<<<<<< HEAD
                         command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@UserID", idnumber ?? string.Empty, DbType.String, factory));
                         command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Type", type ?? string.Empty, DbType.String, factory));
                         command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Sizes", size ?? string.Empty, DbType.String, factory));
@@ -1477,12 +1491,18 @@ namespace BuyingTool.Repository
                         using (DbDataReader reader = command.ExecuteReader())
                         {
                             exportTable.Load(reader);
+=======
+                        using (DbDataReader reader = command.ExecuteReader())
+                        {
+                            dataTable.Load(reader);
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
                         }
                     }
                 }
             }
             catch (DbException ex)
             {
+<<<<<<< HEAD
                 logMessage = ex.Message;
                 LogHelper.LogError(ErrorMessage.Db + ErrorMessage.Export, ex);
             }
@@ -2040,5 +2060,19 @@ namespace BuyingTool.Repository
         }
         
         #endregion
+=======
+                string logMessage = string.Concat("Database error in retrieving Attribute Filters. ", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                string logMessage = string.Concat("System error in retrieving Attribute Filters. ", ex.Message);
+                throw;
+            }
+
+            return Task.FromResult(dataTable);
+        }
+        //#endregion
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
     }
 }

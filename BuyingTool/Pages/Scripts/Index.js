@@ -17,3 +17,9 @@
         }
     }
 };
+async function ShowLoader() {
+    $('#loaderOverlay').css("visibility", "visible");
+}
+async function HideLoader() {
+    $('#loaderOverlay').css("visibility", "hidden");
+}

@@ -84,8 +84,21 @@ namespace BuyingTool.Repository
         Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, Int16 input);
 
 
+<<<<<<< HEAD
         Task<(DataTable, string dbResponse)> GetPerSiteTable(string idnumber, string storegrade, string size, string type);
 
+=======
+        #region New Filter Pulling - Normalize Table
+        Task<DataTable> GetFiltersAttribute(string idnumber);
+        Task<DataTable> GetFiltersOrganization(string idnumber);
+        Task<DataTable> GetFiltersRequired(string idnumber);
+        Task<DataTable> GetFiltersStyles(string idnumber);
+
+        // NEW Login
+        Task<(string response, string dbResponse)> AccountVerification(string idnumber, string pass);
+        #endregion
+        Task<DataTable> GetSortReference();
+>>>>>>> e46e40ec536bd0e8772622911edc52ea9d5c03de
 
         Task<(DataTable, string dbResponse)> GetExportTable(string idnumber, string storegrade, string size, string type);
 
