@@ -448,6 +448,62 @@ namespace BuyingTool.Repository
 
         #endregion
 
+        #region SORT REFERENCE
+        
+         public Task<DataTable> GetSortReference()
+        {
+            var dataTable = new DataTable();
+
+            try
+            {
+                using (DbConnection connection = _databaseConnection.CreateConnection())
+                {
+                    if (connection == null)
+                    {
+                        throw new InvalidOperationException("The database connection could not be created because CreateConnection() returned null.");
+                    }
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    using (DbCommand command = connection.CreateCommand())
+                    {
+                        command.CommandText = "select * from [INTERIM_BUYING_TOOL].[dbo].[SortReference]";
+                        command.CommandType = CommandType.Text;
+
+                        DbProviderFactory factory;
+                        string errorMessage = _databaseConnection.TryGetDbProviderFactory(out factory);
+
+                        if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            throw new InvalidOperationException(errorMessage);
+                        }
+
+                        using (DbDataReader reader = command.ExecuteReader())
+                        {
+                            dataTable.Load(reader);
+                        }
+                    }
+                }
+            }
+            catch (DbException ex)
+            {
+                string logMessage = string.Concat("Database error in retrieving Attribute Filters. ", ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                string logMessage = string.Concat("System error in retrieving Attribute Filters. ", ex.Message);
+                throw;
+            }
+
+            return Task.FromResult(dataTable);
+        }
+        
+        #endregion
+
         #region SET FILTERS WINDOW
 
         // PERIOD PLAN

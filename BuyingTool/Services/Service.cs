@@ -239,6 +239,17 @@ namespace BuyingTool.Services
         }
 
         #endregion
+        
+
+        #region Sort Reference
+        
+        public Task<DataTable> GetSortReference()
+        {
+            var dtMainTable = _dBContext.GetSortReference().GetAwaiter().GetResult();
+            return Task.FromResult(dtMainTable);
+        }
+
+        #endregion
 
 
         #region Account Verification
@@ -489,6 +500,7 @@ namespace BuyingTool.Services
 
 
         #region Other Service
+        
         // Convert DataTable to Table Header and Table Rows
         public Task<(List<string> tableHeader, List<string[]> tableRows)> DatatableConvertToHT(DataTable dataTable)
         {

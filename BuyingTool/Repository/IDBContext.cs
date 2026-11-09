@@ -29,6 +29,9 @@ namespace BuyingTool.Repository
         Task<DataTable> GetFinalDataSetFilter(string idnumber);
 
 
+        Task<DataTable> GetSortReference();
+
+
         Task<DataTable> GetPeriodPlan();
 
         Task<DataTable> GetOptionGalTable(
