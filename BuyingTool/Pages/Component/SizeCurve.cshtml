@@ -12,7 +12,7 @@
     string department = Session["Department"] as string; 
     string periodplan = Session["PeriodPlan"] as string; 
 
-    (tableHeaders, tableRows, dbResponse) = service.GetSizeCurveTable(brand, division, department, category, periodplan)
+    (tableHeaders, tableRows) = service.GetSizeCurveTable(brand, division, department, category, periodplan)
                                 .GetAwaiter()
                                 .GetResult();
 

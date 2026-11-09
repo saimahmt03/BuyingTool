@@ -15,6 +15,7 @@ namespace BuyingTool.Services
         private readonly IDBContext _dBContext;
         private readonly ServiceHelper serviceHelper = new ServiceHelper();
 
+
         #region DBContext Setup
         public Service()
             : this(new DBContext(new DatabaseConnection()))
@@ -27,7 +28,8 @@ namespace BuyingTool.Services
         }
         #endregion
 
-        #region User Info Session
+        
+        #region User Session
         private string GetCurrentUserId()
          {
             if (System.Web.HttpContext.Current != null &&
@@ -49,7 +51,8 @@ namespace BuyingTool.Services
         }
         #endregion
 
-        #region Cache
+
+        #region Cache Filters
 
         // Distribution Summary, Per Site, Export Filter Region
         public Task<DataTable> GetFinalDataSetFilterCache()
@@ -76,6 +79,7 @@ namespace BuyingTool.Services
             return Task.FromResult(dataSet);
         }
 
+        // Clear cache Distribution Summary, Per Site, Export Filter Region
         public void ClearFinalDataSetFilterCache(string userId)
         {
             string cacheKey = $"FinalDataSetFilter_{userId}";
@@ -236,7 +240,9 @@ namespace BuyingTool.Services
 
         #endregion
 
-        #region DBContext In Use
+
+        #region Account Verification
+
         // Account Verification
         public bool AccountVerification(string idnumber, string pass)
         {
@@ -255,6 +261,11 @@ namespace BuyingTool.Services
             return false;
         }
 
+        #endregion
+
+
+        #region Set Filters Window
+
         // Plan Period
         public Task<DataTable> GetPeriodPlan()
         {
@@ -263,15 +274,6 @@ namespace BuyingTool.Services
             return Task.FromResult(dataSet);
         }
 
-        // Calculation
-        public Task<DataTable> GetCalculation(string brand, string division, string department, string category, string firstGRPeriodYear, string periodPlan, decimal wos, decimal plc, decimal factorRate)
-        {
-            var calTable = _dBContext.Calculate(brand, division, department, category, firstGRPeriodYear, periodPlan, GetCurrentUserId(), wos, plc, factorRate).GetAwaiter().GetResult();
-
-            return Task.FromResult(calTable);
-        }
-
-        #region Table Population
         // Option Gallery 
         public Task<(List<string> tableHeader, List<string[]> tableRows)> GetOptionGalTable(
             // Required Parameters
@@ -359,7 +361,20 @@ namespace BuyingTool.Services
             return serviceHelper.PopulateDatatableHelper(dataSet);
         }
 
-        // Distribution Summary
+        // Calculation
+        public Task<DataTable> GetCalculation(string brand, string division, string department, string category, string firstGRPeriodYear, string periodPlan, decimal wos, decimal plc, decimal factorRate)
+        {
+            var calTable = _dBContext.Calculate(brand, division, department, category, firstGRPeriodYear, periodPlan, GetCurrentUserId(), wos, plc, factorRate).GetAwaiter().GetResult();
+
+            return Task.FromResult(calTable);
+        }
+
+        #endregion
+
+
+        #region Summary Distribution
+
+        // Summary Distribution
         public Task<(DataTable[], string dbResponse)> GetDistributionSummary(string size, string storegrade)
         {
             var userId = GetCurrentUserId();
@@ -369,7 +384,24 @@ namespace BuyingTool.Services
             return Task.FromResult((dataSet, response));
         }
 
-        // Per Site
+        // Override
+        public Task<(List<string> tableHeader, List<string[]> tableRows, string response, string dbResponse)> GetOverrideTable(string size, string storegrade, Int16 input)
+        {
+            var userId = GetCurrentUserId();
+
+            var (dataSet, response, dbResponse) = _dBContext.GetOverride(userId, size, storegrade, input).GetAwaiter().GetResult();
+
+            var (thead, trows) = serviceHelper.PopulateDatatableHelper(dataSet).GetAwaiter().GetResult();
+
+            return Task.FromResult((thead, trows, response, dbResponse));
+        }
+
+        #endregion
+
+
+        #region Store Breakdown or Per Site
+
+        // Store Breakdown or Per Site
         public Task<(List<string> tableHeader, List<string[]> tableRows, string dbResponse)> GetPerSiteTable(string storegrade, string size, string type)
         {
             var userId = GetCurrentUserId();
@@ -380,6 +412,11 @@ namespace BuyingTool.Services
 
             return Task.FromResult((tHeader, tRows, response));
         }
+
+        #endregion
+
+
+        #region Export
 
         // Export
         public Task<(List<string> tableHeader, List<string[]> tableRows, string dbResponse)> GetExportTable(string storegrade, string size, string type)
@@ -393,17 +430,39 @@ namespace BuyingTool.Services
             return Task.FromResult((tHeader, tRows, response));
         }
 
+        #endregion
+
+
+        #region Size Curve
+
         // Size Curve
-        public Task<(List<string> tableHeader, List<string[]> tableRows, string dbResponse)> GetSizeCurveTable(string brand, string division, string department, string category, string planperiodyear)
+        public Task<(List<string> tableHeader, List<string[]> tableRows)> GetSizeCurveTable(string brand, string division, string department, string category, string planperiodyear)
         {
-            var (dataSet, dbResponse) = _dBContext.GetSizeCurveTable(GetCurrentUserId(), brand, division, department, category, planperiodyear).GetAwaiter().GetResult();
+            var dataSet = _dBContext.GetSizeCurveTable(GetCurrentUserId(), brand, division, department, category, planperiodyear).GetAwaiter().GetResult();
 
             var (theader, trows) =  serviceHelper.PopulateDatatableHelper(dataSet).GetAwaiter().GetResult();
 
-            return Task.FromResult((theader, trows, dbResponse));
+            return Task.FromResult((theader, trows));
         }
-        
-        // Monitoring for Exported to Alloc
+
+        #endregion
+
+
+        #region Alloc Sevice
+
+        // To Alloc
+        public Task<(string response, string dbResponse)> ExportToAlloc(List<string> theader, List<string[]> trows, string brand, string collection, int fiscalMonth, int fiscalYear, string matno, string color)
+        {
+            DataTable dataTable = serviceHelper.ConvertListToDataTable(theader, trows).GetAwaiter().GetResult();
+
+            XDocument xmlDoc = serviceHelper.DataTabletoXML(dataTable).GetAwaiter().GetResult();
+
+            var (response, dbResponse) = _dBContext.ExportToAlloc(xmlDoc, brand, collection, fiscalMonth, fiscalYear, matno, color, GetCurrentUserId()).GetAwaiter().GetResult();
+
+            return Task.FromResult((response, dbResponse));
+        }
+
+        // History Monitoring for Exported Data to Alloc
         public Task<(List<string> tableHeader, List<string[]> tableRows, string dbResponse)> GetExortedToAllocToolHistory()
         {
             var userId = GetCurrentUserId();
@@ -415,37 +474,17 @@ namespace BuyingTool.Services
             return Task.FromResult((thead, trows, dbResponse));
         }
 
-        public Task<(List<string> tableHeader, List<string[]> tableRows, string response, string dbResponse)> GetOverrideTable(string size, string storegrade, Int16 input)
-        {
-            var userId = GetCurrentUserId();
-
-            var (dataSet, response, dbResponse) = _dBContext.GetOverride(userId, size, storegrade, input).GetAwaiter().GetResult();
-
-            var (thead, trows) = serviceHelper.PopulateDatatableHelper(dataSet).GetAwaiter().GetResult();
-
-            return Task.FromResult((thead, trows, response, dbResponse));
-        }
         #endregion
 
 
-        #region Export Service
-        // To Alloc
-        public Task<(string response, string dbResponse)> ExportToAlloc(List<string> theader, List<string[]> trows, string brand, string collection, int fiscalMonth, int fiscalYear, string matno, string color)
-        {
-            DataTable dataTable = serviceHelper.ConvertListToDataTable(theader, trows).GetAwaiter().GetResult();
-
-            XDocument xmlDoc = serviceHelper.DataTabletoXML(dataTable).GetAwaiter().GetResult();
-
-            var (response, dbResponse )= _dBContext.ExportToAlloc(xmlDoc, brand, collection, fiscalMonth, fiscalYear, matno, color, GetCurrentUserId()).GetAwaiter().GetResult();
-
-            return Task.FromResult((response, dbResponse));
-        }
+        #region Download or Export as Excel Service
 
         // Export to Excel
         public Task ExportToExcel(List<string> tHeader, List<string[]> tRows, string customFileName, HttpResponse response)
         {
             return serviceHelper.ExportToExcel(tHeader, tRows, customFileName, response);
         }
+
         #endregion
 
 
@@ -478,6 +517,5 @@ namespace BuyingTool.Services
 
         #endregion
 
-        #endregion
     }
 }

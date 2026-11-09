@@ -7,24 +7,77 @@ namespace BuyingTool.Shared
 {
     public class StoredProcedures
     {
-        // Verify user, User Id session
-        public const string VerifyUserAccount = "[dbo].[usp_ValidateAccess]";
+        #region ACCOUNT VERIFICATION
+        
+        // Account Virefication
+        public const string AccoutVerification = "[dbo].[usp_Login]";
 
-        // Calculation
-        public const string GetCalculation = "[dbo].[usp_Get_Final_DataSet]";
+        #endregion
 
-        // Filter Windows
-        public const string GetMainTable = "[dbo].[usp_GetUserDataSet_test]";
+        #region FILTERS
+
+        // Attribute Region Filter
+        public const string GetFiltersAttribute = "[dbo].[usp_GetFilters_Attributes]";
+
+        // Organization Region Filter
+        public const string GetFiltersOrganization = "[dbo].[usp_GetFilters_Organization]";
+
+        // Required Region Filter
+        public const string GetFiltersRequired = "[dbo].[usp_GetFilters_Required]";
+
+        // Style Region Filter
+        public const string GetFiltersStyles = "[dbo].[usp_GetFilters_Styles]";
+
+        // Distribution Summary, Site Breakdow or Per Site, and Export Store Grade and Size Filter
+        public const string GetStoreGradeAndSizeFilter = "[dbo].[usp_GetStoreGradeAndSizeByUser]";
+
+        #endregion
+
+        #region SET FILTERS WINDOW
 
         // Perido Plan
         public const string GetPeriodPlan = "[dbo].[usp_GetPlanPeriods]";
 
         // Option Gallery, Distribution Summary, Per Site, Export
         public const string GetOptionGallery = "[dbo].[usp_Get_Option_Gallery]";
+
+        // Calculation
+        public const string GetCalculation = "[dbo].[usp_Get_Final_DataSet]";
+
+        #endregion
+
+        #region DISTRIBUTION SUMMARY
+
+        // Distribution Summary
         public const string GetSummaryDistribution = "[dbo].[usp_GetStoreOrderBufferDashboard]";
+
+        // Override
+        public const string GetOverride = "[dbo].[usp_OverrideDrops]";
+
+        #endregion
+
+        #region STORE BREAKDOWN OR PER SITE       
+
+        // Store Breakedown or Per Site
         public const string GetStoreSizeBreakdown = "[dbo].[usp_GetStoreSizeBreakdown]";
+
+        #endregion
+
+        #region EXPORT
+
+        // Export
         public const string GetExport = "[dbo].[StoreOrderBufferExport]";
+
+        #endregion
+
+        #region SIZE CURVE
+
+        // Size Curve
         public const string GetSizeCure = "[dbo].[usp_Get_Size_Curve]";
+
+        #endregion
+
+        #region ALLOC
 
         // Add to Alloc
         public const string AddToAlloc = "[AFR].[IA].[UPSERT_BuyAlloc]";
@@ -32,19 +85,12 @@ namespace BuyingTool.Shared
         // Monitoring of Exported to Alloc
         public const string GetExportedToAllocToolHistory = "[AFR].[IA].[usp_GeExportedToAllocHistoryByCreatedBy]";
 
-        // Store Grade and Size Filters for Distribution Summary, Per Site, and Export
-        public const string GetStoreGradeAndSizeFilter = "[dbo].[usp_GetStoreGradeAndSizeByUser]";
+        #endregion
 
-        // Override
-        public const string GetOverride = "[dbo].[usp_OverrideDrops]";
+        #region LOG
 
-        // New Filters Pulling
-        public const string GetFiltersAttribute = "[dbo].[usp_GetFilters_Attributes]";
-        public const string GetFiltersOrganization = "[dbo].[usp_GetFilters_Organization]";
-        public const string GetFiltersRequired = "[dbo].[usp_GetFilters_Required]";
-        public const string GetFiltersStyles = "[dbo].[usp_GetFilters_Styles]";
+        public const string GetUserLog = "[dbo].[sp_InsertBuyingToolLog]";
 
-        // New Account Login
-        public const string AccoutVerification = "[dbo].[usp_Login]";
+        #endregion
     }
 }
