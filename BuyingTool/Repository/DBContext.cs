@@ -490,12 +490,12 @@ namespace BuyingTool.Repository
             }
             catch (DbException ex)
             {
-                string logMessage = string.Concat("Database error in retrieving Attribute Filters. ", ex.Message);
+                string logMessage = string.Concat("Database error in retrieving Sort References. ", ex.Message);
                 throw;
             }
             catch (Exception ex)
             {
-                string logMessage = string.Concat("System error in retrieving Attribute Filters. ", ex.Message);
+                string logMessage = string.Concat("System error in retrieving Sort References. ", ex.Message);
                 throw;
             }
 
