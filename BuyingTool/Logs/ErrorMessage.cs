@@ -18,6 +18,8 @@ namespace BuyingTool.Logs
         public const string Style = "Style Filter Region. ";
         public const string StoregradeAndSize = "Final Dataset Store Grade and Size Filter. ";
 
+        public const string SortReference = "Sort Reference. ";
+
         public const string PeriodPlan = "Period Plan Filter. ";
         public const string OptionGallery = "Option Gallery. ";
         public const string Calculation = "Calculate. ";
