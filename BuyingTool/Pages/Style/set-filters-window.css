@@ -57,7 +57,7 @@ header {
 
 /* Left Sidebar Filter Panel - Expanded width to match your purple box outline (fitting 2 columns side-by-side) */
 .filter-panel {
-    flex: 0 0 700px;
+    flex: 1;
     width: 700px;
     background-color: var(--panel-bg);
     border: 2px solid var(--panel-border);
@@ -67,7 +67,7 @@ header {
 
 /* Right Main Options Gallery Panel - Expands to fill the remaining dashboard space */
 .gallery-panel {
-    flex: 1;
+    flex: 2;
     min-width: 0;
     overflow-x: auto;
     background-color: var(--panel-bg);
@@ -218,11 +218,12 @@ header {
     }
 
     .filter-panel {
-        flex: 0 0 auto;
+        flex: 1;
         width: 100%;
     }
 
     .gallery-panel {
+        flex:2;
         width: 100%;
     }
 }
