@@ -31,10 +31,47 @@
             // OLD
             // Clicking a tab reloads the page with ?tab=<its name>
             var url = Href("~/") + "?tab=" + Uri.EscapeDataString(tab.Text);
-
-            <li class="tab-nav__item" id="navTab-@counter">
-                <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)">@tab.Text</a>
-            </li>
+            switch (tab.Text)
+            {
+                case "Main":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-house"></i>Main</a>
+                    </li>
+                    break;
+                case "1. Set Filters":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-check-lg"></i>Set Filters</a>
+                    </li>
+                    <div class="tab-nav-separator"><i class="bi bi-chevron-right"></i></div>
+                    break;
+                case "2. Review Summary":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-card-list"></i>Review Summary</a>
+                    </li>
+                    <div class="tab-nav-separator"><i class="bi bi-chevron-right"></i></div>
+                    break;
+                case "3. Review Site Details":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-diagram-3"></i>Review Site Details</a>
+                    </li>
+                    <div class="tab-nav-separator"><i class="bi bi-chevron-right"></i></div>
+                    break;
+                case "4. Export":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-file-earmark"></i>Export</a>
+                    </li>
+                    break;
+                case "Size Curve":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-graph-down"></i>Size Curve</a>
+                    </li>
+                    break;
+                case "Monitoring":
+                    <li class="tab-nav__item" id="navTab-@counter">
+                        <a class="@css" href="@url" aria-current="@(isActive ? "page" : null)"><i class="bi bi-display"></i>Monitoring</a>
+                    </li>
+                    break;
+            }
 
 
             // NEW
@@ -51,4 +88,6 @@
             //</li>
         }
     </ul>
+
+
 </nav>

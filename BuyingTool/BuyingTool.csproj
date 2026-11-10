@@ -348,6 +348,8 @@
     <Content Include="Pages\Common\TableWithImageAndPagination.cshtml" />
     <Content Include="Pages\Component\Monitoring.cshtml" />
     <Content Include="Pages\Common\Modal.cshtml" />
+    <Content Include="Pages\Style\Font\Roboto-Italic-VariableFont_wdth,wght.ttf" />
+    <Content Include="Pages\Style\Font\Roboto-VariableFont_wdth,wght.ttf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -355,7 +357,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Pages\Style\Icons\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

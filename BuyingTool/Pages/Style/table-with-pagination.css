@@ -5,7 +5,6 @@
     min-width: max-content; /* Allows the table to expand horizontally to fit all 25+ columns */
     border-collapse: collapse;
     table-layout: auto; /* Lets columns size themselves based on their content */
-    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
     font-size: 11px;
     color: #000;
 }

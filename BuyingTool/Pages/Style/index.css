@@ -4,14 +4,34 @@
 :root {
     --bg-main: #efefef;
     --text-dark: #222;
+    --main-dark: #0C4559;
+    --main-light: #068598;
+    --sub-dark: #0C4F60;
+    --tert-light: #0C909F;
+    --objects: #088696;
+    --subtext: #86888D;
+    --multiselect-border: #E7E8EC;
 }
-
+@font-face {
+    font-family: Roboto; 
+    src: url(Font/Roboto-VariableFont_wdth,wght.ttf); /* url of the font */
+}
+@font-face {
+    font-family: Roboto-Italic; 
+    src: url(Font/Roboto-Italic-VariableFont_wdth,wght.ttf); /* url of the font */
+}
+i {
+    margin-right: 5px;
+}
+html {
+    font-family: 'Roboto';
+}
 /* Base Styles & Box-Sizing Reset */
 body {
     margin: 0;
     padding: 0;
     background-color: var(--bg-main);
-    font-family: Tahoma, Arial, sans-serif;
+    font-family: 'Roboto';
     font-size: 11px;
     color: var(--text-dark);
     box-sizing: border-box;
@@ -27,9 +47,9 @@ body {
 /* Header Layout wrapping the flexible two-column layout */
 .dashboard-header {
     width: 100%;
-    background-color: #0a5873; /* Matches the exact TabNav strip background color */
-    height: 38px; /* Locks a strict, consistent header height */
-    padding: 0;
+    background-color: var(--main-dark); /* Matches the exact TabNav strip background color */
+    height: fit-content; /* Locks a strict, consistent header height */
+    padding: 8px;
     margin: 0;
     flex-shrink: 0;
     overflow: hidden;
@@ -37,7 +57,9 @@ body {
 
 /* Two-column flexible container for navigation and logout link */
 .two-col {
-    display: flex;
+    display: grid;
+    grid-template-rows:auto;
+    grid-template-columns: auto auto;
     justify-content: space-between;
     align-items: stretch; /* Forces both columns to match the header height perfectly */
     width: 100%;
@@ -47,7 +69,7 @@ body {
 
 /* Left side wrapping tab navigation */
 .col-left-side {
-    flex: 1 1 auto;
+    grid-column:1;
     min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
@@ -58,28 +80,28 @@ body {
 
 /* Right side wrapping logout action - inherits header background to blend seamlessly */
 .col-right-side {
-    flex: 0 0 auto;
+    grid-column:2;
     padding: 0 20px;
     display: flex;
+    justify-content:end;
     align-items: center; /* Keeps the LOGOUT text perfectly centered vertically */
     background-color: inherit;
     order: 2;
     white-space: nowrap;
 }
-
 /* Styled Logout text link with white text */
 .logout-link {
     background: none;
     border: none;
     color: #ffffff; /* Pure white text color */
-    font-family: Tahoma, Arial, sans-serif;
-    font-size: 11px;
+    font-family: Roboto;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
-    text-decoration: underline;
     padding: 0;
     margin: 0;
     white-space: nowrap;
+    place-self:center;
 }
 
     .logout-link:hover {
@@ -120,7 +142,7 @@ body {
 }
 
     .textfield--password .textfield__input {
-        font-family: Tahoma, Arial, sans-serif;
+        font-family: Roboto;
         font-size: 11px;
     }
 

@@ -8,9 +8,9 @@
     min-width: max-content; /* Allows the table to expand horizontally to fit all columns */
     border-collapse: collapse;
     table-layout: auto; /* Lets columns size themselves based on their content */
-    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
     font-size: 11px;
     color: #000;
+    border-radius:15px;
 }
 
     .data-table th,
@@ -47,6 +47,7 @@
     font-weight: bold;
     text-align: center;
     white-space: nowrap;
+    color:var(--main-dark);
 }
 
 /* Image row styling & fixed thumbnail dimensions */

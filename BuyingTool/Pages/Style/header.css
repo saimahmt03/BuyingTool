@@ -4,17 +4,23 @@
 :root {
     --header-bg: #004f6c; /* CHANGED: darker blue-teal, matched to the prototype image */
     --header-text: #ffffff;
-    --header-height: 67px;
+    --header-height: 60px;
 }
 
 /* 2. Band */
 .page-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     min-height: var(--header-height);
+    border-bottom: 2px solid var(--multiselect-border);
     padding: 0 14px; /* CHANGED: 16px -> 14px, matches the image */
-    background: var(--header-bg);
+    background: none;
+    color: var(--main-dark);
+    width: auto;
+    margin-bottom: 8px;
 }
 
 /* 3. Title */
@@ -24,9 +30,8 @@
     overflow: hidden; /* CHANGED: long titles are cut with "..." instead of wrapping */
     white-space: nowrap;
     text-overflow: ellipsis;
-    color: var(--header-text);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 24px; /* CHANGED: 26px -> 24px, matches the image */
+    color: var(--main-dark);
+    font-size: 20px; /* CHANGED: 26px -> 24px, matches the image */
     font-weight: bold;
     line-height: 1.2;
 }

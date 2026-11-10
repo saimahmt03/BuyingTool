@@ -10,7 +10,6 @@
 
 body {
     background-color: var(--bg-main);
-    font-family: Tahoma, Arial, sans-serif;
     font-size: 11px;
     color: var(--text-dark);
     margin: 0;

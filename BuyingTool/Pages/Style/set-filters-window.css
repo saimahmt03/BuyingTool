@@ -3,17 +3,24 @@
    ================================================================= */
 :root {
     --bg-main: #e0e0e0;
-    --panel-bg: #ececec;
-    --panel-border: #888;
+    --panel-bg: #FFFFFF;
+    --panel-border: #929394;
     --header-bg-dark: #555555;
     --header-bg-teal: #2f5d5c;
     --text-dark: #222;
     --text-light: #fff;
+    --bg-main: #FFFFFF;
+    --text-dark: #222;
+    --main-dark: #0C4559;
+    --sub-dark: #0C4F60;
+    --tert-light: #0C909F;
+    --objects: #088696;
+    --subtext: #6B6C70;
+    --multiselect-border: #E7E8EC;
 }
 
 body {
     background-color: var(--bg-main);
-    font-family: Tahoma, Arial, sans-serif;
     font-size: 11px;
     color: var(--text-dark);
     margin: 0;
@@ -53,20 +60,20 @@ header {
     flex: 0 0 700px;
     width: 700px;
     background-color: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--panel-border);
     padding: 8px;
+    border-radius:15px;
 }
 
 /* Right Main Options Gallery Panel - Expands to fill the remaining dashboard space */
 .gallery-panel {
     flex: 1;
     min-width: 0;
-    background-color: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
-    padding: 8px;
     overflow-x: auto;
+    background-color: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    padding: 8px;
+    border-radius: 15px;
 }
 
 /* Responsive Table Scroll Container */
@@ -78,7 +85,10 @@ header {
 
 /* Reusable Filter Group Spacing */
 .filter-group {
-    margin: 15px 0 0 10px;
+    margin: 15px;
+    border-radius: 15px;
+    border: 2px solid var(--multiselect-border);
+    padding:15px;
 }
 
     /* Apply dark teal to inner filter group headers EXCEPT the first one ("Required Filters*") */
@@ -117,7 +127,7 @@ header {
 .filter-group > div {
     display: flex;
     align-items: center;
-    margin-bottom: 4px;
+    margin-top: 4px;
     contain: layout;
 }
 
@@ -273,3 +283,31 @@ header {
     text-align: left !important;
     padding-left: 10px !important;
 }
+
+.dropdown__label {
+    color: var(--subtext);
+    font-family: 'Roboto';
+    padding: 2px;
+}
+.dropdown__select{
+    padding: 4px;
+    border: 2px solid var(--multiselect-border);
+    border-radius: 8px;
+    background-color: #ffffff;
+    font: inherit;
+    color: black;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height:fit-content;
+}
+
+    .dropdown__select:hover {
+        border: 2px solid var(--main-dark);
+    }
+    .dropdown__select option {
+        font-size: 14px;
+        border-radius:5px;
+        font-weight: 600;
+    }

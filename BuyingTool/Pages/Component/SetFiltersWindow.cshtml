@@ -294,9 +294,9 @@
                 Session["SiteName"] = selectedSiteName;
                 Session["StoreGrade"] = selectedStoreGrade;
 
-                Session["Color"] = selectedColor ;
-                Session["Silhouette"] = selectedSilhouette ;
-                Session["CollectionAttri"] = selectedCollectionAttri ;
+                Session["Color"] = selectedColor;
+                Session["Silhouette"] = selectedSilhouette;
+                Session["CollectionAttri"] = selectedCollectionAttri;
                 Session["FitCut"] = selectedFitCut;
                 Session["MaterialComposition"] = selectedMaterialComposition;
                 Session["MaterialConstruction"] = selectedMaterialConstruction;
@@ -395,7 +395,6 @@
     <link href="~/Pages/Style/header.css?v=@headerCssVersion" rel="stylesheet" />
     <link href="~/Pages/Style/sectionheader.css?v=@sectionheaderCss" rel="stylesheet" />
     <link href="~/Pages/Style/button.css?v=@buttonCss" rel="stylesheet" />
-
     <!--<link href="~/Pages/Style/table-with-pagination.css?v=tablePCss" rel="stylesheet" />-->
 
     <link href="~/Pages/Style/table-with-image-and-pagination.css?v=@tableIPCss" rel="stylesheet" />
@@ -416,7 +415,9 @@
             <!-- LEFT SIDEBAR: FILTERS PANEL -->
             <aside class="filter-panel" aria-label="Filters Panel">
                 <div class="row">
-                    @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Filters")
+                    <header class="page-header" role="banner">
+                        <h1 class="page-header__title"><i class="bi bi-funnel"></i>Filters</h1>
+                    </header>
 
                     <div class="two-row">
                         <!-- SINGLE FORM WRAPPING ALL INPUTS AND BUTTONS -->
@@ -425,7 +426,9 @@
                                 <div class="two-col">
                                     <div class="col">
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Required Filters*")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-list-check"></i>Required Filters</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/Dropdown.cshtml", "brand", "Brand", new List<string>(), brand, "", "100%", "changeFilter(dd_brand)")
                                             @RenderPage("~/Pages/Common/Dropdown.cshtml", "division", "Division", new List<string>(), division, "", "100%", "changeFilter(dd_division)")
                                             @RenderPage("~/Pages/Common/Dropdown.cshtml", "department", "Department", new List<string>(), department, "", "100%", "changeFilter(dd_department)")
@@ -435,17 +438,21 @@
                                             @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", new List<string>(), selectedPeriodPlans, "", "100%", "changeFilter(dd_periodplans)")
 
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", new List<string>(), selectedCollection, "", "100%", "changeFilter(dd_collection)")
-                                            
+
                                         </div>
 
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Styles")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-palette"></i>Styles</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "stylecode", "Style Code", new List<string>(), selectedStyleCode, "", "100%", "changeStyle(dd_stylecode)")
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "style", "Style", new List<string>(), "", "", "100%", "changeStyle(dd_style)")
                                         </div>
 
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Organization")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-diagram-3"></i>Organization</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "region", "Region", new List<string>(), "", "", "100%", "changeFilter(dd_region)")
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "country", "Country", new List<string>(), "", "", "100%", "changeFilter(dd_country)")
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "channel", "Channel", new List<string>(), "", "", "100%", "changeFilter(dd_channel)")
@@ -460,19 +467,27 @@
 
                                     <div class="col">
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Input Factor Rate")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-graph-up"></i>Input Factor Rate</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/TextField.cshtml", "factorRate", "Factor Rate", "1.2", "decimal")
                                         </div>
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Input PLC")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-layers"></i>Input PLC</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/TextField.cshtml", "plc", "PLC", "12", "numeric")
                                         </div>
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Input Week of Stock")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-clipboard"></i>Input Week of Stock</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/TextField.cshtml", "wos", "WOS", "3", "numeric")
                                         </div>
                                         <div class="filter-group">
-                                            @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Attributes")
+                                            <header class="page-header" role="banner">
+                                                <h1 class="page-header__title"><i class="bi bi-bar-chart"></i>Attributes</h1>
+                                            </header>
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "color", "Color", new List<string>(), "", "", "100%", "changeStyle(dd_color)")
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "silhouette", "Silhouette", new List<string>(), "", "", "100%", "changeStyle(dd_silhouette)")
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collectionattri", "Collection", new List<string>(), "", "", "100%", "changeStyle(dd_collectionattri)")
@@ -496,13 +511,13 @@
                                 <div class="three-col">
                                     <div class="col">
                                         <!-- UPDATED: now submits so the server can clear the saved table -->
-                                        @RenderPage("~/Pages/Common/Button.cshtml", "Clear All", "submit", "actionButton", "Clear")
+                                        <button class="button" type="submit" name="actionButton" value="Clear"><i class="bi bi-x"></i>Clear All</button>
                                     </div>
                                     <div class="col">
-                                        @RenderPage("~/Pages/Common/Button.cshtml", "Display", "submit", "actionButton", "Display")
+                                        <button class="button" type="submit" name="actionButton" value="Display"><i class="bi bi-card-list"></i>Display</button>
                                     </div>
                                     <div class="col">
-                                        @RenderPage("~/Pages/Common/Button.cshtml", "Calculate", "submit", "actionButton", "Calculate")
+                                        <button class="button" type="submit" name="actionButton" value="Calculate"><i class="bi bi-calculator"></i>Calculate</button>
                                     </div>
                                 </div>
                             </div>
@@ -529,11 +544,11 @@
                                 </div>
 
                                 <!--
-                                 if (!string.IsNullOrEmpty(errorMessage))
-                                 {
-                                    <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">errorMessage</div>
-                                 }
-                                -->
+                 if (!string.IsNullOrEmpty(errorMessage))
+                 {
+                    <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">errorMessage</div>
+                 }
+                -->
                             </div>
                         </form>
                     </div>
@@ -543,7 +558,9 @@
             <!-- RIGHT SIDEBAR: OPTIONS GALLERY PANEL -->
             <article class="gallery-panel" aria-label="Options Gallery Panel">
                 <div class="row">
-                    @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Options Gallery")
+                    <header class="page-header" role="banner">
+                        <h1 class="page-header__title"><i class="bi bi-collection"></i>Options Gallery</h1>
+                    </header>
                     <div class="table-responsive">
                         <!-- Unchanged: tableHeaders/tableRows are restored from Session in the code block above -->
                         <!---RenderPage("~/Pages/Common/TableWithImageAndPagination.cshtml", tableHeaders, tableRows, true, 21)-->
