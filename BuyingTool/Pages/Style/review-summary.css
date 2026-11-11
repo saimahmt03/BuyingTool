@@ -58,7 +58,7 @@ header {
 .three-col-filter-left-side {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     gap: 10px;
     flex-wrap: wrap;
 }
@@ -115,10 +115,11 @@ header {
 
 /* Card styling for each panel with fluid sizing */
 .panel-card {
-    background-color: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
-    padding: 8px;
+    padding: 4px;
+    border: 2px solid var(--multiselect-border);
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin:4px;
     min-width: 0; /* Critical for CSS grid item containment */
     width: 100%;
     display: flex;
@@ -175,7 +176,7 @@ header {
 .panel-card[aria-label="Override Drops Quantity Panel"] .three-col {
     display: flex !important;
     flex-wrap: nowrap !important;
-    align-items: flex-end !important;
+    align-items: center !important;
     gap: 10px !important;
     width: 100% !important;
 }

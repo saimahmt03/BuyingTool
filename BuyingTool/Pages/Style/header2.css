@@ -1,33 +1,45 @@
 ﻿/* Component: PageHeader.cshtml */
 
 :root {
-    --header-bg: #004f6c;
+    --bg-main: #efefef;
+    --text-dark: #222;
+    --main-dark: #0C4559;
+    --main-light: #068598;
+    --sub-dark: #0C4F60;
+    --tert-light: #0C909F;
+    --objects: #088696;
+    --subtext: #86888D;
+    --multiselect-border: #E7E8EC;
+    --hover: #E7E8EC;
+    --header-bg: #004f6c; /* CHANGED: darker blue-teal, matched to the prototype image */
     --header-text: #ffffff;
-    --header-height: clamp(36px, 4vw, 42px); /* Slim, compact height */
-    --header-font-size: clamp(12px, 1.2vw, 14px); /* Small, clean label text size */
+    --header-height: 60px;
 }
-
 .page-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
     min-height: var(--header-height);
-    height: var(--header-height);
-    padding: 0 clamp(8px, 1.5vw, 12px);
-    background: var(--header-bg);
-    width: 100%;
+    border-bottom: 2px solid var(--multiselect-border);
+    padding: 0 14px; /* CHANGED: 16px -> 14px, matches the image */
+    background: none;
+    color: var(--main-dark);
+    width: auto;
+    margin-bottom: 8px;
 }
 
+/* 3. Title */
 .page-header__title {
     margin: 0;
-    flex: 1 1 auto;
-    min-width: 0; /* Crucial for flex ellipsis */
-    overflow: hidden;
+    min-width: 0; /* CHANGED: lets a long title shrink instead of overflowing */
+    overflow: hidden; /* CHANGED: long titles are cut with "..." instead of wrapping */
     white-space: nowrap;
     text-overflow: ellipsis;
-    color: var(--header-text);
-    font-size: var(--header-font-size);
-    font-weight: 600;
+    color: var(--main-dark);
+    font-size: 20px; /* CHANGED: 26px -> 24px, matches the image */
+    font-weight: bold;
     line-height: 1.2;
 }
 

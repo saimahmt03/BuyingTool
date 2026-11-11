@@ -285,7 +285,7 @@
                         @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizes", "Size", sizeList, selectedSizes, "", "100px")
                     </div>
                     <div class="control-item">
-                        @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
+                        <button class="button" type="submit" name="actionButton" value="Apply"><i class="bi bi-arrow-right-short"></i>Apply</button>
                     </div>
                     @if (!string.IsNullOrEmpty(dbResponse))
                     {
@@ -294,43 +294,43 @@
 
 
                     <!-- Right-aligned Actions -->
-                    <div class="action-group-right">
+                <div class="action-group-right">
 
-                        <!-- Text input for the custom filename -->
-                        <input type="text"
-                               name="customFileName"
-                               id="customFileName"
-                               class="form-control"
-                               placeholder="Enter filename..."
-                               value="000000_colorname"
-                               style="width: 200px; display: inline-block;" />
+                    <!-- Text input for the custom filename -->
+                    <input type="text"
+                           name="customFileName"
+                           id="customFileName"
+                           class="textfield"
+                           placeholder="Enter filename..."
+                           value="000000_colorname"
+                           style="width: 200px; display: inline-block;" />
 
-                        <!-- Export to Excel Button -->
-                        @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+                    <!-- Export to Excel Button -->
+                    <button class="button" type="submit" name="actionButton" value="Export"><i class="bi bi-file-earmark-excel"></i>Download as Excel File</button>
 
-                        <!-- Export to Alloc Button -->
-                        @RenderPage("~/Pages/Common/Button.cshtml", "Export to Alloc Tool", "submit", "actionButton", "SaveToDb")
+                    <!-- Export to Alloc Button -->
+                <button class="button" type="submit" name="actionButton" value="SaveToDb"><i class="bi bi-arrow-bar-up"></i>Export to Alloc Tool</button>
 
-                        <!--Modal-->
-                        <div class="modal-backdrop" id="allocResultModal" style="@modalStyle" aria-hidden="@(showModal ? "false" : "true")" onclick="handleBackdropClick(event, 'allocResultModal')">
-                            <div class="modal-dialog" role="dialog" aria-labelledby="allocResultModal-title" aria-modal="true" style="background: #f4f4f4 !important; position: relative !important; z-index: 100000 !important; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 500px; width: 100%; overflow: hidden;">
-                                <div class="modal-header" style="background: #f4f4f4 !important; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;">
-                                    <h3 id="allocResultModal-title" class="modal-title" style="margin: 0; font-size: 1.25rem; color: #333;">@modalTitle</h3>
-                                    <button type="button" class="modal-close" onclick="closeModal('allocResultModal')" aria-label="Close modal" style="background: transparent; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
-                                </div>
-                                <div class="modal-body" style="background: #f4f4f4 !important; padding: 20px; color: #333;">
-                                    @Html.Raw(modalBodyContent)
-                                </div>
-                                @if (!string.IsNullOrEmpty(modalFooter))
-                                {
-                                    <div class="modal-footer" style="background: #eeeeee !important; padding: 12px 20px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 10px;">
-                                        @Html.Raw(modalFooter)
-                                    </div>
-                                }
+                    <!--Modal-->
+                    <div class="modal-backdrop" id="allocResultModal" style="@modalStyle" aria-hidden="@(showModal ? "false" : "true")" onclick="handleBackdropClick(event, 'allocResultModal')">
+                        <div class="modal-dialog" role="dialog" aria-labelledby="allocResultModal-title" aria-modal="true" style="background: #f4f4f4 !important; position: relative !important; z-index: 100000 !important; border-radius: 6px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-width: 500px; width: 100%; overflow: hidden;">
+                            <div class="modal-header" style="background: #f4f4f4 !important; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;">
+                                <h3 id="allocResultModal-title" class="modal-title" style="margin: 0; font-size: 1.25rem; color: #333;">@modalTitle</h3>
+                                <button type="button" class="modal-close" onclick="closeModal('allocResultModal')" aria-label="Close modal" style="background: transparent; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
                             </div>
+                            <div class="modal-body" style="background: #f4f4f4 !important; padding: 20px; color: #333;">
+                                @Html.Raw(modalBodyContent)
+                            </div>
+                            @if (!string.IsNullOrEmpty(modalFooter))
+                            {
+                                <div class="modal-footer" style="background: #eeeeee !important; padding: 12px 20px; border-top: 1px solid #ddd; display: flex; justify-content: flex-end; gap: 10px;">
+                                    @Html.Raw(modalFooter)
+                                </div>
+                            }
                         </div>
-                         
                     </div>
+
+                </div>
 
                 </div>
 

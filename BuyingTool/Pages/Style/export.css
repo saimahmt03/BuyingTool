@@ -9,7 +9,7 @@
 }
 
 body {
-    background-color: var(--bg-main);
+    background-color: white;
     font-size: 11px;
     color: var(--text-dark);
     margin: 0;
@@ -91,10 +91,10 @@ header {
 
 /* Data grid / table panel card styling */
 .export-panel {
-    background-color: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
-    padding: 8px;
+    padding: 4px;
+    border: 2px solid var(--multiselect-border);
+    border-radius: 8px;
+    background-color: #ffffff;
     width: 100%;
     min-width: 0;
 }
@@ -143,3 +143,19 @@ header {
         margin-left: 0;
     }
 }
+.textfield {
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    border: 2px solid var(--multiselect-border);
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 11px;
+    color: #000;
+    padding: 4px;
+    transition: all 0.3s ease;
+}
+
+    .textfield:hover {
+        border: 2px solid var(--main-dark);
+    }

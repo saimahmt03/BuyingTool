@@ -207,7 +207,7 @@
                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizes", "Size", sizeList, selectedSizes, "", "100px")
                         </div>
                         <div class="col">
-                            @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
+                            <button class="button" type="submit" name="actionButton" value="Apply"><i class="bi bi-arrow-right-short"></i>Apply</button>
                         </div>
                         @if (!string.IsNullOrEmpty(dbResponse))
                         {
@@ -220,12 +220,12 @@
                         <input type="text"
                                name="customFileName"
                                id="customFileName"
-                               class="form-control"
+                               class="textfield"
                                placeholder="Enter filename..."
                                value="000000_colorname"
                                style="width: 200px; display: inline-block;" />
 
-                        @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+                        <button class="button" type="submit" name="actionButton" value="Export"><i class="bi bi-file-earmark-excel"></i>Download as Excel File</button>
                     </div>
                     @if (!string.IsNullOrEmpty(errorMessage))
                     {

@@ -159,3 +159,33 @@ tr:hover {
     transition:all ease 0.3s;
     background-color: var(--multiselect-border);
 }
+
+.dropdown__label {
+    color: var(--subtext);
+    font-family: 'Roboto';
+    padding: 2px;
+}
+
+.dropdown__select {
+    padding: 4px;
+    border: 2px solid var(--multiselect-border);
+    border-radius: 8px;
+    background-color: #ffffff;
+    font: inherit;
+    color: black;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: fit-content;
+}
+
+    .dropdown__select:hover {
+        border: 2px solid var(--main-dark);
+    }
+
+    .dropdown__select option {
+        font-size: 14px;
+        border-radius: 5px;
+        font-weight: 600;
+    }

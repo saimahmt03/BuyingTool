@@ -51,10 +51,13 @@ th {
     }
 
 /* Alternating rows for readability */
+
 tbody tr:nth-child(even) {
     background-color: #fafbfc;
 }
-
+    tbody tr:nth-child(even):hover {
+        background-color: var(--multiselect-border);
+    }
 /* Highlighted Column (e.g., New QTY / V1 vertical block) */
 td.highlight-col, th.highlight-col {
     background-color: #e0f3ff !important;

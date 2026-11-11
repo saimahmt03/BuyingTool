@@ -300,7 +300,7 @@
                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "sizes", "Size", sizeList, selectedSizes, "", "100px")
                         </div>
                         <div class="col apply-btn-col">
-                            @RenderPage("~/Pages/Common/Button.cshtml", "Apply", "submit", "actionButton", "Apply")
+                            <button class="button" type="submit" name="actionButton" value="Apply"><i class="bi bi-arrow-right-short"></i>Apply</button>
                         </div>
                     </div>
                     <div class="three-col-filter-right-side">
@@ -313,7 +313,7 @@
                             <input type="text"
                                    name="customFileName"
                                    id="customFileName"
-                                   class="form-control"
+                                   class="textfield"
                                    placeholder="Enter filename..."
                                    value="ReportSummary"
                                    style="width: 200px; display: inline-block;" />
@@ -321,7 +321,7 @@
 
                         </div>
                         <div class="col export-btn-col">
-                            @RenderPage("~/Pages/Common/Button.cshtml", "Download as Excel File", "submit", "actionButton", "Export")
+                            <button class="button" type="submit" name="actionButton" value="Export"><i class="bi bi-file-earmark-excel"></i>Download as Excel File</button>
                         </div>
                         <div class="row">
                             @if (!string.IsNullOrEmpty(errorMessage))
@@ -376,10 +376,10 @@
                                     @RenderPage("~/Pages/Common/TextField.cshtml", "override", "Value", "", "numeric")
                                 </div>
                                 <div class="col-2">
-                                    @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
+                                    <button class="button" type="submit" name="actionButton" value="Go"><i class="bi bi-arrow-right-short"></i>Go</button>
                                 </div>
                                 <div class="col-3">
-                                    @RenderPage("~/Pages/Common/Button.cshtml", "Reset", "submit", "actionButton", "Reset")
+                                    <button class="button" type="submit" name="actionButton" value="Reset"><i class="bi bi-arrow-counterclockwise"></i>Reset</button>
                                 </div>
                             </div>
                         </div>

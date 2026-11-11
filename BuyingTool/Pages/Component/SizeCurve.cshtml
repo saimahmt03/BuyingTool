@@ -29,17 +29,18 @@
 </head>
 <body>
     <main class="main-content-wrapper" role="main">
+        <header class="page-header" role="banner">
+            <h1 class="page-header__title">@label2</h1>
+        </header>
         <section class="size-curve-container">
-            
             <div class="size-curve-row">
                 <article class="panel-card" aria-label="Size Curve per Store Panel">
-                    @RenderPage("~/Pages/Common/Header.cshtml", label2)
                     <div class="table-responsive-wrapper">
                         @RenderPage("~/Pages/Common/TableWithPagination.cshtml", tableHeaders, tableRows, true, 25)
                     </div>
                 </article>
             </div>
-            
+
         </section>
     </main>
 </body>

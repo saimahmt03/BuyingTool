@@ -2,14 +2,20 @@
    Size Curve Layout Styles (.NET Framework 4.7.2 / Razor v3)
    ================================================================= */
 :root {
-    --bg-main: #e0e0e0;
-    --panel-bg: #ececec;
-    --panel-border: #888;
+    --bg-main: #efefef;
     --text-dark: #222;
+    --main-dark: #0C4559;
+    --main-light: #068598;
+    --sub-dark: #0C4F60;
+    --tert-light: #0C909F;
+    --objects: #088696;
+    --subtext: #86888D;
+    --multiselect-border: #E7E8EC;
+    --hover: #E7E8EC;
 }
 
 body {
-    background-color: var(--bg-main);
+    background-color: white;
     font-size: 11px;
     color: var(--text-dark);
     margin: 0;
@@ -43,10 +49,10 @@ body {
 
 /* Card styling for each panel matching enterprise theme */
 .panel-card {
-    background-color: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
-    padding: 8px;
+    padding: 4px;
+    border: 2px solid var(--multiselect-border);
+    border-radius: 8px;
+    background-color: #ffffff;
     min-width: 0;
     width: 100%;
     display: flex;
