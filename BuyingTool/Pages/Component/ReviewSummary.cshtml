@@ -371,12 +371,15 @@
                     <article class="panel-card cumulative-panel" aria-label="Override Drops Quantity Panel">
                         @RenderPage("~/Pages/Common/Header.cshtml", "Override Drops Quantity?")
                         <div class="row">
-                            <div class="two-col">
+                            <div class="three-col">
                                 <div class="col-1">
                                     @RenderPage("~/Pages/Common/TextField.cshtml", "override", "Value", "", "numeric")
                                 </div>
                                 <div class="col-2">
                                     @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
+                                </div>
+                                <div class="col-3">
+                                    @RenderPage("~/Pages/Common/Button.cshtml", "Reset", "submit", "actionButton", "Reset")
                                 </div>
                             </div>
                         </div>
@@ -387,9 +390,6 @@
                                     {
                                         <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
                                     }
-                                </div>
-                                <div class="col-2">
-                                    @RenderPage("~/Pages/Common/Button.cshtml", "Reset", "submit", "actionButton", "Reset")
                                 </div>
                             </div>
                         </div>

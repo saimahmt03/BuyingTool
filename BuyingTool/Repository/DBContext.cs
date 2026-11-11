@@ -490,13 +490,11 @@ namespace BuyingTool.Repository
             }
             catch (DbException ex)
             {
-                string logMessage = string.Concat("Database error in retrieving Sort References. ", ex.Message);
-                throw;
+                LogHelper.LogError(ErrorMessage.Db + ErrorMessage.SortReference, ex);
             }
             catch (Exception ex)
             {
-                string logMessage = string.Concat("System error in retrieving Sort References. ", ex.Message);
-                throw;
+                LogHelper.LogError(ErrorMessage.Sys + ErrorMessage.SortReference, ex);
             }
 
             return Task.FromResult(dataTable);

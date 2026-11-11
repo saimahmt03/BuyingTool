@@ -151,8 +151,10 @@ header {
 }
 
 /* =================================================================
-    Override Drops Quantity Panel Layout & Textfield Fix
+    Override Drops Quantity Panel Layout & High-Specificity Fix
     ================================================================ */
+
+/* ---------- TWO-COL division (error message row) ---------- */
 .panel-card[aria-label="Override Drops Quantity Panel"] .two-col {
     display: flex;
     align-items: center;
@@ -160,21 +162,67 @@ header {
     width: 100%;
 }
 
-.panel-card[aria-label="Override Drops Quantity Panel"] .col-1 {
-    flex: 1;
-    min-width: 0;
-}
-
-    /* Restrict the text field width so it doesn't span 100% and overlap the Go button */
-    .panel-card[aria-label="Override Drops Quantity Panel"] .col-1 input,
-    .panel-card[aria-label="Override Drops Quantity Panel"] .col-1 .form-control {
-        width: 120px !important;
-        max-width: 100%;
+    .panel-card[aria-label="Override Drops Quantity Panel"] .two-col .col-1 {
+        flex: 1;
+        min-width: 0;
     }
 
-.panel-card[aria-label="Override Drops Quantity Panel"] .col-2 {
-    flex-shrink: 0;
+    .panel-card[aria-label="Override Drops Quantity Panel"] .two-col .col-2 {
+        flex-shrink: 0;
+    }
+
+/* ---------- THREE-COL division (TextField | Go | Reset) ---------- */
+.panel-card[aria-label="Override Drops Quantity Panel"] .three-col {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-end !important;
+    gap: 10px !important;
+    width: 100% !important;
 }
+
+    /* Column 1: TextField container expansion */
+    .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-1 {
+        flex: 2 1 180px !important;
+        min-width: 160px !important;
+    }
+
+        /* Forcefully override input width, height, and padding inside TextField.cshtml */
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-1 input,
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-1 select,
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-1 textarea,
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-1 .form-control {
+            width: 100% !important;
+            min-width: 160px !important;
+            max-width: none !important;
+            height: 30px !important;
+            padding: 4px 8px !important;
+            font-size: 12px !important;
+            box-sizing: border-box !important;
+        }
+
+    /* Column 2 & 3: Go and Reset buttons container */
+    .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-2,
+    .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-3 {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        align-items: flex-end !important;
+    }
+
+        /* Forcefully scale down the buttons inside Button.cshtml */
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-2 button,
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-3 button,
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-2 input[type="submit"],
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-3 input[type="submit"],
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-2 .actionButton,
+        .panel-card[aria-label="Override Drops Quantity Panel"] .three-col .col-3 .actionButton {
+            width: auto !important;
+            min-width: 60px !important;
+            height: 30px !important;
+            padding: 2px 14px !important;
+            font-size: 11px !important;
+            line-height: normal !important;
+            box-sizing: border-box !important;
+        }
 
 /* =================================================================
     Cumulative Panels Header Adjustment (Store Grade & Territory)
@@ -196,7 +244,6 @@ header {
 
     /* Target table headers containing Order QTY and force the modifier label onto a new line */
     .panel-card.cumulative-panel table th:nth-child(n+2) {
-        /* If your table component renders text cleanly, setting a constrained width or flex/inline-block forces wrapping */
         max-width: 90px;
     }
 
