@@ -348,6 +348,9 @@
     <Content Include="Pages\Common\TableWithImageAndPagination.cshtml" />
     <Content Include="Pages\Component\Monitoring.cshtml" />
     <Content Include="Pages\Common\Modal.cshtml" />
+    <Content Include="Pages\Style\Font\Roboto-Italic-VariableFont_wdth,wght.ttf" />
+    <Content Include="Pages\Style\Font\Roboto-VariableFont_wdth,wght.ttf" />
+    <Content Include="Pages\Common\TableMaxAveMin.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

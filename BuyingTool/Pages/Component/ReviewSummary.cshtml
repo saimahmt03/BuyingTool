@@ -344,7 +344,7 @@
                     <article class="panel-card distribution-panel" aria-label="Distribution Plan per Store Grade Panel">
                         @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Store Grade")
                         <div class="table-responsive-wrapper">
-                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders3, tableRows3)
+                            @RenderPage("~/Pages/Common/TableMaxAveMin.cshtml", tableHeaders3, tableRows3)
                         </div>
                     </article>
                 </div>
@@ -360,7 +360,7 @@
                     <article class="panel-card distribution-panel" aria-label="Distribution Plan per Territory Panel">
                         @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Territory")
                         <div class="table-responsive-wrapper">
-                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders4, tableRows4)
+                            @RenderPage("~/Pages/Common/TableMaxAveMin.cshtml", tableHeaders4, tableRows4)
                         </div>
                     </article>
                 </div>
@@ -371,12 +371,15 @@
                     <article class="panel-card cumulative-panel" aria-label="Override Drops Quantity Panel">
                         @RenderPage("~/Pages/Common/Header.cshtml", "Override Drops Quantity?")
                         <div class="row">
-                            <div class="two-col">
+                            <div class="three-col">
                                 <div class="col-1">
                                     @RenderPage("~/Pages/Common/TextField.cshtml", "override", "Value", "", "numeric")
                                 </div>
                                 <div class="col-2">
                                     @RenderPage("~/Pages/Common/Button.cshtml", "Go", "submit", "actionButton", "Go")
+                                </div>
+                                <div class="col-3">
+                                    @RenderPage("~/Pages/Common/Button.cshtml", "Reset", "submit", "actionButton", "Reset")
                                 </div>
                             </div>
                         </div>
@@ -388,9 +391,6 @@
                                         <div class="error-message" style="color: #ff4d4d; margin-bottom: 15px; font-weight: 500;">@overrideErrorMessage</div>
                                     }
                                 </div>
-                                <div class="col-2">
-                                    @RenderPage("~/Pages/Common/Button.cshtml", "Reset", "submit", "actionButton", "Reset")
-                                </div>
                             </div>
                         </div>
                     </article>
@@ -398,7 +398,7 @@
                     <article class="panel-card distribution-panel" aria-label="Distribution Plan per Drops Panel">
                         @RenderPage("~/Pages/Common/Header.cshtml", "Distribution Plan per Drops")
                         <div class="table-responsive-wrapper">
-                            @RenderPage("~/Pages/Common/Table.cshtml", tableHeaders5, tableRows5)
+                            @RenderPage("~/Pages/Common/TableMaxAveMin.cshtml", tableHeaders5, tableRows5)
                         </div>
                     </article>
                 </div>
