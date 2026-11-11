@@ -11,6 +11,7 @@
     --objects: #088696;
     --subtext: #86888D;
     --multiselect-border: #E7E8EC;
+    --hover: #E7E8EC;
 }
 @font-face {
     font-family: Roboto; 
@@ -154,3 +155,7 @@ body {
 
 
 
+tr:hover {
+    transition:all ease 0.3s;
+    background-color: var(--multiselect-border);
+}
