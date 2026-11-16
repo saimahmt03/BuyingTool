@@ -14,10 +14,10 @@
 
     string label = "Monitoring to Exported to Alloc Tool";
 
-    if (dbResponse != "Success")
+    if (!string.IsNullOrEmpty(dbResponse))
     {
         label = "The System Couldn't Fetch Data from Database";
-    }
+    } 
 }
 <head>
     <link href="~/Pages/Style/header2.css?v=@headerCss" rel="stylesheet" />

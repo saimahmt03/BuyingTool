@@ -29,14 +29,19 @@
                            .Distinct()
                            .ToList()
                 : new List<string>();
+    if (storeGradeList.Contains("Online"))
+    {
+        storeGradeList.Remove("Online");
+        storeGradeList.Insert(0, "Online");
+    }
 
     var sizeList = dataSet != null
-                ? dataSet.AsEnumerable()
-                           .Select(row => row.Field<string>("Size"))
-                           .Where(val => !string.IsNullOrWhiteSpace(val))
-                           .Distinct()
-                           .ToList()
-                : new List<string>();
+        ? dataSet.AsEnumerable()
+                   .Select(row => row.Field<string>("Size"))
+                   .Where(val => !string.IsNullOrWhiteSpace(val))
+                   .Distinct()
+                   .ToList()
+        : new List<string>();
 
     var (tables, dbResponse) = service.GetDistributionSummary(selectedSizes, selectedStoreGrades).GetAwaiter().GetResult();
 
