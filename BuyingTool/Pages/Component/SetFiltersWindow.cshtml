@@ -393,6 +393,8 @@
     var setfilterswindow = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Style/set-filters-window.css")).Ticks.ToString();
 
     var modalJsVersion = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Scripts/modal.js")).Ticks.ToString();
+
+    var displayAndCalculateSpinner = System.IO.File.GetLastWriteTime(Server.MapPath("~/Pages/Scripts/displayAndCalculateSpinner.js")).Ticks.ToString();
 }
 
 <head>
@@ -408,6 +410,7 @@
     <link href="~/Pages/Style/set-filters-window.css?v=@setfilterswindow" rel="stylesheet" />
 
     <script src="~/Pages/Scripts/modal.js?v=@modalJsVersion"></script>
+    <script src="~/Pages/Scripts/displayAndCalculateSpinner.js?v=@displayAndCalculateSpinner"></script>
 </head>
 <body>
     <header role="banner">
