@@ -55,39 +55,13 @@ namespace BuyingTool.Services
         #region Cache Filters
 
         // Distribution Summary, Per Site, Export Filter Region
-        public Task<DataTable> GetFinalDataSetFilterCache()
+        public Task<DataTable> GetFinalDataSetFilter()
         {
-            var userId = GetCurrentUserId();
+            string userid = GetCurrentUserId();
 
-            string cacheKey = $"FinalDataSetFilter_{userId}";
-
-            DataTable dataSet = HttpRuntime.Cache[cacheKey] as DataTable;
-
-            if (dataSet == null)
-            {
-                dataSet = _dBContext.GetFinalDataSetFilter(userId).GetAwaiter().GetResult();
-
-                HttpRuntime.Cache.Insert(
-                    cacheKey,
-                    dataSet,
-                    null,
-                    System.Web.Caching.Cache.NoAbsoluteExpiration,
-                    TimeSpan.FromMinutes(30)
-                );
-            }
+            var dataSet = _dBContext.GetFinalDataSetFilter(userid).GetAwaiter().GetResult();
 
             return Task.FromResult(dataSet);
-        }
-
-        // Clear cache Distribution Summary, Per Site, Export Filter Region
-        public void ClearFinalDataSetFilterCache(string userId)
-        {
-            string cacheKey = $"FinalDataSetFilter_{userId}";
-
-            if (HttpRuntime.Cache[cacheKey] != null)
-            {
-                HttpRuntime.Cache.Remove(cacheKey);
-            }
         }
 
 

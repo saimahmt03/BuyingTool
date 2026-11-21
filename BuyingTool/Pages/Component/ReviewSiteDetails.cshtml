@@ -69,7 +69,7 @@
     string selectedStoreGrades = Session["StoreGrade"] as string;
     string selectedSizes = Session["Size"] as string;
 
-    DataTable dataSet = service.GetFinalDataSetFilterCache().GetAwaiter().GetResult();
+    DataTable dataSet = service.GetFinalDataSetFilter().GetAwaiter().GetResult();
 
     var storeGradeList = dataSet != null
                 ? dataSet.AsEnumerable()
