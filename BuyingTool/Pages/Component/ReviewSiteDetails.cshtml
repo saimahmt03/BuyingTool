@@ -84,13 +84,30 @@
         storeGradeList.Insert(0, "Online");
     }
 
+    if (storeGradeList.Contains("Dept. Store"))
+    {
+        storeGradeList.Remove("Dept. Store");
+
+        int indexE = storeGradeList.IndexOf("E");
+        if (indexE != -1)
+        {
+            // Insert right after "E"
+            storeGradeList.Insert(indexE + 1, "Dept. Store");
+        }
+        else
+        {
+            // Fallback: If "E" doesn't exist, you can push it to the end or keep it wherever appropriate
+            storeGradeList.Add("Dept. Store");
+        }
+    }
+
     var sizeList = dataSet != null
-        ? dataSet.AsEnumerable()
-                   .Select(row => row.Field<string>("Size"))
-                   .Where(val => !string.IsNullOrWhiteSpace(val))
-                   .Distinct()
-                   .ToList()
-        : new List<string>();
+? dataSet.AsEnumerable()
+           .Select(row => row.Field<string>("Size"))
+           .Where(val => !string.IsNullOrWhiteSpace(val))
+           .Distinct()
+           .ToList()
+: new List<string>();
 
     if (activeMetric == "MAX" && string.IsNullOrEmpty(selectedStoreGrades) && string.IsNullOrEmpty(selectedSizes))
     {
