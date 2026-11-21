@@ -17,7 +17,13 @@ namespace BuyingTool.Shared
             public string ActivityStatus { get; set; } = string.Empty;
             public string SystemResponse { get; set; } = string.Empty;
             public string User { get; set; } = string.Empty;
-            public DateTime DateAdded { get; set; } = DateTime.UtcNow;
+            public DateTime DateAdded { get; set; } = DateTime.Now;
+
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
         }
 
 
@@ -25,6 +31,11 @@ namespace BuyingTool.Shared
         {
             public string UserID { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "Index.cshtml";
             public string Section { get; set; } = "Login";
@@ -69,6 +80,11 @@ namespace BuyingTool.Shared
             public string Channel { get; set; } = string.Empty;
             public string OutletType { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "SetFiltersWindow.cshtml";
             public string Section { get; set; } = "Filters Window Option Gallery";
@@ -90,6 +106,11 @@ namespace BuyingTool.Shared
             public decimal Plc { get; set; } = 0;
             public decimal FactorRate { get; set; } = 0;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "SetFiltersWindow.cshtml";
             public string Section { get; set; } = "Filters Window CalculatE";
@@ -98,13 +119,18 @@ namespace BuyingTool.Shared
             public string StoreProcedure { get; set; } = StoredProcedures.GetCalculation;
         }
 
-        
+
         public class DistributationSummaryTable
         {
             public string UserID { get; set; } = string.Empty;
             public string StoreGrade { get; set; } = string.Empty;
             public string Size { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "ReviewSummary.cshtml";
             public string Section { get; set; } = "Summary Distributation Tables";
@@ -119,6 +145,12 @@ namespace BuyingTool.Shared
             public string StoreGrade { get; set; } = string.Empty;
             public string Size { get; set; } = string.Empty;
             public decimal Input { get; set; } = 0;
+
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
 
             public string Page { get; set; } = "ReviewSummary.cshtml";
@@ -136,6 +168,11 @@ namespace BuyingTool.Shared
             public string Size { get; set; } = string.Empty;
             public string Type { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "ReviewSiteDetails.cshtml";
             public string Section { get; set; } = "Store Breakdown or Per Site Table";
@@ -152,14 +189,19 @@ namespace BuyingTool.Shared
             public string Size { get; set; } = string.Empty;
             public string Type { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
 
+            public int BasePerBatch { get; set; } = 0;
             public string Page { get; set; } = "Export.cshtml";
             public string Section { get; set; } = "Export Table";
             public string Button { get; set; } = string.Empty;
             public string Function { get; set; } = "GetExportTable() in DBCotext";
             public string StoreProcedure { get; set; } = StoredProcedures.GetExport;
         }
-    
+
 
         public class SizeCurve
         {
@@ -170,6 +212,11 @@ namespace BuyingTool.Shared
             public string Category { get; set; } = string.Empty;
             public string PlanPeriod { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "SizeCurve.cshtml";
             public string Section { get; set; } = "Size Curve Table";
@@ -178,7 +225,7 @@ namespace BuyingTool.Shared
             public string StoreProcedure { get; set; } = StoredProcedures.GetSizeCure;
         }
 
-    
+
         public class ExportToAlloc
         {
             public string UserID { get; set; } = string.Empty;
@@ -190,6 +237,11 @@ namespace BuyingTool.Shared
             public string Matno { get; set; } = string.Empty;
             public string Color { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "Export.cshtml";
             public string Section { get; set; } = "Export To Alloc Tool";
@@ -202,6 +254,11 @@ namespace BuyingTool.Shared
         {
             public string UserID { get; set; } = string.Empty;
 
+            public string BatchNo { get; set; } = string.Empty;
+            public int TotalData { get; set; } = 0;
+            public int NumberOfBatch { get; set; } = 0;
+            public int TotalProcessedData { get; set; } = 0;
+            public int BasePerBatch { get; set; } = 0;
 
             public string Page { get; set; } = "Monitoring.cshtml";
             public string Section { get; set; } = "Export To Alloc History Monitoring Table";
@@ -209,6 +266,6 @@ namespace BuyingTool.Shared
             public string Function { get; set; } = "GetExortedToAllocToolHistory() in DBCotext";
             public string StoreProcedure { get; set; } = StoredProcedures.GetExportedToAllocToolHistory;
         }
-    
+
     }
 }

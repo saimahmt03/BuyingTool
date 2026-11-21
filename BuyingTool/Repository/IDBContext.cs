@@ -96,5 +96,7 @@ namespace BuyingTool.Repository
         Task<(string response, string dbResponse)> ExportToAlloc(XDocument xmlDoc, string brand, string collection, int fiscalMonth, int fiscalYear, string matno, string color, string idnumber);
 
         Task<(DataTable, string dbResponse)> GetExortedToAllocToolHistory(string idnumber);
+
+        void WriteExportTollocLog(XDocument xmlDoc, string brand, string collection, int fiscalMonth, int fiscalYear, string matno, string color, string idnumber, string batchNo, int totalData, int numberOfBatch, int totalProcessedData, int basePerBatch, string response, string dbresponse, string errorMsg);
     }
 }

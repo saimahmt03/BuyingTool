@@ -1800,96 +1800,6 @@ namespace BuyingTool.Repository
                 logMessage = ex.Message;
                 LogHelper.LogError(ErrorMessage.Sys + ErrorMessage.ExportToAlloc, ex);
             }
-            finally
-            {
-                var BaseModel = new Log.BaseLogModel();
-                var ExportToAlloc = new Log.ExportToAlloc();
-
-                string ActivityStatus = string.Empty;
-
-                var param = new
-                {
-                    UserID = idnumber,
-                    XMLDoc = xmlDoc,
-                    Brand = brand,
-                    Collection = collection,
-                    FiscalMonth = fiscalMonth,
-                    FiscalYear = fiscalYear,
-                    Matno = matno,
-                    Color = color
-                };
-
-                string jsonResult = JsonConvert.SerializeObject(param);
-
-                if (string.IsNullOrEmpty(logMessage))
-                {
-                    ActivityStatus = "Success";
-                    BaseModel.SystemResponse = string.Empty;
-                }
-                else
-                {
-                    ActivityStatus = "Failed";
-                    BaseModel.SystemResponse = logMessage;
-                }
-
-                BaseModel.Page = ExportToAlloc.Page;
-                BaseModel.Section = ExportToAlloc.Section;
-                BaseModel.Activity = ExportToAlloc.Button;
-                BaseModel.Parameter = jsonResult;
-                BaseModel.Function = ExportToAlloc.Function;
-                BaseModel.StoreProcedure = ExportToAlloc.StoreProcedure;
-                BaseModel.ActivityStatus = ActivityStatus;
-                BaseModel.User = idnumber;
-
-                try
-                {
-                    using (DbConnection logConnection = _databaseConnection.CreateConnection())
-                    {
-                        if (logConnection == null)
-                        {
-                            throw new InvalidOperationException(
-                                "The database connection could not be created.");
-                        }
-
-                        if (logConnection.State != ConnectionState.Open)
-                        {
-                            logConnection.Open();
-                        }
-
-                        using (DbCommand logCommand = logConnection.CreateCommand())
-                        {
-                            logCommand.CommandText = StoredProcedures.GetUserLog;
-                            logCommand.CommandType = CommandType.StoredProcedure;
-
-                            DbProviderFactory logFactory;
-                            string logError = _databaseConnection.TryGetDbProviderFactory(out logFactory);
-
-                            if (!string.IsNullOrEmpty(logError))
-                            {
-                                throw new InvalidOperationException(logError);
-                            }
-
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Page", BaseModel.Page, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Section", BaseModel.Section, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Activity", BaseModel.Activity, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Parameter", BaseModel.Parameter, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Function", BaseModel.Function, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@StoreProcedure", BaseModel.StoreProcedure, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
-                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
-
-                            logCommand.ExecuteNonQuery();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.LogError(
-                        "[BuyingTool Log Error] Failed to write audit/activity log to database in Exorpt To Alloc: ",
-                        ex);
-                }
-            }
 
             return Task.FromResult((response, logMessage));
         }
@@ -2036,7 +1946,115 @@ namespace BuyingTool.Repository
 
             return Task.FromResult((historyTable, logMessage));
         }
-        
+
+        // LOG EXPORTED TO ALLOC PER BATCH
+        public void WriteExportTollocLog(XDocument xmlDoc, string brand, string collection, int fiscalMonth, int fiscalYear, string matno, string color, string idnumber, string batchNo, int totalData, int numberOfBatch, int totalProcessedData, int basePerBatch, string response, string dbresponse, string errorMsg)
+        {
+            try
+            {
+                var BaseModel = new Log.BaseLogModel();
+                var ExportToAlloc = new Log.ExportToAlloc();
+
+                string ActivityStatus = string.Empty;
+
+                var param = new
+                {
+                    UserID = idnumber,
+                    XMLDoc = xmlDoc,
+                    Brand = brand,
+                    Collection = collection,
+                    FiscalMonth = fiscalMonth,
+                    FiscalYear = fiscalYear,
+                    Matno = matno,
+                    Color = color,
+                    BatchNo = batchNo,
+                    TotalData = totalData,
+                    NumberOfBatch = numberOfBatch,
+                    TotalProcessedData = totalProcessedData,
+                    BasePerBatch = basePerBatch
+                };
+
+                string jsonResult = JsonConvert.SerializeObject(param);
+
+                if (response == "Success")
+                {
+                    ActivityStatus = "Success";
+                    BaseModel.SystemResponse = string.Empty;
+                }
+                else
+                {
+                    ActivityStatus = "Failed";
+                    BaseModel.SystemResponse = errorMsg;
+                }
+
+                BaseModel.Page = ExportToAlloc.Page;
+                BaseModel.Section = ExportToAlloc.Section;
+                BaseModel.Activity = ExportToAlloc.Button;
+                BaseModel.Parameter = jsonResult;
+                BaseModel.Function = ExportToAlloc.Function;
+                BaseModel.StoreProcedure = ExportToAlloc.StoreProcedure;
+                BaseModel.ActivityStatus = ActivityStatus;
+                BaseModel.User = idnumber;
+                BaseModel.BatchNo = batchNo;
+                BaseModel.TotalData = totalData;
+                BaseModel.NumberOfBatch = numberOfBatch;
+                BaseModel.TotalProcessedData = totalProcessedData;
+                BaseModel.BasePerBatch = basePerBatch;
+
+                using (DbConnection logConnection = _databaseConnection.CreateConnection())
+                {
+                    if (logConnection == null)
+                    {
+                        throw new InvalidOperationException(
+                            "The database connection could not be created.");
+                    }
+
+                    if (logConnection.State != ConnectionState.Open)
+                    {
+                        logConnection.Open();
+                    }
+
+                    using (DbCommand logCommand = logConnection.CreateCommand())
+                    {
+                        logCommand.CommandText = StoredProcedures.GetUserLog;
+                        logCommand.CommandType = CommandType.StoredProcedure;
+
+                        DbProviderFactory logFactory;
+                        string logError = _databaseConnection.TryGetDbProviderFactory(out logFactory);
+
+                        if (!string.IsNullOrEmpty(logError))
+                        {
+                            throw new InvalidOperationException(logError);
+                        }
+
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Page", BaseModel.Page, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Section", BaseModel.Section, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Activity", BaseModel.Activity, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Parameter", BaseModel.Parameter, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@Function", BaseModel.Function, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@StoreProcedure", BaseModel.StoreProcedure, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                        logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
+
+                        logCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (DbException ex)
+            {
+                LogHelper.LogError(ErrorMessage.Db + ErrorMessage.ExportToAlloc, ex);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(ErrorMessage.Sys + ErrorMessage.ExportToAlloc, ex);
+            }
+        }
         #endregion
     }
 }
