@@ -117,6 +117,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = AccountVerification.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = AccountVerification.BatchNo;
+                BaseModel.TotalData = AccountVerification.TotalData;
+                BaseModel.NumberOfBatch = AccountVerification.NumberOfBatch;
+                BaseModel.TotalProcessedData = AccountVerification.TotalProcessedData;
+                BaseModel.BasePerBatch = AccountVerification.BasePerBatch;
 
                 try
                 {
@@ -155,6 +160,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -451,7 +461,7 @@ namespace BuyingTool.Repository
         #region SORT REFERENCE
         
          public Task<DataTable> GetSortReference()
-        {
+         {
             var dataTable = new DataTable();
 
             try
@@ -752,6 +762,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = SetFiltersWindowOptGal.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = userId;
+                BaseModel.BatchNo = SetFiltersWindowOptGal.BatchNo;
+                BaseModel.TotalData = SetFiltersWindowOptGal.TotalData;
+                BaseModel.NumberOfBatch = SetFiltersWindowOptGal.NumberOfBatch;
+                BaseModel.TotalProcessedData = SetFiltersWindowOptGal.TotalProcessedData;
+                BaseModel.BasePerBatch = SetFiltersWindowOptGal.BasePerBatch;
 
                 try
                 {
@@ -790,6 +805,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -914,6 +934,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = SetFiltersWindowCalcu.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = SetFiltersWindowCalcu.BatchNo;
+                BaseModel.TotalData = SetFiltersWindowCalcu.TotalData;
+                BaseModel.NumberOfBatch = SetFiltersWindowCalcu.NumberOfBatch;
+                BaseModel.TotalProcessedData = SetFiltersWindowCalcu.TotalProcessedData;
+                BaseModel.BasePerBatch = SetFiltersWindowCalcu.BasePerBatch;
 
                 try
                 {
@@ -952,6 +977,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -1068,6 +1098,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = DistributationSummaryTable.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = DistributationSummaryTable.BatchNo;
+                BaseModel.TotalData = DistributationSummaryTable.TotalData;
+                BaseModel.NumberOfBatch = DistributationSummaryTable.NumberOfBatch;
+                BaseModel.TotalProcessedData = DistributationSummaryTable.TotalProcessedData;
+                BaseModel.BasePerBatch = DistributationSummaryTable.BasePerBatch;
 
                 try
                 {
@@ -1106,6 +1141,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -1220,6 +1260,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = DistributationSummaryOverride.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = DistributationSummaryOverride.BatchNo;
+                BaseModel.TotalData = DistributationSummaryOverride.TotalData;
+                BaseModel.NumberOfBatch = DistributationSummaryOverride.NumberOfBatch;
+                BaseModel.TotalProcessedData = DistributationSummaryOverride.TotalProcessedData;
+                BaseModel.BasePerBatch = DistributationSummaryOverride.BasePerBatch;
 
                 try
                 {
@@ -1258,6 +1303,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -1373,6 +1423,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = StoreBreakdownTable.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = StoreBreakdownTable.BatchNo;
+                BaseModel.TotalData = StoreBreakdownTable.TotalData;
+                BaseModel.NumberOfBatch = StoreBreakdownTable.NumberOfBatch;
+                BaseModel.TotalProcessedData = StoreBreakdownTable.TotalProcessedData;
+                BaseModel.BasePerBatch = StoreBreakdownTable.BasePerBatch;
 
                 try
                 {
@@ -1411,6 +1466,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -1525,6 +1585,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = ExportTable.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = ExportTable.BatchNo;
+                BaseModel.TotalData = ExportTable.TotalData;
+                BaseModel.NumberOfBatch = ExportTable.NumberOfBatch;
+                BaseModel.TotalProcessedData = ExportTable.TotalProcessedData;
+                BaseModel.BasePerBatch = ExportTable.BasePerBatch;
 
                 try
                 {
@@ -1563,6 +1628,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -1681,6 +1751,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = SizeCurve.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = SizeCurve.BatchNo;
+                BaseModel.TotalData = SizeCurve.TotalData;
+                BaseModel.NumberOfBatch = SizeCurve.NumberOfBatch;
+                BaseModel.TotalProcessedData = SizeCurve.TotalProcessedData;
+                BaseModel.BasePerBatch = SizeCurve.BasePerBatch;
 
                 try
                 {
@@ -1719,6 +1794,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
@@ -1792,11 +1872,13 @@ namespace BuyingTool.Repository
             }
             catch (DbException ex)
             {
+                response = "Failed";
                 logMessage = ex.Message;
                 LogHelper.LogError(ErrorMessage.Db + ErrorMessage.ExportToAlloc, ex);
             }
             catch (Exception ex)
             {
+                response = "Failed";
                 logMessage = ex.Message;
                 LogHelper.LogError(ErrorMessage.Sys + ErrorMessage.ExportToAlloc, ex);
             }
@@ -1893,6 +1975,11 @@ namespace BuyingTool.Repository
                 BaseModel.StoreProcedure = ExportToAllocHistory.StoreProcedure;
                 BaseModel.ActivityStatus = ActivityStatus;
                 BaseModel.User = idnumber;
+                BaseModel.BatchNo = ExportToAllocHistory.BatchNo;
+                BaseModel.TotalData = ExportToAllocHistory.TotalData;
+                BaseModel.NumberOfBatch = ExportToAllocHistory.NumberOfBatch;
+                BaseModel.TotalProcessedData = ExportToAllocHistory.TotalProcessedData;
+                BaseModel.BasePerBatch = ExportToAllocHistory.BasePerBatch;
 
                 try
                 {
@@ -1931,6 +2018,11 @@ namespace BuyingTool.Repository
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@ActivityStatus", BaseModel.ActivityStatus, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@SystemResponse", BaseModel.SystemResponse, DbType.String, logFactory));
                             logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@User", BaseModel.User, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BatchNo", BaseModel.BatchNo, DbType.String, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalData", BaseModel.TotalData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@NumberOfBatch", BaseModel.NumberOfBatch, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@TotalProcessedData", BaseModel.TotalProcessedData, DbType.Int32, logFactory));
+                            logCommand.Parameters.Add(DatabaseParameterHelper.CreateParameter("@BasePerBatch", BaseModel.BasePerBatch, DbType.Int32, logFactory));
 
                             logCommand.ExecuteNonQuery();
                         }
