@@ -264,5 +264,30 @@ namespace BuyingTool.Services
         }
 
         #endregion
+
+        #region Split Data Export to Alloc By Batch
+
+        public Task<List<DataTable>> SplitDataTable(DataTable dataTable, int batchSize)
+        {
+            var batches = new List<DataTable>();
+
+            for (int i = 0; i < dataTable.Rows.Count; i += batchSize)
+            {
+                DataTable batch = dataTable.Clone();
+
+                int currentBatchSize = Math.Min(batchSize, dataTable.Rows.Count - i);
+                for (int j = 0; j < currentBatchSize; j++)
+                {
+                    batch.ImportRow(dataTable.Rows[i + j]);
+                }
+
+                batches.Add(batch);
+            }
+
+            return Task.FromResult(batches);
+        }
+
+        #endregion
+
     }
 }

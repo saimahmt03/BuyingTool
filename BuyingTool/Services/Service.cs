@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Collections.Generic;
 using System.Web;
 using System.Data;
@@ -438,11 +439,77 @@ namespace BuyingTool.Services
         // To Alloc
         public Task<(string response, string dbResponse)> ExportToAlloc(List<string> theader, List<string[]> trows, string brand, string collection, int fiscalMonth, int fiscalYear, string matno, string color)
         {
+            var response = "Success";
+            var dbResponse = string.Empty;
+
+            string baseBatchRandomId = new Random().Next(10000000, 100000000).ToString();
+            var batchNo = string.Empty;
+
+            StringBuilder errorMessages = new StringBuilder();
+
+            const int batchSize = 1000;
+
+            string userId = GetCurrentUserId();
+
+            int totalRows = 0;
+            int totalBatches = 0;
+            int successfulBatches = 0;
+            int totalDataProcessed = 0;
+
             DataTable dataTable = serviceHelper.ConvertListToDataTable(theader, trows).GetAwaiter().GetResult();
 
-            XDocument xmlDoc = serviceHelper.DataTabletoXML(dataTable).GetAwaiter().GetResult();
+            if (dataTable == null)
+            {
+                response = "Failed";
+                return Task.FromResult((response, dbResponse));
+            }
 
-            var (response, dbResponse) = _dBContext.ExportToAlloc(xmlDoc, brand, collection, fiscalMonth, fiscalYear, matno, color, GetCurrentUserId()).GetAwaiter().GetResult();
+            totalRows = dataTable.Rows.Count;
+
+            List<DataTable> batches = serviceHelper.SplitDataTable(dataTable, batchSize).GetAwaiter().GetResult();
+
+            totalBatches = batches.Count;
+
+            for (int i = 0; i < batches.Count; i++)
+            {
+                DataTable batch = batches[i];
+
+                batchNo = baseBatchRandomId + "_" + (i + 1);
+
+                XDocument xmlDoc = serviceHelper.DataTabletoXML(batch).GetAwaiter().GetResult();
+
+                (response, dbResponse) = _dBContext.ExportToAlloc(xmlDoc, brand, collection, fiscalMonth, fiscalYear, matno, color, userId).GetAwaiter().GetResult();
+
+                if (response != "Success")
+                {
+                    errorMessages.AppendLine("Batch " + (i + 1) + " of " + totalBatches + " failed: " + dbResponse);
+
+                    _dBContext.WriteExportTollocLog(xmlDoc, brand, collection, fiscalMonth, fiscalYear, matno, color, userId, batchNo, totalRows, totalBatches, totalDataProcessed, batchSize, response, dbResponse, errorMessages.ToString().Trim());
+
+                    break;
+                }
+
+                successfulBatches++;
+                totalDataProcessed += batch.Rows.Count;
+
+                _dBContext.WriteExportTollocLog(xmlDoc, brand, collection, fiscalMonth, fiscalYear, matno, color, userId, batchNo, totalRows, totalBatches, totalDataProcessed, batchSize, response, dbResponse, errorMessages.ToString().Trim());
+            }
+
+            if (successfulBatches != totalBatches)
+            {
+                response = "Failed";
+            }
+
+            if (response == "Failed")
+            {
+                dbResponse = errorMessages.ToString().Trim();
+            }
+            else
+            {
+                dbResponse = "Successfully processed " +
+                    totalRows + " records in " +
+                    totalBatches + " batches.";
+            }
 
             return Task.FromResult((response, dbResponse));
         }
