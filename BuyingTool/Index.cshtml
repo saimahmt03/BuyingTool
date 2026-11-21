@@ -12,8 +12,6 @@
         string userId = Session["idnumber"] as string;
         if (!string.IsNullOrEmpty(userId))
         {
-            //service.ClearFiltersWindowCache(userId);
-            service.ClearFinalDataSetFilterCache(userId);
             service.ClearGetFiltersAttributeCache(userId);
             service.ClearGetFiltersOrganizationCache(userId);
             service.ClearGetFiltersRequiredCache(userId);

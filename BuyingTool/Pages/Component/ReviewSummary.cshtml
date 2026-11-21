@@ -15,7 +15,7 @@
         selectedSizes = Session["Size"] as string;
     }
 
-    DataTable dataSet = service.GetFinalDataSetFilterCache().GetAwaiter().GetResult();
+    DataTable dataSet = service.GetFinalDataSetFilter().GetAwaiter().GetResult();
 
     var tableNameList = new string[] { "Store Grade (Cummulative)", "Distribution Plan per Store Grade", "Territory (Cummulative)",
                                         "Distribution Plan per Territory", "Distribution Plan per Drops"};
