@@ -35,21 +35,25 @@ namespace BuyingTool.Services
         {
             string response = ValidateUserAccount(user);
 
-            if (response == "Proceed")
+            if (response != "Proceed")
+            {
+                return response;
+            }
+            else
             {
                 bool validated = _service.AccountVerification(user.Id_Number, user.Password);
 
                 if (validated)
                 {
-                    return user.Id_Number;
+                    return response;
                 }
                 else
                 {
-                    return "User does not exist, please try again.";
+                    response = "User does not exist. Please try again.";
+
+                    return response;
                 }
             }
-
-            return response;
         }
     }
 }
