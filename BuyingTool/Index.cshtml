@@ -45,7 +45,7 @@
 
         if (action == "Login")
         {
-            string response = userAccountService.ValidateUser(useraccount);
+            var (response, username) = userAccountService.ValidateUser(useraccount).GetAwaiter().GetResult();
 
             if (response != "Proceed")
             {
@@ -55,6 +55,7 @@
             {
                 // Save session and reload Index to transition to Main.cshtml
                 Session["idnumber"] = idnumber;
+                Session["username"] = username;
                 Response.Redirect("~/Index.cshtml");
                 return;
             }

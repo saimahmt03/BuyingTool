@@ -31,27 +31,27 @@ namespace BuyingTool.Services
             return response;
         }
 
-        public string ValidateUser(UserRequired user)
+        public Task<(string response, string username)> ValidateUser(UserRequired user)
         {
             string response = ValidateUserAccount(user);
 
             if (response != "Proceed")
             {
-                return response;
+                return Task.FromResult((response, string.Empty));
             }
             else
             {
-                bool validated = _service.AccountVerification(user.Id_Number, user.Password);
+                var (validated, username) = _service.AccountVerification(user.Id_Number, user.Password).GetAwaiter().GetResult();
 
                 if (validated)
                 {
-                    return response;
+                    return Task.FromResult((response, username));
                 }
                 else
                 {
-                    response = "User does not exist. Please try again.";
+                    response = "Invalid credentials. Please check your account details and try again.";
 
-                    return response;
+                    return Task.FromResult((response, string.Empty));
                 }
             }
         }

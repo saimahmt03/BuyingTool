@@ -230,21 +230,35 @@ namespace BuyingTool.Services
         #region Account Verification
 
         // Account Verification
-        public bool AccountVerification(string idnumber, string pass)
+        public Task<(bool response, string useraccount)> AccountVerification(string idnumber, string pass)
         {
-            var (response, dbResponse) = _dBContext.AccountVerification(idnumber, pass).GetAwaiter().GetResult();
+            var dataTable = new DataTable();
 
-            if (response == "200")
+            dataTable = _dBContext.AccountVerification(idnumber, pass).GetAwaiter().GetResult();
+
+            var account = dataTable.AsEnumerable()
+                    .Select(row => new
+                    {
+                        Result = dataTable.Columns.Contains("Result")
+                            ? row["Result"]?.ToString()
+                            : null,
+                        UserProfile = dataTable.Columns.Contains("UserProfile")
+                            ? row["UserProfile"]?.ToString()
+                            : null
+                    })
+                    .FirstOrDefault();
+
+            if (account.Result == "200")
             {
                 GetFiltersAttributeCache(idnumber).GetAwaiter().GetResult();
                 GetFiltersOrganizationCache(idnumber).GetAwaiter().GetResult();
                 GetFiltersRequiredCache(idnumber).GetAwaiter().GetResult();
                 GetFiltersStylesCache(idnumber).GetAwaiter().GetResult();
 
-                return true;
+                return Task.FromResult((true, account.UserProfile));
             }
 
-            return false;
+            return Task.FromResult((false, string.Empty)); ;
         }
 
         #endregion

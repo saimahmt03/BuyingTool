@@ -28,10 +28,10 @@ namespace BuyingTool.Repository
 
         #region ACCOUNT VERIFICATION
 
-        public Task<(string response, string dbResponse)> AccountVerification(string idnumber, string pass)
+        public Task<DataTable> AccountVerification(string idnumber, string pass)
         {
+            var dataTable = new DataTable();
             string logMessage = string.Empty;
-            var response = string.Empty;
 
             try
             {
@@ -64,13 +64,18 @@ namespace BuyingTool.Repository
                         command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@USERID", idnumber, DbType.String, factory));
                         command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@PASSWORD", pass, DbType.String, factory));
 
-                        // Execute the command and capture the single string response
-                        object result = command.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
+                        using (DbDataReader reader = command.ExecuteReader())
                         {
-                            response = result.ToString();
+                            dataTable.Load(reader);
                         }
+
+                        // Execute the command and capture the single string response
+                        //object result = command.ExecuteScalar();
+
+                        //if (result != null && result != DBNull.Value)
+                        //{
+                        //    response = result.ToString();
+                        //}
                     }
                 }
             }
@@ -178,7 +183,7 @@ namespace BuyingTool.Repository
                 }
             }
 
-            return Task.FromResult((response, logMessage));
+            return Task.FromResult(dataTable);
         }
 
         #endregion

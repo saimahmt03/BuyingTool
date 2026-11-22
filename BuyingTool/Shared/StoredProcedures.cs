@@ -10,7 +10,7 @@ namespace BuyingTool.Shared
         #region ACCOUNT VERIFICATION
         
         // Account Virefication
-        public const string AccoutVerification = "[dbo].[usp_Login]";
+        public const string AccoutVerification = "[dbo].[usp_Login_User]";
 
         #endregion
 

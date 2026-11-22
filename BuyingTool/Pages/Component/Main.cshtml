@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null;
 
-    string userId = Session["idnumber"] != null ? Session["idnumber"].ToString() : "12132424";
+    string username = Session["username"] != null ? Session["username"].ToString() : "User";
 
     var reportCss = System.IO.File
         .GetLastWriteTime(Server.MapPath("~/Pages/Style/main.css"))
@@ -25,7 +25,7 @@
                     </header>
 
                     <div class="report-info-row">
-                        <p class="user-greeting-text">Welcome User @userId.</p>
+                        <p class="user-greeting-text">Welcome <strong> @username.</strong></p>
                         <p class="current-date-text">Today is @DateTime.UtcNow.ToString("MMMM d, yyyy")</p>
                         <p class="reload-time-text">Last reloaded at @DateTime.UtcNow.ToString("M/d/yyyy h:mm:ss tt")</p>
                     </div>
