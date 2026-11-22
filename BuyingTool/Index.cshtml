@@ -37,8 +37,6 @@
         string idnumber = Request.Form["idnumber"];
         string pass = Request.Form["password"];
 
-        //System.Diagnostics.Debug.WriteLine("DEBUG ID NUMBER RECEIVED: " + idnumber);
-
         UserRequired useraccount = new UserRequired
         {
             Id_Number = idnumber,
@@ -47,27 +45,18 @@
 
         if (action == "Login")
         {
-            string user = userAccountService.ValidateUser(useraccount);
+            string response = userAccountService.ValidateUser(useraccount);
 
-            if (!string.IsNullOrEmpty(user))
+            if (response != "Proceed")
             {
-
-                if (user == "User does not exist, please try again.")
-                {
-                    errorMessage = user;
-                }
-                else
-                {
-                    // Save session and reload Index to transition to Main.cshtml
-                    Session["idnumber"] = idnumber;
-                    Session["password"] = pass;
-                    Response.Redirect("~/Index.cshtml");
-                    return;
-                }
+                errorMessage = response;
             }
             else
             {
-                errorMessage = "Invalid ID Number or Password.";
+                // Save session and reload Index to transition to Main.cshtml
+                Session["idnumber"] = idnumber;
+                Response.Redirect("~/Index.cshtml");
+                return;
             }
         }
     }
