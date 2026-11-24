@@ -13,6 +13,7 @@ using System.IO;
 using BuyingTool.Data;
 using BuyingTool.Shared;
 using BuyingTool.Logs;
+using BuyingTool.DTO.Request;
 
 
 namespace BuyingTool.Repository
@@ -460,12 +461,137 @@ namespace BuyingTool.Repository
 
             return Task.FromResult(dataTable);
         }
+        public DataTable GetSavedSessionFilters(string idnumber)
+        {
+            var dataTable = new DataTable();
 
+            try
+            {
+                using (DbConnection connection = _databaseConnection.CreateConnection())
+                {
+                    if (connection == null)
+                    {
+                        throw new InvalidOperationException("The database connection could not be created because CreateConnection() returned null.");
+                    }
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    using (DbCommand command = connection.CreateCommand())
+                    {
+                        command.CommandText = "select * from [INTERIM_BUYING_TOOL].[dbo].[FiltersBySession] where [UserID] = " + idnumber;
+                        command.CommandType = CommandType.Text; DbProviderFactory factory;
+                        string errorMessage = _databaseConnection.TryGetDbProviderFactory(out factory);
+
+                        if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            throw new InvalidOperationException(errorMessage);
+                        }
+                        using (DbDataReader reader = command.ExecuteReader())
+                        {
+                            dataTable.Load(reader);
+                        }
+                    }
+                }
+            }
+            catch (DbException ex)
+            {
+                LogHelper.LogError(ErrorMessage.Db + ErrorMessage.SessionFilters, ex);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(ErrorMessage.Sys + ErrorMessage.SessionFilters, ex);
+            }
+
+            return dataTable;
+        }
+        public void SaveSessionFilters(string idnumber, SavedSessionFilters savedSessionFilters)
+        {
+
+            try
+            {
+                using (DbConnection connection = _databaseConnection.CreateConnection())
+                {
+                    if (connection == null)
+                    {
+                        throw new InvalidOperationException("The database connection could not be created because CreateConnection() returned null.");
+                    }
+
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    using (DbCommand command = connection.CreateCommand())
+                    {
+
+                        string sqlstring = "IF EXISTS ( select * from [INTERIM_BUYING_TOOL].[dbo].[FiltersBySession] where [UserID] = @idnumber )    BEGIN UPDATE[dbo].[FiltersBySession]   SET [DateUpdated] = @DateUpdated      ,[Brand] = @Brand      ,[Division] = @Division      ,[Category] = @Category      ,[Department] = @Department      ,[PeriodPlan] = @PeriodPlan      ,[Collection] = @Collection      ,[Style] = @Style      ,[StyleCode] = @StyleCode      ,[Region] = @Region      ,[Country] = @Country      ,[Channel] = @Channel      ,[Territory] = @Territory      ,[Area] = @Area      ,[OutletType] = @OutletType      ,[SiteCode] = @SiteCode      ,[SiteName] = @SiteName      ,[StoreGrade] = @StoreGrade      ,[Color] = @Color      ,[Silhouette] = @Silhouette      ,[CollectionAttri] = @CollectionAttri      ,[FitCut] = @FitCut      ,[MaterialComposition] = @MaterialComposition      ,[MaterialConstruction] = @MaterialConstruction      ,[PrintTexture] = @PrintTexture      ,[ProductLine] = @ProductLine      ,[SleeveType] = @SleeveType      ,[StyleCollection] = @StyleCollection      ,[SubCategory] = @SubCategory      ,[SizeGroup] = @SizeGroup      ,[OrigSrp] = @OrigSrp WHERE [UserID] = @idnumber   END ELSE    BEGIN        INSERT INTO[dbo].[FiltersBySession]           ([DateUpdated]           ,[UserID]           ,[Brand]           ,[Division]           ,[Category]           ,[Department]           ,[PeriodPlan]           ,[Collection]           ,[Style]           ,[StyleCode]           ,[Region]           ,[Country]           ,[Channel]           ,[Territory]           ,[Area]           ,[OutletType]           ,[SiteCode]           ,[SiteName]           ,[StoreGrade]           ,[Color]           ,[Silhouette]           ,[CollectionAttri]           ,[FitCut]           ,[MaterialComposition]           ,[MaterialConstruction]           ,[PrintTexture]           ,[ProductLine]           ,[SleeveType]           ,[StyleCollection]           ,[SubCategory]           ,[SizeGroup]           ,[OrigSrp])     VALUES           (@DateUpdated           , @UserID           , @Brand           , @Division           , @Category           , @Department           , @PeriodPlan           , @Collection           , @Style           , @StyleCode           , @Region          , @Country           , @Channel           , @Territory           , @Area           , @OutletType           , @SiteCode           , @SiteName           , @StoreGrade           , @Color           , @Silhouette           , @CollectionAttri           , @FitCut           , @MaterialComposition           , @MaterialConstruction           , @PrintTexture           , @ProductLine           , @SleeveType           , @StyleCollection           , @SubCategory           , @SizeGroup           , @OrigSrp )   END";
+                        command.CommandText = sqlstring;
+                        command.CommandType = CommandType.Text;
+                        var sql = @"Update [User] SET FirstName = @FirstName WHERE Id = @Id";
+                        Dictionary<string, object> values = new Dictionary<string, object>();
+                        values["@DateUpdated"] = DateTime.Now;
+                        values["@UserID"] = savedSessionFilters.UserID;
+                        values["@idnumber"] = savedSessionFilters.UserID;
+                        values["@Brand"] = savedSessionFilters.Brand;
+                        values["@Division"] = savedSessionFilters.Division;
+                        values["@Category"] = savedSessionFilters.Category;
+                        values["@Department"] = savedSessionFilters.Department;
+                        values["@PeriodPlan"] = savedSessionFilters.PeriodPlan;
+                        values["@Collection"] = savedSessionFilters.Collection;
+                        values["@Style"] = savedSessionFilters.Style;
+                        values["@StyleCode"] = savedSessionFilters.StyleCode;
+                        values["@Region"] = savedSessionFilters.Region;
+                        values["@Country"] = savedSessionFilters.Country;
+                        values["@Channel"] = savedSessionFilters.Channel;
+                        values["@Territory"] = savedSessionFilters.Territory;
+                        values["@Area"] = savedSessionFilters.Area;
+                        values["@OutletType"] = savedSessionFilters.OutletType;
+                        values["@SiteCode"] = savedSessionFilters.SiteCode;
+                        values["@SiteName"] = savedSessionFilters.SiteName;
+                        values["@StoreGrade"] = savedSessionFilters.StoreGrade;
+                        values["@Color"] = savedSessionFilters.Color;
+                        values["@Silhouette"] = savedSessionFilters.Silhouette;
+                        values["@CollectionAttri"] = savedSessionFilters.CollectionAttri;
+                        values["@FitCut"] = savedSessionFilters.FitCut;
+                        values["@MaterialComposition"] = savedSessionFilters.MaterialComposition;
+                        values["@MaterialConstruction"] = savedSessionFilters.MaterialConstruction;
+                        values["@PrintTexture"] = savedSessionFilters.PrintTexture;
+                        values["@ProductLine"] = savedSessionFilters.ProductLine;
+                        values["@SleeveType"] = savedSessionFilters.SleeveType;
+                        values["@StyleCollection"] = savedSessionFilters.StyleCollection;
+                        values["@SubCategory"] = savedSessionFilters.SubCategory;
+                        values["@SizeGroup"] = savedSessionFilters.SizeGroup;
+                        values["@OrigSrp"] = savedSessionFilters.OrigSrp;
+                        foreach (var item in values)
+                        {
+                            var p = command.CreateParameter();
+                            p.ParameterName = item.Key;
+                            p.Value = item.Value;
+                            command.Parameters.Add(p);
+                        }
+                        command.ExecuteReader();
+                    }
+                }
+            }
+            catch (DbException ex)
+            {
+                LogHelper.LogError(ErrorMessage.Db + ErrorMessage.SessionFilters, ex);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError(ErrorMessage.Sys + ErrorMessage.SessionFilters, ex);
+            }
+
+            return;
+        }
         #endregion
 
         #region SORT REFERENCE
-        
-         public Task<DataTable> GetSortReference()
+
+        public Task<DataTable> GetSortReference()
          {
             var dataTable = new DataTable();
 

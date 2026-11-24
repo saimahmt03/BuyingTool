@@ -1,6 +1,7 @@
 ﻿@using System.Data;
 @using BuyingTool.Services
 @using System.Linq;
+@using BuyingTool.DTO.Request
 @{
     Service service = new Service();
 
@@ -219,6 +220,40 @@
                 Session["SizeGroup"] = selectedSizeGroup;
                 Session["OrigSrp"] = selectedOrigSrp;
 
+                SavedSessionFilters savedSessionFilters = new SavedSessionFilters();
+                savedSessionFilters.UserID = Session["idnumber"].ToString();
+                savedSessionFilters.DateUpdated = DateTime.Now;
+                savedSessionFilters.Brand = brand;
+                savedSessionFilters.Division = division;
+                savedSessionFilters.Category = category;
+                savedSessionFilters.Department = department;
+                savedSessionFilters.PeriodPlan = selectedPeriodPlans;
+                savedSessionFilters.Collection = selectedCollection;
+                savedSessionFilters.Style = selectedStyle;
+                savedSessionFilters.StyleCode = selectedStyleCode;
+                savedSessionFilters.Region = selectedRegion;
+                savedSessionFilters.Country = selectedCountry;
+                savedSessionFilters.Channel = selectedChannel;
+                savedSessionFilters.Territory = selectedTerritory;
+                savedSessionFilters.Area = selectedArea;
+                savedSessionFilters.OutletType = selectedOutletType;
+                savedSessionFilters.SiteCode = selectedSiteCode;
+                savedSessionFilters.SiteName = selectedSiteName;
+                savedSessionFilters.StoreGrade = selectedStoreGrade;
+                savedSessionFilters.Color = selectedColor;
+                savedSessionFilters.Silhouette = selectedSilhouette;
+                savedSessionFilters.CollectionAttri = selectedCollectionAttri;
+                savedSessionFilters.FitCut = selectedFitCut;
+                savedSessionFilters.MaterialComposition = selectedMaterialComposition;
+                savedSessionFilters.MaterialConstruction = selectedMaterialConstruction;
+                savedSessionFilters.PrintTexture = selectedPrintTexture;
+                savedSessionFilters.SleeveType = selectedSleeveType;
+                savedSessionFilters.StyleCollection = selectedStyleCollection;
+                savedSessionFilters.SubCategory = selectedSubCategory;
+                savedSessionFilters.SizeGroup = selectedSizeGroup;
+                savedSessionFilters.OrigSrp = selectedOrigSrp;
+                service.SaveSessionFiltersDB(Session["idnumber"].ToString(), savedSessionFilters);
+
                 Session["FactorRate"] = factorRateDeci;
 
                 Response.Redirect("~/?tab=2.%20Review%20Summary");
@@ -298,9 +333,9 @@
                 Session["SiteName"] = selectedSiteName;
                 Session["StoreGrade"] = selectedStoreGrade;
 
-                Session["Color"] = selectedColor ;
-                Session["Silhouette"] = selectedSilhouette ;
-                Session["CollectionAttri"] = selectedCollectionAttri ;
+                Session["Color"] = selectedColor;
+                Session["Silhouette"] = selectedSilhouette;
+                Session["CollectionAttri"] = selectedCollectionAttri;
                 Session["FitCut"] = selectedFitCut;
                 Session["MaterialComposition"] = selectedMaterialComposition;
                 Session["MaterialConstruction"] = selectedMaterialConstruction;
@@ -311,6 +346,41 @@
                 Session["SubCategory"] = selectedSubCategory;
                 Session["SizeGroup"] = selectedSizeGroup;
                 Session["OrigSrp"] = selectedOrigSrp;
+
+                SavedSessionFilters savedSessionFilters = new SavedSessionFilters();
+                savedSessionFilters.UserID = Session["idnumber"].ToString();
+                savedSessionFilters.DateUpdated = DateTime.Now;
+                savedSessionFilters.Brand = brand;
+                savedSessionFilters.Division = division;
+                savedSessionFilters.Category = category;
+                savedSessionFilters.Department = department;
+                savedSessionFilters.PeriodPlan = selectedPeriodPlans;
+                savedSessionFilters.Collection = selectedCollection;
+                savedSessionFilters.Style = selectedStyle;
+                savedSessionFilters.StyleCode = selectedStyleCode;
+                savedSessionFilters.Region = selectedRegion;
+                savedSessionFilters.Country = selectedCountry;
+                savedSessionFilters.Channel = selectedChannel;
+                savedSessionFilters.Territory = selectedTerritory;
+                savedSessionFilters.Area = selectedArea;
+                savedSessionFilters.OutletType = selectedOutletType;
+                savedSessionFilters.SiteCode = selectedSiteCode;
+                savedSessionFilters.SiteName = selectedSiteName;
+                savedSessionFilters.StoreGrade = selectedStoreGrade;
+                savedSessionFilters.Color = selectedColor;
+                savedSessionFilters.Silhouette = selectedSilhouette;
+                savedSessionFilters.CollectionAttri = selectedCollectionAttri;
+                savedSessionFilters.FitCut = selectedFitCut;
+                savedSessionFilters.MaterialComposition = selectedMaterialComposition;
+                savedSessionFilters.MaterialConstruction = selectedMaterialConstruction;
+                savedSessionFilters.PrintTexture = selectedPrintTexture;
+                savedSessionFilters.SleeveType = selectedSleeveType;
+                savedSessionFilters.StyleCollection = selectedStyleCollection;
+                savedSessionFilters.SubCategory = selectedSubCategory;
+                savedSessionFilters.SizeGroup = selectedSizeGroup;
+                savedSessionFilters.OrigSrp = selectedOrigSrp;
+                service.SaveSessionFiltersDB(Session["idnumber"].ToString(), savedSessionFilters); 
+                Session["DisplayDone"] = "True";
             }
         }
         else
@@ -442,7 +512,7 @@
                                             @RenderPage("~/Pages/Common/Dropdown.cshtml", "periodplans", "Period Plan", new List<string>(), selectedPeriodPlans, "", "100%", "changeFilter(dd_periodplans)")
 
                                             @RenderPage("~/Pages/Common/DropdownMultipleSelect.cshtml", "collection", "Collection", new List<string>(), selectedCollection, "", "100%", "changeFilter(dd_collection)")
-                                            
+
                                         </div>
 
                                         <div class="filter-group">

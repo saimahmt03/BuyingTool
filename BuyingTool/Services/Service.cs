@@ -8,6 +8,7 @@ using BuyingTool.Repository;
 using BuyingTool.Data;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using BuyingTool.DTO.Request;
 
 namespace BuyingTool.Services
 {
@@ -212,12 +213,41 @@ namespace BuyingTool.Services
                 HttpRuntime.Cache.Remove(cacheKey);
             }
         }
+        public DataTable GetSavedSessionFilters(string userid)
+        {
+            // Make the cache key unique to the specific user
 
+            string cacheKey = $"SavedSessionFilters_{userid}";
+
+            DataTable dtMainTable = HttpRuntime.Cache[cacheKey] as DataTable;
+
+            if (dtMainTable == null)
+            {
+                dtMainTable = _dBContext.GetSavedSessionFilters(userid);
+
+                HttpRuntime.Cache.Insert(
+                    cacheKey,
+                    dtMainTable,
+                    null,
+                    System.Web.Caching.Cache.NoAbsoluteExpiration,
+                    TimeSpan.FromMinutes(30)
+                );
+            }
+
+            return dtMainTable;
+        }
+
+        public void SaveSessionFiltersDB(string userid, SavedSessionFilters savedSessionFilters)
+        {
+            _dBContext.SaveSessionFilters(userid, savedSessionFilters);
+
+            return;
+        }
         #endregion
-        
+
 
         #region Sort Reference
-        
+
         public Task<DataTable> GetSortReference()
         {
             var dtMainTable = _dBContext.GetSortReference().GetAwaiter().GetResult();

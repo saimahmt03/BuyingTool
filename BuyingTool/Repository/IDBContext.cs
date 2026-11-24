@@ -9,7 +9,7 @@ using BuyingTool.Data;
 using BuyingTool.Shared;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-
+using BuyingTool.DTO.Request;
 
 namespace BuyingTool.Repository
 {
@@ -83,6 +83,9 @@ namespace BuyingTool.Repository
 
         Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, Int16 input);
 
+        DataTable GetSavedSessionFilters(string idnumber);
+
+        void SaveSessionFilters(string idnumber, SavedSessionFilters savedSessionFilters);
 
         Task<(DataTable, string dbResponse)> GetPerSiteTable(string idnumber, string storegrade, string size, string type);
 

@@ -1,5 +1,6 @@
 ﻿@using BuyingTool.Services
 @using BuyingTool.DTO.Request
+@using System.Data;
 @{
     UserAccountService userAccountService = new UserAccountService();
     Service service = new Service();
@@ -213,38 +214,112 @@
         {
             <p id="calculationdone" hidden>false</p>
         }
-        var sessionBrand = Session["Brand"];
-        var sessionDivision = Session["Division"];
-        var sessionCategory = Session["Category"];
-        var sessionDepartment = Session["Department"];
-        var sessionPeriodPlan = Session["PeriodPlan"];
-        var sessionCollection = Session["Collection"];
-        var sessionStyle = Session["Style"];
-        var sessionStyleCode = Session["StyleCode"];
+        String sessionBrand = "";
+        String sessionDivision = "";
+        String sessionCategory = "";
+        String sessionDepartment = "";
+        String sessionPeriodPlan = "";
+        String sessionCollection = "";
+        String sessionStyle = "";
+        String sessionStyleCode = "";
 
-        var sessionRegion = Session["Region"];
-        var sessionCountry = Session["Country"];
-        var sessionChannel = Session["Channel"];
-        var sessionTerritory = Session["Territory"];
-        var sessionArea = Session["Area"];
-        var sessionOutletType = Session["OutletType"];
-        var sessionSiteCode = Session["SiteCode"];
-        var sessionSiteName = Session["SiteName"];
-        var sessionStoreGrade = Session["StoreGrade"];
+        String sessionRegion = "";
+        String sessionCountry = "";
+        String sessionChannel = "";
+        String sessionTerritory = "";
+        String sessionArea = "";
+        String sessionOutletType = "";
+        String sessionSiteCode = "";
+        String sessionSiteName = "";
+        String sessionStoreGrade = "";
 
-        var sessionColor = Session["Color"];
-        var sessionSilhouette = Session["Silhouette"];
-        var sessionCollectionAttri = Session["CollectionAttri"];
-        var sessionFitCut = Session["FitCut"];
-        var sessionMaterialComposition = Session["MaterialComposition"];
-        var sessionMaterialConstruction = Session["MaterialConstruction"];
-        var sessionPrintTexture = Session["PrintTexture"];
-        var sessionProductLine = Session["ProductLine"];
-        var sessionSleeveType = Session["SleeveType"];
-        var sessionStyleCollection = Session["StyleCollection"];
-        var sessionSubCategory = Session["SubCategory"];
-        var sessionSizeGroup = Session["SizeGroup"];
-        var sessionOrigSrp = Session["OrigSrp"];
+        String sessionColor = "";
+        String sessionSilhouette = "";
+        String sessionCollectionAttri = "";
+        String sessionFitCut = "";
+        String sessionMaterialComposition = "";
+        String sessionMaterialConstruction = "";
+        String sessionPrintTexture = "";
+        String sessionProductLine = "";
+        String sessionSleeveType = "";
+        String sessionStyleCollection = "";
+        String sessionSubCategory = "";
+        String sessionSizeGroup = "";
+        String sessionOrigSrp = "";
+        if ((Session["CalculationDone"] != null || Session["DisplayDone"] != null) && Session["idnumber"] != null)
+        {
+            sessionBrand = Session["Brand"].ToString();
+            sessionDivision = Session["Division"].ToString();
+            sessionCategory = Session["Category"].ToString();
+            sessionDepartment = Session["Department"].ToString();
+            sessionPeriodPlan = Session["PeriodPlan"].ToString();
+            sessionCollection = Session["Collection"].ToString();
+            sessionStyle = Session["Style"].ToString();
+            sessionStyleCode = Session["StyleCode"].ToString();
+
+            sessionRegion = Session["Region"].ToString();
+            sessionCountry = Session["Country"].ToString();
+            sessionChannel = Session["Channel"].ToString();
+            sessionTerritory = Session["Territory"].ToString();
+            sessionArea = Session["Area"].ToString();
+            sessionOutletType = Session["OutletType"].ToString();
+            sessionSiteCode = Session["SiteCode"].ToString();
+            sessionSiteName = Session["SiteName"].ToString();
+            sessionStoreGrade = Session["StoreGrade"].ToString();
+
+            sessionColor = Session["Color"].ToString();
+            sessionSilhouette = Session["Silhouette"].ToString();
+            sessionCollectionAttri = Session["CollectionAttri"].ToString();
+            sessionFitCut = Session["FitCut"].ToString();
+            sessionMaterialComposition = Session["MaterialComposition"].ToString();
+            sessionMaterialConstruction = Session["MaterialConstruction"].ToString();
+            sessionPrintTexture = Session["PrintTexture"].ToString();
+            sessionProductLine = Session["ProductLine"].ToString();
+            sessionSleeveType = Session["SleeveType"].ToString();
+            sessionStyleCollection = Session["StyleCollection"].ToString();
+            sessionSubCategory = Session["SubCategory"].ToString();
+            sessionSizeGroup = Session["SizeGroup"].ToString();
+            sessionOrigSrp = Session["OrigSrp"].ToString();
+        }
+        else
+        {
+            DataTable dataTable = service.GetSavedSessionFilters(idnumberforlabel.ToString());
+            foreach (DataRow row in dataTable.Rows)
+            {
+                sessionBrand = row["Brand"].ToString();
+                sessionDivision = row["Division"].ToString();
+                sessionCategory = row["Category"].ToString();
+                sessionDepartment = row["Department"].ToString();
+                sessionPeriodPlan = row["PeriodPlan"].ToString();
+                sessionCollection = row["Collection"].ToString();
+                sessionStyle = row["Style"].ToString();
+                sessionStyleCode = row["StyleCode"].ToString();
+
+                sessionRegion = row["Region"].ToString();
+                sessionCountry = row["Country"].ToString();
+                sessionChannel = row["Channel"].ToString();
+                sessionTerritory = row["Territory"].ToString();
+                sessionArea = row["Area"].ToString();
+                sessionOutletType = row["OutletType"].ToString();
+                sessionSiteCode = row["SiteCode"].ToString();
+                sessionSiteName = row["SiteName"].ToString();
+                sessionStoreGrade = row["StoreGrade"].ToString();
+
+                sessionColor = row["Color"].ToString();
+                sessionSilhouette = row["Silhouette"].ToString();
+                sessionCollectionAttri = row["CollectionAttri"].ToString();
+                sessionFitCut = row["FitCut"].ToString();
+                sessionMaterialComposition = row["MaterialComposition"].ToString();
+                sessionMaterialConstruction = row["MaterialConstruction"].ToString();
+                sessionPrintTexture = row["PrintTexture"].ToString();
+                sessionProductLine = row["ProductLine"].ToString();
+                sessionSleeveType = row["SleeveType"].ToString();
+                sessionStyleCollection = row["StyleCollection"].ToString();
+                sessionSubCategory = row["SubCategory"].ToString();
+                sessionSizeGroup = row["SizeGroup"].ToString();
+                sessionOrigSrp = row["OrigSrp"].ToString();
+            }
+        }
     }
 
     <label hidden id="idnumber">@idnumberforlabel</label>

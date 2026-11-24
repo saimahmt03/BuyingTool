@@ -17,6 +17,7 @@ namespace BuyingTool.Logs
         public const string Required = "Required Filter Region. ";
         public const string Style = "Style Filter Region. ";
         public const string StoregradeAndSize = "Final Dataset Store Grade and Size Filter. ";
+        public const string SessionFilters = "Session Filters. ";
 
         public const string SortReference = "Sort Reference. ";
 

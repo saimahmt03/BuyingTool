@@ -306,6 +306,7 @@
     <Compile Include="Data\DatabaseParameterHelper.cs" />
     <Compile Include="Data\DatabaseProviderFactory.cs" />
     <Compile Include="Data\IDatabaseConnection.cs" />
+    <Compile Include="DTO\Request\SavedSessionFilters.cs" />
     <Compile Include="DTO\Request\UserRequired.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
