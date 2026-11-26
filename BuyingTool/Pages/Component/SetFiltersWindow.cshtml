@@ -12,6 +12,8 @@
     string errorMessage = string.Empty;
 
     decimal frate = 1.0m;
+    decimal fplc = 12;
+    decimal fwos = 3;
 
     // Modal state variables
     bool showModal = false;
@@ -255,6 +257,8 @@
                 service.SaveSessionFiltersDB(Session["idnumber"].ToString(), savedSessionFilters);
 
                 Session["FactorRate"] = factorRateDeci;
+                Session["PLC"] = plcDeci;
+                Session["WOS"] = wosDeci;
 
                 Response.Redirect("~/?tab=2.%20Review%20Summary");
             }
@@ -381,6 +385,10 @@
                 savedSessionFilters.OrigSrp = selectedOrigSrp;
                 service.SaveSessionFiltersDB(Session["idnumber"].ToString(), savedSessionFilters);
                 Session["DisplayDone"] = "True";
+
+                Session["FactorRate"] = factorRateDeci;
+                Session["PLC"] = plcDeci;
+                Session["WOS"] = wosDeci;
             }
         }
         else
@@ -427,6 +435,9 @@
 
             Session.Remove("DisplayDone");
 
+            Session.Remove("FactorRate");
+            Session.Remove("PLC");
+            Session.Remove("WOS");
         }
     }
 
@@ -445,6 +456,8 @@
         selectedPeriodPlans = Session["PeriodPlan"] as string;
 
         frate = Convert.ToDecimal(Session["FactorRate"]);
+        fplc = Convert.ToDecimal(Session["PLC"]);
+        fwos = Convert.ToDecimal(Session["WOS"]);
     }
 
 
@@ -544,11 +557,11 @@
                                         </div>
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Input PLC")
-                                            @RenderPage("~/Pages/Common/TextField.cshtml", "plc", "PLC", "12", "numeric")
+                                            @RenderPage("~/Pages/Common/TextField.cshtml", "plc", "PLC", fplc.ToString(System.Globalization.CultureInfo.InvariantCulture), "decimal")
                                         </div>
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Input Week of Stock")
-                                            @RenderPage("~/Pages/Common/TextField.cshtml", "wos", "WOS", "3", "numeric")
+                                            @RenderPage("~/Pages/Common/TextField.cshtml", "wos", "WOS", fwos.ToString(System.Globalization.CultureInfo.InvariantCulture), "decimal")
                                         </div>
                                         <div class="filter-group">
                                             @RenderPage("~/Pages/Common/SectionHeader.cshtml", "Attributes")
