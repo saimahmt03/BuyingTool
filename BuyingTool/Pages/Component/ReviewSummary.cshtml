@@ -183,7 +183,7 @@
             var tRows5 = new List<string[]>();
 
             string overrideRaw = Request.Form["override"];
-            Int16 overridevalue = 0;
+            int overridevalue = 0;
 
             string storegrade = Session["StoreGrade"] as string;
             string size = Session["Size"] as string;
@@ -192,10 +192,12 @@
             {
                 overrideErrorMessage = "Please enter the value.";
             }
+            else if (!int.TryParse(overrideRaw, out overridevalue))
+            {
+                overrideErrorMessage = "Please enter a valid whole number.";
+            }
             else
             {
-                overridevalue = Convert.ToInt16(overrideRaw);
-
                 (tHeader5, tRows5, overrideErrorMessage, errorMessage) = service.GetOverrideTable(size, storegrade, overridevalue).GetAwaiter().GetResult();
 
                 tableHeaders5 = tHeader5;

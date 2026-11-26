@@ -81,7 +81,7 @@ namespace BuyingTool.Repository
 
         Task<(DataTable[], string dbResponse)> GetDistributionSummryTable(string idnumber, string size, string storegrade);
 
-        Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, Int16 input);
+        Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, int input);
 
         DataTable GetSavedSessionFilters(string idnumber);
 
