@@ -221,7 +221,7 @@ namespace BuyingTool.Services
 
             DataTable dtMainTable = HttpRuntime.Cache[cacheKey] as DataTable;
 
-            if (dtMainTable == null)
+            if (dtMainTable == null && userid!= null && userid!="")
             {
                 dtMainTable = _dBContext.GetSavedSessionFilters(userid);
 

@@ -281,7 +281,7 @@
             sessionSizeGroup = Session["SizeGroup"].ToString();
             sessionOrigSrp = Session["OrigSrp"].ToString();
         }
-        else
+        else if (idnumberforlabel!="")
         {
             DataTable dataTable = service.GetSavedSessionFilters(idnumberforlabel.ToString());
             foreach (DataRow row in dataTable.Rows)

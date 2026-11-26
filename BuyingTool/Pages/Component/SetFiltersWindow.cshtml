@@ -379,7 +379,7 @@
                 savedSessionFilters.SubCategory = selectedSubCategory;
                 savedSessionFilters.SizeGroup = selectedSizeGroup;
                 savedSessionFilters.OrigSrp = selectedOrigSrp;
-                service.SaveSessionFiltersDB(Session["idnumber"].ToString(), savedSessionFilters); 
+                service.SaveSessionFiltersDB(Session["idnumber"].ToString(), savedSessionFilters);
                 Session["DisplayDone"] = "True";
             }
         }
@@ -424,6 +424,8 @@
             Session.Remove("SubCategory");
             Session.Remove("SizeGroup");
             Session.Remove("OrigSrp");
+
+            Session.Remove("DisplayDone");
 
         }
     }
