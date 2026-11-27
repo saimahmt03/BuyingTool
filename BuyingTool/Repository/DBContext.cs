@@ -1294,7 +1294,7 @@ namespace BuyingTool.Repository
         }
 
         // OVERRIDE
-        public Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, Int16 input)
+        public Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, int input)
         {
             string logMessage = string.Empty;
             string response = "Success";

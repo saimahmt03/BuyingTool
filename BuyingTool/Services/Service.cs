@@ -415,7 +415,7 @@ namespace BuyingTool.Services
         }
 
         // Override
-        public Task<(List<string> tableHeader, List<string[]> tableRows, string response, string dbResponse)> GetOverrideTable(string size, string storegrade, Int16 input)
+        public Task<(List<string> tableHeader, List<string[]> tableRows, string response, string dbResponse)> GetOverrideTable(string size, string storegrade, int input)
         {
             var userId = GetCurrentUserId();
 
