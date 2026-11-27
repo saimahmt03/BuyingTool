@@ -183,7 +183,7 @@
             var tRows5 = new List<string[]>();
 
             string overrideRaw = Request.Form["override"];
-            int overridevalue = 0;
+            long overridevalue = 0;
 
             string storegrade = Session["StoreGrade"] as string;
             string size = Session["Size"] as string;
@@ -192,7 +192,7 @@
             {
                 overrideErrorMessage = "Please enter the value.";
             }
-            else if (!int.TryParse(overrideRaw, out overridevalue))
+            else if (!long.TryParse(overrideRaw, out overridevalue))
             {
                 overrideErrorMessage = "Please enter a valid whole number.";
             }
