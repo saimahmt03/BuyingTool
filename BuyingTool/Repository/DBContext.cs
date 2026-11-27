@@ -1294,7 +1294,7 @@ namespace BuyingTool.Repository
         }
 
         // OVERRIDE
-        public Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, int input)
+        public Task<(DataTable, string response, string dbResponse)> GetOverride(string idnumber, string size, string storegrade, long input)
         {
             string logMessage = string.Empty;
             string response = "Success";
@@ -1329,7 +1329,7 @@ namespace BuyingTool.Repository
                         command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@StoreGrades", storegrade ?? string.Empty, DbType.String, factory));
 
                         // Fixed: Changed parameter name from @Input to @OverrideValue to match the stored procedure definition
-                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@OverrideValue", input, DbType.Int16, factory));
+                        command.Parameters.Add(DatabaseParameterHelper.CreateParameter("@OverrideValue", input, DbType.Int64, factory));
 
                         if (!string.IsNullOrEmpty(errorMessage))
                         {
